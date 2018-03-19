@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'polls',
     'home',
     'django_nose',
+    'rest_framework',
 ]
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

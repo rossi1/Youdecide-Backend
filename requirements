@@ -1,3 +1,4 @@
 django==2.0
 nose
 django-nose
+djangorestframework-3.7.7
