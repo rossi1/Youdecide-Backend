@@ -24,4 +24,6 @@ urlpatterns = [
     path('index', home_views.home, name='home'),
     path('', include(polls_urls)),
     path('api/', include(api_urls)),
+    # urls.py
+    path(r"^wizard/$", "my_form_wizard_view", name="my_form_wizard_view"),
 ]

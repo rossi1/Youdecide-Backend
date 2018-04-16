@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'polls',
     'home',
     'django_nose',
+    'django_formtools-2.1.dist-info'
     'rest_framework',
 ]
 
