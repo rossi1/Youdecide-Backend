@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+#from django_mysql.models import ListCharField
 
 # Create your models here.
 '''
@@ -43,3 +46,35 @@ votes and pretend that they were accepted, this way they won't try nearly as har
 
 polls
 '''
+
+
+# class User(AbstractUser):
+#     full_name = models.TextField(max_length=500, blank=True)
+#     email = models.EmailField(max_length=500, blank=True)
+#     location = models.CharField(max_length=30, blank=True)
+
+
+class VoterId(models.Model):
+    voterID = models.CharField(max_length=100)
+    ip_address = models.GenericIPAddressField(max_length=100)
+
+
+class Question(models.Model):
+    # creator = models.ForeignKey(User)
+    date_created = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=255)
+    # options = models.ForeignKey(Choice)
+    # created_on = models.DateTimeField(auto_now_add=True)
+
+
+class Poll(models.Model):
+    #  question = models.ForeignKey(Question)             # models.CharField(max_length=200)
+    date_created = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(unique=True, max_length=255)
+    approved = models.BooleanField(True)
+
+
+class Choice(models.Model):
+    #  poll = models.ForeignKey(Poll)
+    choice = models.CharField(max_length=200)
+    votes = models.IntegerField()

@@ -18,12 +18,15 @@ from django.urls import path, include
 import home.views as home_views
 from polls import urls as polls_urls
 from api import urls as api_urls
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index', home_views.home, name='home'),
-    path('', include(polls_urls)),
+    path('', home_views.home, name='home'),
+    path('polls', include(polls_urls)),
     path('api/', include(api_urls)),
     # urls.py
-    path(r"^wizard/$", "my_form_wizard_view", name="my_form_wizard_view"),
+    # path(r"^wizard/$", "my_form_wizard_view", name="my_form_wizard_view"),
+    re_path('.*', TemplateView.as_view(template_name='youdecide_frontend/index.html')),
 ]
