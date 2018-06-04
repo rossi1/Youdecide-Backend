@@ -37,9 +37,80 @@ votes and pretend that they were accepted, this way they won't try nearly as har
 
 ///
 
-
-
-
-
 polls
 '''
+
+
+class UserType(models.Model):
+    type_name = models.CharField(max_length=50)
+    description = models.TextField(default="")
+
+
+class AdminUser(models.Model):
+    user_type_id = models.ForeignKey(UserType, on_delete=models.CASCADE, on_update=models.CASCADE)
+    user_name = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+
+
+class SurveyCategory(models.Model):
+    category_name = models.CharField(max_length=50)
+    description = models.TextField(default="")
+    created_date = models.DateField(auto_now=True)
+    last_modified = models.DateField(auto_now=True)
+
+
+class Survey(models.Model):
+    survey_category_id = models.ForeignKey(SurveyCategory, on_delete=models.CASCADE, on_update=models.CASCADE)
+    survey_name = models.CharField(max_length=50)
+    description = models.TextField(default="")
+    created_date = models.DateField(auto_now=True)
+    last_modified = models.DateField(auto_now=True)
+
+
+class SurveyQuestion(models.Model):
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, on_update=models.CASCADE)
+    question = models.TextField(default="")
+    opening_time = models.DateField(auto_now=True)
+    closing_time = models.DateField(auto_now=True)
+    description = models.TextField(default="")
+    created_date = models.DateField(auto_now=True)
+    last_modified = models.DateField(auto_now=True)
+
+
+class SurveyResponseChoice(models.Model):
+    question_id = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE, on_update=models.CASCADE)
+    response_choice = models.TextField(default="")
+
+
+class SurveyQuestionOrder(models.Model):
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, on_update=models.CASCADE)
+    question_id = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE, on_update=models.CASCADE)
+    question_order = models.IntegerField()
+
+
+class SurveyRespondent(models.Model):
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+    email = models.TextField(default="")
+    ip_address = models.TextField(default="")
+    created_date = models.DateField(auto_now=True)
+
+
+class SurveyResponse(models.Model):
+    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE, on_update=models.CASCADE)
+    respondent_id = models.ForeignKey(SurveyRespondent, on_delete=models.CASCADE, on_update=models.CASCADE)
+    start_at = models.DateField(auto_now=True)
+    completed_at = models.DateField(auto_now=True)
+    last_updated = models.DateField(auto_now=True)
+
+
+class ActionType(models.Model):
+    action_name = models.CharField(max_length=50)
+    description = models.TextField(default="")
+    created_date = models.DateField(auto_now=True)
+
+
+class AudiVault(models.Model):
+    pass
