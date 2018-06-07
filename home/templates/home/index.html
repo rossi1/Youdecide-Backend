@@ -2,31 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- production version, optimized for size and speed -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <title>You decide</title>
 </head>
 <body>
-<h3>You Decide</h3>
-<h1>Welcome to you decide</h1>
-{% comment %}{% block content %}
-    <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-    <form action="" method="post">{% csrf_token %}
-        <table>
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-                {% for form in wizard.form.forms %}
-                    {{ form }}
-                {% endfor %}
-            {% else %}
-                {{ wizard.form }}
-            {% endif %}
-        </table>
-        {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-        {% endif %}
-        <input type="submit" value="{% trans "submit" %}"/>
-    </form>
-{% endblock %}{% endcomment %}
+
+ <div id="app">
+  [[ message ]]
+</div>
+<div>
+    <input type="text" id="input" v-model="text">
+
+</div>
+
+<script>
+
+var app = new Vue({
+    delimiters: ['[[', ']]'],
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+    var app2 = new Vue({
+
+  el: '#input',
+  data: {
+    text: '2 Hello Vue!'
+  }
+})
+</script>
+
+
+
+
 </body>
 </html>
