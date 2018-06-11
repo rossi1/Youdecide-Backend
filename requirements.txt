@@ -1,6 +1,6 @@
 django==2.1
 nose
 django-nose
-djangorestframework-3.7.7
+djangorestframework
 create-react-app@1.5.2
-npm=5.7.1
+npm==5.7.1

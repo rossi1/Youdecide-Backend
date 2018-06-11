@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from formtools.wizard.views import CookieWizardView
+#from formtools.wizard.views import CookieWizardView
 from .forms import ContactForm1, ContactForm2
 
 
