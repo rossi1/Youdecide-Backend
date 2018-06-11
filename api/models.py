@@ -51,9 +51,13 @@ class UserType(models.Model):
 
 
 class AdminUser(models.Model):
+    '''
+    # the following info has been provided by the default django.contrib.models.auth.User
     user_type_id = models.ForeignKey(UserType, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
+    '''
+    admin_user = models.ForeignKey(User, related_name='custom_admin_user', on_delete=models.CASCADE)
 
 
 class SurveyCategory(models.Model):
@@ -64,7 +68,7 @@ class SurveyCategory(models.Model):
 
 
 class Survey(models.Model):
-    survey_category_id = models.ForeignKey(SurveyCategory, on_delete=models.CASCADE)
+    survey_category_id = models.ForeignKey(SurveyCategory, related_name='survey_category', on_delete=models.CASCADE)
     survey_name = models.CharField(max_length=50)
     description = models.TextField(default="")
     created_date = models.DateTimeField(auto_now=True)
@@ -72,7 +76,7 @@ class Survey(models.Model):
 
 
 class SurveyQuestion(models.Model):
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, related_name='survey_user_question', on_delete=models.CASCADE)
     question = models.TextField(default="")
     opening_time = models.DateTimeField(auto_now=True)
     closing_time = models.DateTimeField(auto_now=True)
@@ -82,44 +86,50 @@ class SurveyQuestion(models.Model):
 
 
 class SurveyResponseChoice(models.Model):
-    question_id = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
+    question_id = models.ForeignKey(SurveyQuestion, related_name='survey_question_choice', on_delete=models.CASCADE)
     response_choice = models.TextField(default="")
 
 
 class SurveyQuestionOrder(models.Model):
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    question_id = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, related_name='survey_question_order', on_delete=models.CASCADE)
+    question_id = models.ForeignKey(SurveyQuestion, related_name='survey_question_key', on_delete=models.CASCADE)
     question_order = models.IntegerField()
 
 
 class SurveyRespondent(models.Model):
+    '''
+    ### this info is provided by creating a subclass of django auth.User object
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     email = models.TextField(default="")
-    ip_address = models.TextField(default="")
+    '''
+    surveyor = models.ForeignKey(User, on_delete=models.CASCADE)
+    # ip_address = models.TextField(default="")
+    # django has inbuilt GenericIPAddressField with support for validation
+    ip_address = models.GenericIPAddressField(verbose_name='user_ip_address')
     created_date = models.DateTimeField(auto_now=True)
 
 
 class SurveyResponse(models.Model):
-    survey_id = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    respondent_id = models.ForeignKey(SurveyRespondent, on_delete=models.CASCADE)
+    survey_id = models.ForeignKey(Survey, related_name='surveyResponse_survey', on_delete=models.CASCADE)
+    respondent_id = models.ForeignKey(SurveyRespondent, related_name='surveyResponse_respondent', on_delete=models.CASCADE)
     start_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(auto_now=True)
     last_updated = models.DateTimeField(auto_now=True)
 
 
 class UserActionType(models.Model):
-    created_by = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(AdminUser, related_name='actionType_adminuser', on_delete=models.CASCADE)
     action_name = models.CharField(max_length=50)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
 
 
-class AudiVault(models.Model):
-    user_id = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
-    action_type_id = models.ForeignKey(UserActionType,  on_delete=models.CASCADE)
+class AuditVault(models.Model):
+    user_id = models.ForeignKey(AdminUser, related_name='audtivault_adminuser', on_delete=models.CASCADE)
+    action_type_id = models.ForeignKey(UserActionType, related_name='auditvault_actiontype', on_delete=models.CASCADE)
     row_id = models.BigIntegerField(null=False)
     row_data_old = models.BinaryField()
     row_data_new = models.BinaryField()
