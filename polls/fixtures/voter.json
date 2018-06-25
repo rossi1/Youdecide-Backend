@@ -1,0 +1,14 @@
+[
+  {
+    "voter": {
+      "hasVoted": "True",
+      "ip_address": 2323232,
+      "time_stamp": 12:00,
+      "cema":"android",
+      "device": "iphone",
+      "api-key": 23342
+      "poll-pk": 3
+      "choice": "musa"
+    }
+  }
+]

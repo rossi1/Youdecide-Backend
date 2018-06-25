@@ -1,0 +1,94 @@
+[
+    {
+        "fields":{
+            "username": "joan",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2016-03-10T08:36:22.814Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$bXvomIr3vWtr$ZCzlt04Ja2HT2AL4SDm7/4JcRlU5G39c5nPZvAnZhtU=",
+            "email": "joan.ngatia@andela.com",
+            "date_joined": "2015-09-03T09:01:00.053Z"
+            },
+        "model": "auth.user",
+        "pk": 1
+    },
+      {
+        "fields":{
+            "username": "joan",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2016-03-10T08:36:22.814Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$bXvomIr3vWtr$ZCzlt04Ja2HT2AL4SDm7/4JcRlU5G39c5nPZvAnZhtU=",
+            "email": "joan.ngatia@andela.com",
+            "date_joined": "2015-09-03T09:01:00.053Z"
+            },
+        "model": "auth.user",
+        "pk": 2
+    },
+      {
+        "fields":{
+            "username": "joan",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2016-03-10T08:36:22.814Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$bXvomIr3vWtr$ZCzlt04Ja2HT2AL4SDm7/4JcRlU5G39c5nPZvAnZhtU=",
+            "email": "joan.ngatia@andela.com",
+            "date_joined": "2015-09-03T09:01:00.053Z"
+            },
+        "model": "auth.user",
+        "pk": 3
+    },
+      {
+        "fields":{
+            "username": "joan",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2016-03-10T08:36:22.814Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$bXvomIr3vWtr$ZCzlt04Ja2HT2AL4SDm7/4JcRlU5G39c5nPZvAnZhtU=",
+            "email": "joan.ngatia@andela.com",
+            "date_joined": "2015-09-03T09:01:00.053Z"
+            },
+        "model": "auth.user",
+        "pk": 4
+    },
+      {
+        "fields":{
+            "username": "joan",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2016-03-10T08:36:22.814Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$bXvomIr3vWtr$ZCzlt04Ja2HT2AL4SDm7/4JcRlU5G39c5nPZvAnZhtU=",
+            "email": "joan.ngatia@andela.com",
+            "date_joined": "2015-09-03T09:01:00.053Z"
+            },
+        "model": "auth.user",
+        "pk": 5
+    },
+
+
+]

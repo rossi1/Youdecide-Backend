@@ -1,0 +1,63 @@
+[
+  {
+   "poll": {
+     "title": "top online MOOC",
+     "options": {
+          "EDX": 20,
+          "COURSERA": 78,
+          "UDACITY":11
+          },
+     "pk": 21
+}
+
+},
+  {
+   "poll": {
+     "title": "The best ivy league school",
+     "options": {
+          "YALE": 20,
+          "MIT": 78,
+          "Havard": 50,
+          "Stanford": 45,
+          "UCLA": 9
+          },
+     "pk": 12
+}
+
+},
+  {
+   "poll": {
+     "title": "who is the best player in world cup",
+     "options": {
+          "C ronaldo": 20,
+          "messi": 2,
+          "musa ahmed": 1,
+          "countinhi Philip": 7
+          },
+     "pk": 2
+}
+
+},
+  {
+   "poll": {
+     "title": "favorite pdp candidate",
+     "options": {
+          "atiku": 20,
+          "dan kwambo": 78
+          },
+     "pk": 33
+}
+
+},{
+   "poll": {
+     "title": "most valuable company",
+     "options": {
+          "Amazon": 20,
+          "Facebook": 78,
+          "Google": 129
+          },
+     "pk": 892
+}
+
+}
+]
