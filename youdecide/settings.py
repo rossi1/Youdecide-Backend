@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pages',
     'polls',
     'home',
+    'voting',
     'django_nose',
     #  'youdecide_frontend',
     # 'django_formtools-2.1.dist-info'
