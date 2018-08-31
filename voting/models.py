@@ -47,6 +47,8 @@ class Answers(models.Model):
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     answer_text = models.TextField()
     is_anonymous = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.id

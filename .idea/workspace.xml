@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42bb8803-9d93-4b06-b6d9-504281d641ea" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/voting/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/voting/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/voting/templates/apps.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/voting/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youdecide/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/youdecide/settings.py" afterDir="false" />
-    </list>
+    <list default="true" id="42bb8803-9d93-4b06-b6d9-504281d641ea" name="Default" comment="" />
     <ignored path="youdecide.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -430,9 +423,9 @@
       <window_info anchor="bottom" id="Run" order="2" weight="0.32944608" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32944608" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
-      <window_info anchor="bottom" id="manage.py@youdecide" visible="true" weight="0.32944608" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32944608" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
+      <window_info anchor="bottom" id="manage.py@youdecide" weight="0.32944608" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
