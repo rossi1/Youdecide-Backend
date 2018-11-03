@@ -4,3 +4,6 @@ django-nose
 djangorestframework
 create-react-app@1.5.2
 npm==5.7.1
+Pillow
+social-auth-app-django
+python-decouple

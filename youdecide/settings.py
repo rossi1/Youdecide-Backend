@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from django.urls import reverse_lazy
+from decouple import config
 
 
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
@@ -26,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y=zqu#8c7$(4_@&so9c(op^f#_-%*ms10%yu+6zis+g)szm8*x'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,16 +44,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
     'api',
     'pages',
     'polls',
     'home',
     'voting',
+    'userprofile',
     'django_nose',
     #  'youdecide_frontend',
     # 'django_formtools-2.1.dist-info'
     'rest_framework',
+    # social authentication
+    # 'python-social-auth',
+    'social_django',
+
 ]
+#
+# AUTHENTICATION_BACKENDS = (
+#                             'django.contrib.auth.backends.ModelBackend',
+#                             # 'account.authentication.EmailAuthBackend',
+#                                 'social.backends.facebook.Facebook2OAuth2',
+#                             )
+# SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
+# SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
@@ -73,7 +88,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+                os.path.join(BASE_DIR, 'templates'),
+                # uncomment this to use vue template
                 os.path.join(BASE_DIR, 'build'),
+
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -139,5 +157,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
+    os.path.join(BASE_DIR, 'static'),
+    # uncomment this to use vue static file
+    os.path.join(BASE_DIR, 'build/static'),
 ]
+
+# path for media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# uncomment this to use vue frontend
+# STATICFILES_DIRS = [
+#   os.path.join(BASE_DIR, 'build/static'),
+# ]
