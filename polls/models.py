@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from account.models import CustomUser
 
 
 # Create your models here.
 class Poll(models.Model):
     question = models.CharField(max_length=200)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -24,7 +25,7 @@ class Choice(models.Model):
 class Vote(models.Model):
     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    voted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    voted_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ("poll", "voted_by")
@@ -38,7 +39,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250,
                             unique_for_date='publish')
-    author = models.ForeignKey(User,
+    author = models.ForeignKey(CustomUser,
                                related_name='blog_posts', on_delete=models.CASCADE)
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)

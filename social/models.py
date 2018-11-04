@@ -1,14 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from account.models import CustomUser
 
 
 # Create your models here.
 class Following(models.Model):
-    following_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    following_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 
 class Followers(models.Model):
-    follower_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    follower_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 
 class MyPolls(models.Model):
@@ -16,8 +17,8 @@ class MyPolls(models.Model):
 
 
 class Follower(models.Model):
-    follower = models.ForeignKey(User, related_name='following_set')
-    following = models.ForeignKey(User, related_name='follower_set')
+    follower = models.ForeignKey(CustomUser, related_name='following_set')
+    following = models.ForeignKey(CustomUser, related_name='follower_set')
 
     class Meta:
         unique_together = ('follower', 'following')

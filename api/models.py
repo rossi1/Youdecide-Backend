@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from account.models import CustomUser
 
 # from django_mysql.models import ListCharField
 
@@ -57,7 +58,7 @@ class AdminUser(models.Model):
     user_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     '''
-    admin_user = models.ForeignKey(User, related_name='custom_admin_user', on_delete=models.CASCADE)
+    admin_user = models.ForeignKey(CustomUser, related_name='custom_admin_user', on_delete=models.CASCADE)
 
 
 class SurveyCategory(models.Model):
@@ -105,7 +106,7 @@ class SurveyRespondent(models.Model):
     password = models.CharField(max_length=50)
     email = models.TextField(default="")
     '''
-    surveyor = models.ForeignKey(User, on_delete=models.CASCADE)
+    surveyor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     # ip_address = models.TextField(default="")
     # django has inbuilt GenericIPAddressField with support for validation
     ip_address = models.GenericIPAddressField(verbose_name='user_ip_address')
