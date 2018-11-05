@@ -72,7 +72,7 @@ class QuestionGroups(models.Model):
 
 class PostPoll(models.Model):
     title = models.CharField(max_length=140)
-    user = models.ForeignKey(User, related_name="user_posts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_posts")
     votes = models.IntegerField(default=0)
 
     def upvote(self, user):
@@ -95,8 +95,8 @@ class PostPoll(models.Model):
 
 
 class UserVotes(models.Model):
-    user = models.ForeignKey(User, related_name="user_votes")
-    post = models.ForeignKey(PostPoll, related_name="post_votes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_votes")
+    post = models.ForeignKey(PostPoll, on_delete=models.CASCADE, related_name="post_votes")
     vote_type = models.CharField()
 
     class Meta:
