@@ -71,9 +71,9 @@ class QuestionGroups(models.Model):
 
 
 class PostPoll(models.Model):
-    title = models.CharField(max_length = 140)
+    title = models.CharField(max_length=140)
     user = models.ForeignKey(User, related_name="user_posts")
-    votes = models.IntegerField(default = 0)
+    votes = models.IntegerField(default=0)
 
     def upvote(self, user):
         try:

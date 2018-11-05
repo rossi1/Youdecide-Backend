@@ -11,10 +11,6 @@ class Followers(models.Model):
     follower_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class MyPolls(models.Model):
-    pass
-
-
 class Follower(models.Model):
     follower = models.ForeignKey(User, related_name='following_set')
     following = models.ForeignKey(User, related_name='follower_set')
