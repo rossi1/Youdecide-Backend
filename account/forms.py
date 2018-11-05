@@ -4,7 +4,6 @@ from account.models import Profile
 
 # users/forms.py
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
 
 
 class LoginForm(forms.Form):
@@ -19,7 +18,7 @@ class UserRegistrationForm(forms.ModelForm):
                                 widget=forms.PasswordInput)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('username', 'first_name', 'email')
 
         def clean_password2(self):
@@ -31,7 +30,7 @@ class UserRegistrationForm(forms.ModelForm):
 
 class UserEditForm(forms.ModelForm):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('first_name', 'last_name', 'email')
 
 
@@ -44,12 +43,12 @@ class ProfileEditForm(forms.ModelForm):
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
-        model = CustomUser
+        model = User
         fields = ('username', 'email')
 
 
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('username', 'email')
