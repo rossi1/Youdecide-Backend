@@ -10,9 +10,11 @@ class UserProfile(models.Model):
     # followers = models.ForeignKey()
     # followers = models.ManyToManyField(User, related_name='followers_set', symmetrical=False)
 
-    user_from = models.ForeignKey(User, related_name='rel_from_set', on_delete=models.CASCADE)  # A ForeignKey for the user that creates the
+    user_from = models.ForeignKey(User, related_name='rel_from_set', on_delete=models.CASCADE)  # A ForeignKey for the
+    # user that creates the
     #  relationship
-    user_to = models.ForeignKey(User, related_name='rel_to_set', on_delete=models.CASCADE)  # A ForeignKey for the user being followed
+    user_to = models.ForeignKey(User, related_name='rel_to_set', on_delete=models.CASCADE)  # A ForeignKey for the user
+    #  being followed
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:

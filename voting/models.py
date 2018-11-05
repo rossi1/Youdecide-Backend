@@ -19,6 +19,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 
 class Questions(models.Model):
@@ -66,3 +68,36 @@ class QuestionGroups(models.Model):
 
     class Meta:
         verbose_name_plural = 'QuestionGroups'
+
+
+class PostPoll(models.Model):
+    title = models.CharField(max_length = 140)
+    user = models.ForeignKey(User, related_name="user_posts")
+    votes = models.IntegerField(default = 0)
+
+    def upvote(self, user):
+        try:
+            self.post_votes.create(user=user, post=self, vote_type="up")
+            self.votes += 1
+            self.save()
+        except IntegrityError:
+            return 'already_upvoted'
+        return 'ok'
+
+    def downvote(self, user):
+        try:
+            self.post_votes.create(user=user, post=self, vote_type="down")
+            self.votes -= 1
+            self.save()
+        except IntegrityError:
+            return 'already_downvoted'
+        return 'ok'
+
+
+class UserVotes(models.Model):
+    user = models.ForeignKey(User, related_name="user_votes")
+    post = models.ForeignKey(PostPoll, related_name="post_votes")
+    vote_type = models.CharField()
+
+    class Meta:
+        unique_together = ('user', 'post', 'vote_type')
