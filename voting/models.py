@@ -97,7 +97,7 @@ class PostPoll(models.Model):
 class UserVotes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_votes")
     post = models.ForeignKey(PostPoll, on_delete=models.CASCADE, related_name="post_votes")
-    vote_type = models.CharField()
+    vote_type = models.CharField(max_length=140)
 
     class Meta:
         unique_together = ('user', 'post', 'vote_type')
