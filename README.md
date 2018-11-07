@@ -2442,3 +2442,15 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
+
+
+pip install mysqlclient
+
+pip install pymysql
+Then, edit the __init__.py file in your project origin dir(the same as settings.py)
+
+add:
+
+import pymysql
+
+pymysql.install_as_MySQLdb()
