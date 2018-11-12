@@ -18,23 +18,27 @@ Including another URLconf
 from django.urls import path, include, re_path
 from account import views
 from django.contrib.auth.views import (login, logout, logout_then_login, password_change, password_change_done,
-                                        password_reset, password_reset_done, password_reset_confirm, password_reset_complete)
+                                       password_reset, password_reset_done, password_reset_confirm,
+                                       password_reset_complete)
+from django.contrib.auth.views import (LogoutView, LoginView, PasswordResetView, PasswordResetConfirmView,
+                                       PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView,
+                                       PasswordChangeDoneView,)
 
 urlpatterns = [
-    re_path('^login/$', login, name='login'),
-    re_path('^logout/$', logout, name='logout'),
+    re_path('^login/$', LoginView.as_view(), name='login'),
+    re_path('^logout/$', LogoutView.as_view(), name='logout'),
     re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
 
     # change password urls
-    re_path('^password-change/$', password_change, name='password_change'),
-    re_path('^password-change/done/$', password_change_done, name='password_change_done'),
+    re_path('^password-change/$', PasswordChangeView.as_view(), name='password_change'),
+    re_path('^password-change/done/$', PasswordChangeDoneView.as_view(), name='password_change_done'),
 
     # restore password urls
-    re_path(r'^password-reset/$', password_reset, name='password_reset'),
-    re_path(r'^password-reset/done/$', password_reset_done,name='password_reset_done'),
+    re_path(r'^password-reset/$', PasswordResetView.as_view(), name='password_reset'),
+    re_path(r'^password-reset/done/$', PasswordResetDoneView.as_view(),name='password_reset_done'),
     re_path(r'^password-reset/confirm/(?P<uidb64>[-\w]+)/(?P<token>[-\w]+)/$',
-         password_reset_confirm, name='password_reset_confirm'),
-    re_path(r'^password-reset/complete/$', password_reset_complete, name='password_reset_complete'),
+            PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    re_path(r'^password-reset/complete/$', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 
     re_path('^register/$', views.register, name='register'),
