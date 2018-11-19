@@ -22,12 +22,15 @@ from django.urls import path, re_path
 from account import urls as account_urls
 from django.conf import settings
 from django.conf.urls.static import static
+from survey import urls as survey_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_views.home, name='home'),
     path('polls', include(polls_urls)),
     path('api/', include(api_urls)),
+    path('survey/', include(survey_urls)),
+
 
     # account urls
     path('account/', include(account_urls)),

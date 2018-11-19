@@ -1,15 +1,24 @@
-from django.contrib import admin
-from survey.models import Category, SurveyQuestion
+# from django.contrib import admin
+# from survey.models import Category, SurveyQuestion, SurveyCategories
+#
+#
+# # Register your models here.
+# class CategoryAdmin(admin.ModelAdmin):
+#     list_display = ['category__id', 'title', 'description', 'created_date']
+#
+#
+# class SurveyCategoriesAdmin(admin.ModelAdmin):
+#     model = SurveyCategories
+#     list_display = ['survey_categories_id', 'survey_id', 'categories_id']
+#
+#
+# class SurveyQuestionAdmin(admin.ModelAdmin):
+#     list_display = ['survey_question_id', 'question', 'opening_time', 'closing_time', 'created_by', 'created_date']
+#
+#
+# admin.site.register(Category, CategoryAdmin)
+# admin.site.register(SurveyCategories, SurveyCategoriesAdmin)
+# admin.site.register(SurveyQuestion, SurveyQuestionAdmin)
 
 
-# Register your models here.
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Category._meta.get_fields()]
 
-
-class SurveyQuestionAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in SurveyQuestion._meta.get_fields()]
-
-
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(SurveyQuestion, SurveyQuestionAdmin)
