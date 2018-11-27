@@ -1,0 +1,11 @@
+[
+  {"category_id":1,"title":"Politics","description":"Political topics","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":2,"title":"Health","description":"Health Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":3,"title":"Fashion","description":"Fashion Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":4,"title":"Education","description":"Education Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":5,"title":"Agricalture","description":"Agricalture Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":6,"title":"Technology","description":"Technology Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":7,"title":"Economy","description":"Economy Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":8,"title":"Banking","description":"Banking Survey","created_date":"2018-11-19T16:43:40Z"},
+  {"category_id":9,"title":"Sports","description":"Sports Survey","created_date":"2018-11-19T16:43:40Z"}
+]

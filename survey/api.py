@@ -9,7 +9,7 @@ from survey.serializers import CategorySerializer, SurveyCategoriesSerializer, S
 
 class CategoryAPIListView(APIView):
     """
-    List all the  Category instances, or create a new Appointment instance.
+    List all the  Category instances, or create a new Category instance.
     """
     #queryset =
 

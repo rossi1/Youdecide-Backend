@@ -59,3 +59,59 @@ class SurveyCategories(models.Model):
         managed = False
         db_table = 'survey_categories'
         unique_together = (('survey', 'category'),)
+
+
+class MediaFilesize(models.Model):
+    media_filesize_id = models.AutoField(primary_key=True)
+    minimum_size = models.IntegerField()
+    maximum_size = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'media_filesize'
+
+
+class Media(models.Model):
+    media_id = models.AutoField(primary_key=True)
+    mediatypeid = models.ForeignKey('MediaType', models.DO_NOTHING, db_column='mediatypeid')
+    mediafilename = models.CharField(max_length=50)
+    mediasource = models.CharField(max_length=80, blank=True, null=True)
+    media = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'media'
+
+
+class MediaType(models.Model):
+    media_type_id = models.AutoField(primary_key=True)
+    typename = models.CharField(max_length=50)
+    extension = models.CharField(max_length=5)
+    mediafilesizeid = models.ForeignKey(MediaFilesize, models.DO_NOTHING, db_column='mediafilesizeid')
+
+    class Meta:
+        managed = False
+        db_table = 'media_type'
+
+
+class SurveyChoiceImage(models.Model):
+    survey_choice_image_id = models.AutoField(primary_key=True)
+    survey = models.ForeignKey('SurveyQuestion', models.DO_NOTHING)
+    title = models.CharField(max_length=100)
+    media = models.ForeignKey(Media, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'survey_choice_image'
+
+
+class SurveyChoiceText(models.Model):
+    survey_choice_text_id = models.AutoField(primary_key=True)
+    survey = models.ForeignKey('SurveyQuestion', models.DO_NOTHING)
+    option = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'survey_choice_text'
