@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'userprofile',
     'django_nose',
     #  'youdecide_frontend',
-    # 'django_formtools-2.1.dist-info'
+    'rest_framework.authtoken',
     'rest_framework',
     # social authentication
     # 'python-social-auth',
@@ -90,6 +90,12 @@ REST_FRAMEWORK = {
                     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
                 ]
                 }
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+      'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'youdecide.urls'
 

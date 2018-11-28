@@ -16,7 +16,7 @@ Including another URLconf
 
 
 from django.urls import path, include, re_path
-from account import views
+from account import views, api
 from django.contrib.auth.views import (login, logout, logout_then_login, password_change, password_change_done,
                                        password_reset, password_reset_done, password_reset_confirm,
                                        password_reset_complete)
@@ -44,4 +44,9 @@ urlpatterns = [
     re_path('^register/$', views.register, name='register'),
     re_path('^$', views.dashboard, name='dashboard'),
     re_path('^edit/$', views.edit, name='edit'),
+
+    # sign up rest api
+    re_path(r'^api/users$', api.UserCreate.as_view(), name='account-create'),
+    re_path(r'^api/customuser$', api.UserCreate.as_view(), name='custom-account-create'),
 ]
+

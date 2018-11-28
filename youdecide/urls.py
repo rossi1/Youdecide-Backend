@@ -33,7 +33,7 @@ urlpatterns = [
 
 
     # account urls
-    path('account/', include(account_urls)),
+    path('users/', include(account_urls)),
     # urls.py
     # path(r"^wizard/$", "my_form_wizard_view", name="my_form_wizard_view"),
 
