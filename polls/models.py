@@ -21,13 +21,13 @@ class Choice(models.Model):
         return self.choice_text
 
 
-class Vote(models.Model):
-    choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    voted_by = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ("poll", "voted_by")
+# class Vote(models.Model):
+#     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
+#     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+#     voted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         unique_together = ("poll", "voted_by")
 
 
 class Post(models.Model):

@@ -85,11 +85,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-REST_FRAMEWORK = {
-                'DEFAULT_PERMISSION_CLASSES': [
-                    # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-                ]
-                }
+# REST_FRAMEWORK = {
+#                 'DEFAULT_PERMISSION_CLASSES': [
+#                     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#                 ]
+#                 }
 
 REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': (

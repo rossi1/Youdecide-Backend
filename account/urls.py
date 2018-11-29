@@ -46,7 +46,8 @@ urlpatterns = [
     re_path('^edit/$', views.edit, name='edit'),
 
     # sign up rest api
-    re_path(r'^api/users$', api.UserCreate.as_view(), name='account-create'),
-    re_path(r'^api/customuser$', api.UserCreate.as_view(), name='custom-account-create'),
+    # re_path(r'^api/users$', api.UserCreate.as_view(), name='account-create'),
+    re_path(r'^api/customuser$', api.CustomUserCreate.as_view(), name='custom-account-create'),
+    re_path(r'^api/usertype$', api.CustomUserCreate.as_view(), name='usertype-create'),
 ]
 
