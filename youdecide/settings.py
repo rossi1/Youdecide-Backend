@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'home',
     'survey',
     'voting',
+    'votes',
     'userprofile',
     'django_nose',
     #  'youdecide_frontend',

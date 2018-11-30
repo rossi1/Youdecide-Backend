@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from polls.models import Poll, Choice, Vote
+from polls.models import Poll, Choices #, Vote
 from polls.serializers import PollSerializer
 
 

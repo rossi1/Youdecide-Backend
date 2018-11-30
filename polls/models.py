@@ -12,13 +12,21 @@ class Poll(models.Model):
     def __str__(self):
         return self.question
 
+    class Meta:
+        ordering = ('-pub_date',)
 
-class Choice(models.Model):
+
+class Choices(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
 
     def __str__(self):
         return self.choice_text
+
+
+class PollDuration(models.Model):
+    poll = models.OneToOneField(Poll, on_delete=models.CASCADE)
+    duration = models.DateTimeField(default=None)
 
 
 # class Vote(models.Model):
