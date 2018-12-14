@@ -1,0 +1,61 @@
+[
+    {
+        "id": 3,
+        "choices": [],
+        "question": "favorite color",
+        "pub_date": "2018-12-01T21:21:03.558341Z",
+        "created_by": 2
+    },
+    {
+        "id": 2,
+        "choices": [
+            {
+                "id": 6,
+                "votes": [],
+                "choice_text": "Chelsea",
+                "poll": 2
+            },
+            {
+                "id": 5,
+                "votes": [],
+                "choice_text": "tottenham",
+                "poll": 2
+            },
+            {
+                "id": 4,
+                "votes": [],
+                "choice_text": "arsenal",
+                "poll": 2
+            }
+        ],
+        "question": "best club in London",
+        "pub_date": "2018-12-01T21:20:34.039308Z",
+        "created_by": 2
+    },
+    {
+        "id": 1,
+        "choices": [
+            {
+                "id": 3,
+                "votes": [],
+                "choice_text": "Xavi",
+                "poll": 1
+            },
+            {
+                "id": 2,
+                "votes": [],
+                "choice_text": "messi",
+                "poll": 1
+            },
+            {
+                "id": 1,
+                "votes": [],
+                "choice_text": "Ronaldo",
+                "poll": 1
+            }
+        ],
+        "question": "best midfielder",
+        "pub_date": "2018-12-01T21:16:37.459511Z",
+        "created_by": 1
+    }
+]

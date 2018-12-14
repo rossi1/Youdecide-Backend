@@ -1,0 +1,79 @@
+[{
+  "question": "best club in London",
+  "choices": [
+                {
+                  "name": "appl music",
+                  "image": "applelogo.jpg",
+                  "mp3": "apple.mp3",
+                  "mp4": "steve.mp4",
+                  "voters": ["usmane", "anonymous", "emeka"],
+                  "total_votes": 432
+                },
+                {
+                  "name": "churchboiz",
+                  "image": "cb.jpg",
+                  "mp3": "today.mp3",
+                  "mp4": "track.mp4",
+                  "voters": ["dembele", "anonymous", "dan"],
+                  "total_votes": 542
+                },
+                {
+                  "name": "Spotify",
+                  "image": "spot.jpg",
+                  "mp3": "spotty.mp3",
+                  "mp4": "vid.mp4",
+                  "voters": ["paul", "anonymous", "abba"],
+                  "total_votes": 432
+                }
+              ],
+  "poll_type": ["text", "image", "video"],
+  "created_by": "youdecide",
+  "pub_date": "2018-12-08 16:08:53.337719+00:00",
+  "expire_date": "2018-12-11 16:08:28+00:00",
+  "slug": "best-club-in-london"
+  },
+  {
+    "question": "best footballer 2018",
+    "choices": [
+                  {
+                    "name": "L Messi",
+                    "image": "messi.jpg",
+                    "mp3": "",
+                    "mp4": "Messi goals.mp4",
+                    "voters": ["usmane", "anonymous", "emeka"],
+                    "total_votes": 432
+                  },
+                  {
+                    "name": "C Ronaldo",
+                    "image": "CR7.jpg",
+                    "mp3": "",
+                    "mp4": "Cr freekicks.mp4",
+                    "voters": ["dembele", "anonymous", "dan"],
+                    "total_votes": 542
+                  },
+                  {
+                    "name": "Eden Hazard",
+                    "image": "hazard.jpg",
+                    "mp3": "",
+                    "mp4": "hazard best goals.mp4",
+                    "voters": ["paul", "anonymous", "abba"],
+                    "total_votes": 432
+                  }
+                ],
+    "poll_type": ["image"],
+    "created_by": "youdecide",
+    "pub_date": "2018-12-08 16:23:14.957509+00:00",
+    "expire_date": "2018-12-20 16:22:43+00:00",
+    "slug": "best footballer 2018"},
+  {
+    "question": "Video of the year",
+    "choice_type": "VIDEO",
+    "choices": ["Superman Martin Pk", "Eben Victory", "Nara by Tim Godfrey"],
+    "created_by": "youdecide",
+    "pub_date": "2018-12-11 10:12:31.202539+00:00",
+    "expire_date": "2018-12-31 10:07:31+00:00",
+    "slug": "video-of-the-year",
+    "hash_slug": "31I9E_OhV4OigS1NHwRVquPv"
+  }
+]
+

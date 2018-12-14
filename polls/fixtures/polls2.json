@@ -1,0 +1,72 @@
+[
+    {
+        "id": 4,
+        "choices": [],
+        "question": "cartoon of the year",
+        "pub_date": "2018-12-05T14:35:40.460571Z",
+        "duration": null,
+        "created_by": 2
+    },
+    {
+        "id": 3,
+        "choices": [
+            {
+                "id": 3,
+                "votes": [],
+                "choice_text": "Apple Music",
+                "poll": 3
+            },
+            {
+                "id": 2,
+                "votes": [],
+                "choice_text": "churchboiz",
+                "poll": 3
+            },
+            {
+                "id": 1,
+                "votes": [],
+                "choice_text": "Spotify",
+                "poll": 3
+            }
+        ],
+        "question": "best free music stream app",
+        "pub_date": "2018-12-05T14:19:14.859228Z",
+        "duration": "2018-12-28T14:19:13Z",
+        "created_by": 3
+    },
+    {
+        "id": 2,
+        "choices": [],
+        "question": "best song of the year",
+        "pub_date": "2018-12-05T14:18:50.180210Z",
+        "duration": "2018-12-18T00:00:00Z",
+        "created_by": 2
+    },
+    {
+        "id": 1,
+        "choices": [
+            {
+                "id": 6,
+                "votes": [],
+                "choice_text": "lionel messi",
+                "poll": 1
+            },
+            {
+                "id": 5,
+                "votes": [],
+                "choice_text": "c Ronaldo",
+                "poll": 1
+            },
+            {
+                "id": 4,
+                "votes": [],
+                "choice_text": "luka modric",
+                "poll": 1
+            }
+        ],
+        "question": "best player 2018",
+        "pub_date": "2018-12-05T14:18:07.886090Z",
+        "duration": "2018-12-10T14:18:05Z",
+        "created_by": 3
+    }
+]
