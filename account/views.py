@@ -27,8 +27,6 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request, 'register.html', {'user_form': user_form})
 
-# Create the user profile
-# profile = Profile.objects.create(user=new_user)
 
 @login_required
 def edit(request):

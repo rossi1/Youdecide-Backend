@@ -5,5 +5,5 @@ from polls import api
 
 urlpatterns = [
     # re_path('^poll/(?P<pk>[0-9]+)/$', api.PollAPIDetailView.as_view(), name='poll'),
-    re_path('^user/feeds/$', api.PollAPIListView.as_view(), name='feels'),
+#    re_path('^user/feeds/$', api.PollAPIListView.as_view(), name='feels'),
 ]

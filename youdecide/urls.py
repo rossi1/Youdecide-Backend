@@ -29,8 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_views.home, name='home'),
     path('polls/', include(polls_urls)),
-    path('api/', include(api_urls)),
-    path('survey/', include(survey_urls)),
+    # path('api/', include(api_urls)),
+    # path('survey/', include(survey_urls)),
 
 
     # account urls
