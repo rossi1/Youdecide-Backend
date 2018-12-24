@@ -9,3 +9,5 @@ social-auth-app-django
 python-decouple
 mysqlclient
 pymysql
+celery==4.0
+mailgun

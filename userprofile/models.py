@@ -22,3 +22,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return '{} follows {}'.format(self.user_from, self.user_to)
+
+
+class Likes(models.Model):
+    user = models.OneToOneField(User, )
