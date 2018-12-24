@@ -25,4 +25,5 @@ class UserProfile(models.Model):
 
 
 class Likes(models.Model):
-    user = models.OneToOneField(User, )
+    pass
+    #user = models.OneToOneField(User, )

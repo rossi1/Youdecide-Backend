@@ -24,6 +24,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from survey import urls as survey_urls
 from feed import urls as feed_urls
+from trending import urls as trending_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,10 +33,10 @@ urlpatterns = [
     # path('api/', include(api_urls)),
     # path('survey/', include(survey_urls)),
 
-
     # account urls
     path('users/', include(account_urls)),
     path('feeds/', include(feed_urls)),
+    path('trending/', include(trending_urls)),
     # urls.py
     # path(r"^wizard/$", "my_form_wizard_view", name="my_form_wizard_view"),
 

@@ -7,9 +7,9 @@ from polls.models import Poll
 from polls.serializers import PollSerializer
 
 
-class FeedsAPIListView(APIView):
+class PollFeedAPIListView(APIView):
     """
-    List all the Poll instances, or create a new Poll instance.
+    List all the Poll instances and return as the feeds.
     """
     def get(self, request, format=None):
         poll = Poll.objects.all()
