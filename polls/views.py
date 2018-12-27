@@ -4,13 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .models import Poll, Choice
-from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, UserSerializer
-
-
-class UserCreate(generics.CreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = UserSerializer
+from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
 class PollList(generics.ListCreateAPIView):

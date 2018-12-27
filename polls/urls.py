@@ -2,8 +2,8 @@ from django.urls import path, include, re_path
 # from .views import polls_list, polls_detail
 from polls import api
 from django.urls import path
-from .views import ChoiceList, CreateVote, PollList, PollDetail, UserCreate
-from .api import LoginView
+from .views import ChoiceList, CreateVote, PollList, PollDetail
+
 urlpatterns = [
     # path("polls/", polls_list, name="polls_list"),
     # path("polls/<int:pk>/", polls_detail, name="polls_details"),
@@ -17,8 +17,6 @@ urlpatterns = [
 
 
 urlpatterns = [
-    path("users/", UserCreate.as_view(), name="user_create"),
-    path("login/", LoginView.as_view(), name="login"),
     path("<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
     path("<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="create_vote"),
     # path("choices/", ChoiceList.as_view(), name="choice_list"),

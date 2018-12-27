@@ -1,61 +1,27 @@
+from .serializers import UserSerializer
+from django.contrib.auth import authenticate
+from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from account.serializers import UserSerializer, CustomUserSerializer, UserTypeSerializer
-from django.contrib.auth.models import User
+from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from account.models import Users
 
 
-class UserCreate(APIView):
-    """
-    Creates the user.
-    """
-
-#   def post(self, request, format='json'):
-#       return Response('hello')
-    def post(self, request, format='json'):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                token = Token.objects.create(user=user)
-                json = serializer.data
-                json['token'] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
-                # return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserCreate(generics.CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = UserSerializer
 
 
-class CustomUserCreate(APIView):
-    """
-    Creates the user.
-    """
-    # def post(self, request, format='json'):
-    #     return Response('hello')
-    def post(self, request, format='json'):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                # return Response(serializer.data, status=status.HTTP_201_CREATED)
-                # return token instead of user
-                token = Token.objects.create(user=user)
-                json = serializer.data
-                json['token'] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class LoginView(APIView):
+    permission_classes = ()
 
-
-class UserTypeCreate(APIView):
-    """
-    Creates the user.
-    """
-
-    def post(self, request, format='json'):
-        serializer = UserTypeSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request,):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
+        token, created = Token.objects.get_or_create(user=user)
+        if user:
+            return Response({"token": token.key})
+        else:
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
