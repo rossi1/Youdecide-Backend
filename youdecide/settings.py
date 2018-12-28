@@ -34,7 +34,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '192.168.10.12']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '192.168.10.5']
 
 
 # Application definition
@@ -66,12 +66,17 @@ INSTALLED_APPS = [
     #  'djcelery',
 
 ]
-#
-# AUTHENTICATION_BACKENDS = (
-#                             'django.contrib.auth.backends.ModelBackend',
-#                             # 'account.authentication.EmailAuthBackend',
-#                                 'social.backends.facebook.Facebook2OAuth2',
-#                             )
+
+# authentication backends
+# user can login with username or email as username
+AUTHENTICATION_BACKENDS = (
+    # 'django.contrib.auth.backends.ModelBackend', # for django 1.8.3
+    'django.contrib.auth.backends.AllowAllUsersModelBackend', # for django 1.10 to test is_active user
+    'account.customauthbackend.EmailOrUsernameModelBackend',
+    # facebook auth backend
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+)
 # SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
 # SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
 

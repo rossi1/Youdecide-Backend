@@ -26,8 +26,7 @@ from django.contrib.auth.views import (LogoutView, LoginView, PasswordResetView,
 from account.api import UserCreate, LoginView
 
 urlpatterns = [
-    # re_path('^login/$', LoginView.as_view(), name='login'),
-    # re_path('^logout/$', LogoutView.as_view(), name='logout'),
+    re_path('^logout/$', LogoutView.as_view(), name='logout'),
     re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
 
     # change password urls
@@ -47,7 +46,6 @@ urlpatterns = [
     re_path('^edit/$', views.edit, name='edit'),
 
     # sign up rest api
-    # re_path(r'^api/users$', api.UserCreate.as_view(), name='account-create'),
     path("signup/", UserCreate.as_view(), name="user_create"),
     path("login/", LoginView.as_view(), name="login"),
 
