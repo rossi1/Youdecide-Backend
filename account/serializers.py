@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.password_validation import validate_password
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,6 +31,22 @@ class AllUsersSerializer(serializers.ModelSerializer):
         # Note that id is non-updatable, therefore not required in the
         # read-only fields
         fields = ('id', 'username',)
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password')
 #
 # class CustomUserSerializer(serializers.ModelSerializer):
 #     username = serializers.CharField(

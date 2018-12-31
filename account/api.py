@@ -1,4 +1,4 @@
-from .serializers import UserSerializer, AllUsersSerializer
+from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -54,7 +54,6 @@ class LoginView(APIView):
         else:
             username = request.data.get("email")
         password = request.data.get("password")
-        # password = request.data.get("email")
         user = authenticate(username=username, password=password)
         token, created = Token.objects.get_or_create(user=user)
         if user:
@@ -119,6 +118,35 @@ class Logout(APIView):
             request.user.auth_token.delete()
             return Response(status=status.HTTP_200_OK)
         return HttpResponseRedirect(settings.LOGIN_URL)
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    For /api/v1/users/change-password url path
+    An endpoint for changing password.
+    """
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response("Success.", status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # class UserFollowAPIView(generics.CreateAPIView):
 #     """
