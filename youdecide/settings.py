@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'api',
-    'pages',
+    # 'pages',
     'polls',
     'home',
     'survey',
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     # social authentication
     # 'python-social-auth',
     'social_django',
+    'corsheaders',
     #  'tasks',
     #  'djcelery',
 
@@ -84,6 +85,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,6 +95,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# enable CORS for all domains
+CORS_ORIGIN_ALLOW_ALL = True
 # REST_FRAMEWORK = {
 #                 'DEFAULT_PERMISSION_CLASSES': [
 #                     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'

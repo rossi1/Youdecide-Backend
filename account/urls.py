@@ -20,13 +20,14 @@ from account import views, api
 from django.contrib.auth.views import (login, logout, logout_then_login, password_change, password_change_done,
                                        password_reset, password_reset_done, password_reset_confirm,
                                        password_reset_complete)
-from django.contrib.auth.views import (LogoutView, LoginView, PasswordResetView, PasswordResetConfirmView,
+from django.contrib.auth.views import (PasswordResetView, PasswordResetConfirmView,
                                        PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView,
-                                       PasswordChangeDoneView,)
-from account.api import UserCreate, LoginView
+                                       PasswordChangeDoneView,)  # LogoutView, LoginView,
+from account.api import UserCreate, LoginView, Logout, UserListAPIView
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    re_path('^logout/$', LogoutView.as_view(), name='logout'),
+    # re_path('^logout/$', LogoutView.as_view(), name='logout'),
     re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
 
     # change password urls
@@ -44,10 +45,13 @@ urlpatterns = [
     re_path('^register/$', views.register, name='register'),
     re_path('^$', views.dashboard, name='dashboard'),
     re_path('^edit/$', views.edit, name='edit'),
+    # get all users
+    re_path('^$', UserListAPIView.as_view(), name='users'),
 
     # sign up rest api
-    path("signup/", UserCreate.as_view(), name="user_create"),
-    path("login/", LoginView.as_view(), name="login"),
+    path('signup/', UserCreate.as_view(), name="user_create"),
+    path('login/', LoginView.as_view(), name="login"),
+    path('logout/', Logout.as_view(), name='logout'),
 
 ]
 

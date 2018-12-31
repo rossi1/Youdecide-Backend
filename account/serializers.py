@@ -20,6 +20,16 @@ class UserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
 
+
+class AllUsersSerializer(serializers.ModelSerializer):
+    """Serializer for User model having only the field required for all users"""
+
+    class Meta:
+        model = User
+
+        # Note that id is non-updatable, therefore not required in the
+        # read-only fields
+        fields = ('id', 'username',)
 #
 # class CustomUserSerializer(serializers.ModelSerializer):
 #     username = serializers.CharField(
