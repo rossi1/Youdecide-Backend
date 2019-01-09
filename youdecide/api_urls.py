@@ -22,6 +22,7 @@ from account import urls as account_urls
 from feed import urls as feed_urls
 from trending import urls as trending_urls
 from search import urls as search_urls
+from userprofile import urls as userprofile_urls
 
 urlpatterns = [
     path('', home_views.home, name='home'),
@@ -34,6 +35,7 @@ urlpatterns = [
     path('feeds/', include(feed_urls)),
     path('trending/', include(trending_urls)),
     path('search/', include(search_urls)),
+    path('userprofile', include(userprofile_urls)),
     # urls.py
 ]
 

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 from .models import UserProfile2, Follow  # , Notification, Language
 
@@ -21,6 +22,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'github_username', 'frequency',
                   'followers', 'followings', 'languages')
 
+
+class SingleUserSerializer(serializers.ModelSerializer):
+    """Serializer for User model having only the field required for all users"""
+
+    class Meta:
+        model = User
+
+        # Note that id is non-updatable, therefore not required in the
+        # read-only fields
+        fields = ('id', 'username',)
 
 # class LanguageSerializer(serializers.ModelSerializer):
 #     """Language Serializer"""
