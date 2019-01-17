@@ -9,7 +9,8 @@ from userprofile.serializers import SingleUserSerializer, UserProfileSerializer
 
 class SingleUserAPIDetailView(RetrieveUpdateAPIView):
     """
-    Retrieve, update or delete a given dentist instance.
+    Retrieve instance.
+    /api/v1/users/<id> url path
     """
     serializer_class = SingleUserSerializer
 
@@ -23,19 +24,3 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user = self.get_object(pk)
         serializer = SingleUserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, pk, format=None):
-        user = self.get_object(pk)
-        serializer = SingleUserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            try:
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except:
-                return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        user = self.get_object(pk)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)

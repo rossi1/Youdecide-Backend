@@ -23,7 +23,7 @@ from django.contrib.auth.views import (login, logout, logout_then_login, passwor
 from django.contrib.auth.views import (PasswordResetView, PasswordResetConfirmView,
                                        PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView,
                                        PasswordChangeDoneView,)  # LogoutView, LoginView,
-from account.api import UserCreate, LoginView, Logout, UserListAPIView, ChangePasswordView
+from account.api import UserCreate, LoginView, Logout, UserListAPIView, ChangePasswordView, UserDetailAPIView
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
@@ -43,7 +43,7 @@ urlpatterns = [
 
 
     re_path('^register/$', views.register, name='register'),
-    re_path('^$', views.dashboard, name='dashboard'),
+    # re_path('^$', views.dashboard, name='dashboard'),
     re_path('^edit/$', views.edit, name='edit'),
     # get all users
     re_path('^$', UserListAPIView.as_view(), name='users'),
@@ -52,6 +52,7 @@ urlpatterns = [
     path('signup/', UserCreate.as_view(), name="user_create"),
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', Logout.as_view(), name='logout'),
+    path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
 
 ]

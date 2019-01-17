@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'polls',
     'home',
     'survey',
+    'sms',
     'voting',
     'votes',
     'userprofile',
