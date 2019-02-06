@@ -3,6 +3,5 @@ from trending.api import PollTrendingAPIListView
 
 
 urlpatterns = [
-    # re_path('^poll/(?P<pk>[0-9]+)/$', api.PollAPIDetailView.as_view(), name='poll'),
-    re_path('^polls/get/$', PollTrendingAPIListView.as_view(), name='polls-trending'),
+    re_path('^polls/$', PollTrendingAPIListView.as_view(), name='trending-polls'),
 ]

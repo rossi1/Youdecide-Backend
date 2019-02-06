@@ -18,9 +18,11 @@ recepient2 = '2347038816743'
 recepient3 = '2348032966542'
 recepient4 = '2347065587424'
 recepient5 = '2347032341059'
+recepient6 = '2347088800781'
 message = 'You have job from our anykillz client abbah'
 message2 = 'Itsannie WE make the best designs of clothes in Africa for Africans by an African'
 message3 = 'open account with Eme for best banking experience with Standbic'
+message4 = 'Vote your best candidate 1. PMB  2. ATIKU'
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -37,7 +39,7 @@ class UserCreateSMS(APIView):
     permission_classes = ()
 
     def get(self, request, message2s=None):
-        sendSMS(recepient5, message3)
+        sendSMS(recepient6, message4)
         return Response("success", status=status.HTTP_200_OK)
 
 

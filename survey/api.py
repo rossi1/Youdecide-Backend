@@ -11,7 +11,6 @@ class CategoryAPIListView(APIView):
     """
     List all the  Category instances, or create a new Category instance.
     """
-    #queryset =
 
     def get(self, request, format=None):
         category = Category.objects.all()

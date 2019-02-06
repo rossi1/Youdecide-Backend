@@ -13,3 +13,4 @@ celery==3.1.18
 mailgun
 django-cors-headers
 nexmo
+ngrok
