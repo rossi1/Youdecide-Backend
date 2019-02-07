@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'votes',
     'userprofile',
     'django_nose',
+    'search',
     #  'youdecide_frontend',
     'rest_framework.authtoken',
     'rest_framework',
@@ -106,10 +107,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         'rest_framework.permissions.IsAuthenticated',
     )
 }
