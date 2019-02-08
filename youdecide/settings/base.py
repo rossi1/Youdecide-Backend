@@ -99,23 +99,8 @@ MIDDLEWARE = [
 
 # enable CORS for all domains
 CORS_ORIGIN_ALLOW_ALL = True
-# REST_FRAMEWORK = {
-#                 'DEFAULT_PERMISSION_CLASSES': [
-#                     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#                 ]
-#                 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        'rest_framework.permissions.IsAuthenticated',
-    )
-}
+
 ROOT_URLCONF = 'youdecide.urls'
 
 TEMPLATES = [
@@ -140,33 +125,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'youdecide.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
-    'default': {
-        'NAME': 'YOUDECIDE',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
-        'PASSWORD': '1234567i0',
-        'PORT': '5432',
-        'HOST':'',
-    },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': config('DB_NAME'),
-    #     'USER': config('DB_USER'),
-    #     'PASSWORD': config('DB_PASSWORD'),
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
-    # }
-}
 
 
 # Password validation

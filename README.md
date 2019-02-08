@@ -93,6 +93,11 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+## run app
+edit wsgi.py os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youdecide.settings.SPECIFIC_SETTINGS_NAME")
+eg os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youdecide.settings.local")
+python manage.py runserver --settings=youdecide.settings.['local' or 'production' or 'test' etc]
+
 
 ## Copyright
 Youdecide © 2015 - 2016 YOUDECIDE
