@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'api',
+    'anonymous_user',
     # 'pages',
     'polls',
     'home',
