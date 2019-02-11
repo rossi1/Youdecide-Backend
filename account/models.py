@@ -53,7 +53,8 @@ class Users(models.Model):
         db_table = 'users'
 
     @classmethod
-    def create(cls, users_id, username, password, userstatus): # , createddate, lastupdated):
+    def create(cls, users_id, username, password, userstatus):  # , createddate, lastupdated):
         usertype = cls(users_id=users_id, username=username, password=password,
-                       userstatus=userstatus) #, createddate=createddate, lastupdated=lastupdated)
+                       userstatus=userstatus)
+        #  createddate=createddate, lastupdated=lastupdated)
         return usertype
