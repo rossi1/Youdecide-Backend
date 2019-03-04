@@ -6,8 +6,8 @@ from rest_framework import status
 from django.http import Http404
 from polls.models import Poll
 from polls.serializers import PollSerializer
-from search.serializers import SearchHistorySerializer
-from search.models import SearchHistory
+from search.serializers import SearchHistorySerializer, FailedSearchHistorySerializer
+from search.models import SearchHistory, FailedSearchHistory
 from account.api import CsrfExemptSessionAuthentication
 from rest_framework.authentication import BasicAuthentication
 from django.views.decorators.csrf import csrf_exempt
@@ -33,6 +33,7 @@ class SearchResultList(generics.ListAPIView):
         the user as determined by the username portion of the URL.
         """
         question = self.kwargs['question']
+        user = self.request.user
         print(question)
         return Poll.objects.filter(question=question)
 
@@ -42,7 +43,6 @@ class SearchResultList(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@method_decorator(csrf_exempt, name='get')
 class SearchPollHistoriesAPIListView(APIView):
     """
     List all the poll searches by a user instances
@@ -56,7 +56,6 @@ class SearchPollHistoriesAPIListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@method_decorator(csrf_exempt, name='get')
 class SearchPollHistoryAPIDetailView(RetrieveUpdateAPIView):
     """
     Retrieve a given poll search history instance.
@@ -75,5 +74,20 @@ class SearchPollHistoryAPIDetailView(RetrieveUpdateAPIView):
         poll_search_history = self.get_object(pk)
         serializer = SearchHistorySerializer(poll_search_history)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FailedSearchesAPIListView(APIView):
+    """
+    List all failed searches for creation of future polls with highest failed searches
+    """
+    queryset = FailedSearchHistory.objects.all()
+    serializer_class = FailedSearchHistorySerializer
+
+    def get(self, request, format=None):
+        failed_searches = FailedSearchHistory.objects.all()
+        serializer = FailedSearchHistorySerializer(failed_searches, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 

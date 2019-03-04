@@ -102,3 +102,7 @@ python manage.py runserver --settings=youdecide.settings.['local' or 'production
 ## Copyright
 Youdecide © 2015 - 2016 YOUDECIDE
 
+### Install ngrok
+run the command below for testing with different machines
+ngrok http 8080 -host-header="localhost:8080"
+

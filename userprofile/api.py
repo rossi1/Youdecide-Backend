@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 from django.contrib.auth.models import User
-from userprofile.serializers import SingleUserSerializer, UserProfileSerializer
+from .models import BookMark
+from userprofile.serializers import SingleUserSerializer, UserProfileSerializer, BookmarkSerializer
+from rest_framework import generics
 
 
 class SingleUserAPIDetailView(RetrieveUpdateAPIView):
@@ -24,3 +26,11 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user = self.get_object(pk)
         serializer = SingleUserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookMarkList(generics.ListCreateAPIView):
+    """ get all the user bookmarks
+    """
+    queryset = BookMark.objects.all()
+    serializer_class = BookmarkSerializer
+

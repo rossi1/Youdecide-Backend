@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from .models import UserProfile2, Follow  # , Notification, Language
+from .models import UserProfile2, Follow, BookMark, Share  # , Notification, Language
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -32,6 +32,22 @@ class SingleUserSerializer(serializers.ModelSerializer):
         # Note that id is non-updatable, therefore not required in the
         # read-only fields
         fields = ('id', 'username',)
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    """ Serialize the bookmarks"""
+
+    class Meta:
+        model = BookMark
+        fields = '__all__'
+
+
+class ShareSerializer(serializers.ModelSerializer):
+    """ Serialize the shared polls"""
+
+    class Meta:
+        model = Share
+        fields = '__all__'
 
 # class LanguageSerializer(serializers.ModelSerializer):
 #     """Language Serializer"""

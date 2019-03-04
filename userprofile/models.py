@@ -14,11 +14,10 @@ class UserProfile(models.Model):
     # followers = models.ForeignKey()
     # followers = models.ManyToManyField(User, related_name='followers_set', symmetrical=False)
 
-    user_from = models.ForeignKey(User, related_name='rel_from_set', on_delete=models.CASCADE)  # A ForeignKey for the
-    # user that creates the
-    #  relationship
-    user_to = models.ForeignKey(User, related_name='rel_to_set', on_delete=models.CASCADE)  # A ForeignKey for the user
-    #  being followed
+    user_from = models.ForeignKey(User, related_name='rel_from_set', on_delete=models.CASCADE)
+    # A ForeignKey for the user that creates the relationship
+    user_to = models.ForeignKey(User, related_name='rel_to_set', on_delete=models.CASCADE)
+    # A ForeignKey for the user being followed
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -34,16 +33,29 @@ class Likes(models.Model):
     like_date = models.DateTimeField(auto_now_add=True)
 
 
-class BookMarks(models.Model):
+class BookMark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.poll.question
+
+    class Meta:
+        ordering = ('-created',)
+
 
 class Share(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    poll = models.CharField(max_length=255)
+    # poll = models.CharField(max_length=255)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     share_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.poll.question
+
+    class Meta:
+        ordering = ('-share_date',)
 
 
 class UserProfile2(models.Model):
