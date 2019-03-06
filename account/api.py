@@ -171,32 +171,4 @@ class ChangePasswordView(generics.UpdateAPIView):
 #         except:
 #             raise serializers.serializers.ValidationError(
 #                 'You have already followed this person')
-#
-#
-# class UserSettingsAPIView(generics.RetrieveUpdateAPIView):
-#     """
-#     For api/v1/users/<>/settings/ url path
-#     To enable user to update those that their:
-#     - update's frequency, github account and image
-#     """
-#     """For api/v1/users/<>/settings/ url path"""
-#
-#     queryset = models.UserSettings.objects.all()
-#     serializer_class = UserSettingsSerializer
-#     permission_classes = (IsOwner,)
 
-
-
-
-# class UserTypeCreate(APIView):
-#     """
-#     Creates the user.
-#     """
-#
-#     def post(self, request, format='json'):
-#         serializer = UserTypeSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             if user:
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

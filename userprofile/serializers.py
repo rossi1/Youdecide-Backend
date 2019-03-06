@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from .models import UserProfile2, Follow, BookMark, Share  # , Notification, Language
+from .models import UserProfile2, Follow, BookMark, Share
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -49,20 +49,3 @@ class ShareSerializer(serializers.ModelSerializer):
         model = Share
         fields = '__all__'
 
-# class LanguageSerializer(serializers.ModelSerializer):
-#     """Language Serializer"""
-#
-#     class Meta:
-#         model = Language
-#         fields = ('name',)
-#
-#
-# class NotificationSerializer(serializers.ModelSerializer):
-#     """Notification Serializer"""
-#
-#     class Meta:
-#         model = Notification
-#         fields = ('link', 'activity_type', 'read',
-#                   'content', 'date_created')
-#
-#         read_only_fields = ('date_created', 'link', 'activity_type', 'content')

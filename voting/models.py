@@ -1,21 +1,3 @@
-# from django.db import models
-# from django.contrib.auth.models import User
-# from mambilla.abstract_models import StartEndDate, TimeStampModel
-#
-#
-# # Create your models here.
-# class Question(TimeStampModel):
-#     question = models.CharField(max_length=140)
-#     author = models.ForeignKey(User, on_delete=models.CASCADE)
-#
-#
-# class Answer(TimeStampModel):
-#     answer = models.CharField(max_length=250)
-#     by_user = models.ForeignKey(User, on_delete=models.CASCADE)
-#
-#
-# class Answers(models.Model):
-#     answers = models.ForeignKey(Answer)
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify

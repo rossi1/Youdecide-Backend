@@ -47,28 +47,3 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('old_password', 'new_password')
-#
-# class CustomUserSerializer(serializers.ModelSerializer):
-#     username = serializers.CharField(
-#             validators=[UniqueValidator(queryset=Users.objects.all())]
-#             )
-#     password = serializers.CharField(min_length=8)
-#     createddate = serializers.DateTimeField(required=False)
-#     lastupdated = serializers.DateTimeField(required=False)
-#
-#     def create(self, validated_data):
-#         obj = Users.objects.create(**validated_data)
-#         # obj.save(foo=validated_data['foo'])
-#         obj.save()
-#         return obj
-#
-#     class Meta:
-#         model = Users
-#         fields = ('users_id', 'username', 'password', 'userstatus', 'createddate', 'lastupdated')
-#
-#
-# class UserTypeSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = UserType
-#         fields = ('user_type_id', 'title', 'description', 'createddate', 'lastupdated')
