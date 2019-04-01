@@ -1,6 +1,6 @@
 from youdecide.settings.base import *
 
-
+"""
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
@@ -12,7 +12,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
-
+"""
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

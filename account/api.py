@@ -1,19 +1,25 @@
-from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
+import json
+
 from django.contrib.auth import authenticate
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from userprofile import models, serializers
-from django.http import HttpResponseRedirect
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from youdecide import settings
-import json
-from django.contrib.auth import login
+from userprofile import models, serializers
+
+from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
+
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -55,12 +61,25 @@ class LoginView(APIView):
             username = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(username=username, password=password)
-        token, created = Token.objects.get_or_create(user=user)
+        #token, created = Token.objects.get_or_create(user=user)
         if user:
             # user = json.dumps(user)
-            return Response({"token": token.key})
+            token = self.get_tokens_for_user(user)
+
+            return Response({"token": token})
         else:
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def get_tokens_for_user(user):
+        "custom method to create new refresh and access tokens for the given user"
+
+        refresh = RefreshToken.for_user(user)
+        
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            }
 
 
 class IsOwner(permissions.BasePermission):

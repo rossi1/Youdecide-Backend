@@ -16,15 +16,27 @@ Including another URLconf
 
 
 from django.urls import path, include, re_path
-from account import views, api
+from django.views.decorators.csrf import csrf_exempt
+
 from django.contrib.auth.views import (login, logout, logout_then_login, password_change, password_change_done,
                                        password_reset, password_reset_done, password_reset_confirm,
                                        password_reset_complete)
+
 from django.contrib.auth.views import (PasswordResetView, PasswordResetConfirmView,
                                        PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView,
-                                       PasswordChangeDoneView,)  # LogoutView, LoginView,
+                                       PasswordChangeDoneView,)
+                                         # LogoutView, LoginView,
+
+from rest_framework_simplejwt.views import TokenRefreshView
+
+
 from account.api import UserCreate, LoginView, Logout, UserListAPIView, ChangePasswordView, UserDetailAPIView
-from django.views.decorators.csrf import csrf_exempt
+
+from account import views, api
+
+jwt_urlpattern = [
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+]
 
 urlpatterns = [
     # re_path('^logout/$', LogoutView.as_view(), name='logout'),
@@ -54,6 +66,7 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
+    path('', include(jwt_urlpattern))
 
 ]
 

@@ -62,10 +62,12 @@ INSTALLED_APPS = [
     #  'youdecide_frontend',
     'rest_framework.authtoken',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     # social authentication
     # 'python-social-auth',
     'social_django',
     'corsheaders',
+
     #  'tasks',
     #  'djcelery',
 
