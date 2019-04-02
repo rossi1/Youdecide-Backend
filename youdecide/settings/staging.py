@@ -1,5 +1,4 @@
 from datetime import timedelta
-
 from youdecide.settings.base import *
 
 
@@ -17,8 +16,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),# testing
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # testing
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # testing
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # testing
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 
