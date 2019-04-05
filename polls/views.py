@@ -2,9 +2,32 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
-from .models import Poll, Choice
+from ipware import get_client_ip
+
+from anonymous_user.models import AnonymousUserModel
+
+
+from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
+
+
+
+class AnonymousUserPermission(IsAuthenticated):
+
+    'Override IsAuthenticated permission class to authenticate against AnonymousUser'
+    
+    def has_permission(self, request, view):
+        if request.user.is_authenticated:
+            return True
+        ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
+        
+        
+
+        if AnonymousUserModel.objects.filter(user_ip=ip_address).exists():
+            return False
+        return True
 
 
 class PollList(generics.ListCreateAPIView):
@@ -24,18 +47,30 @@ class ChoiceList(generics.ListCreateAPIView):
     serializer_class = ChoiceSerializer
 
 
-class CreateVote(APIView):
+class CreateVote(generics.CreateAPIView):
+    permission_classes = (AnonymousUserPermission,)
+    serializer_class = VoteSerializer
+    queryset = Vote
 
-    def post(self, request, pk, choice_pk):
-        voted_by = request.data.get("voted_by")
-        data = {'choice': choice_pk, 'poll': pk, 'voted_by': voted_by}
-        serializer = VoteSerializer(data=data)
-        if serializer.is_valid():
-            vote = serializer.save()
+    def create(self, request, pk, choice_pk):
+        
+        data = {'choice': choice_pk, 'poll': pk}
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        if request.user.is_authenticated:
+            self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        detect_anonymous_user = get_client_ip(request)
+        anonymous_user = AnonymousUserModel.objects.create(user_ip=detect_anonymous_user[0])
+        self.perform_create(serializer, anonymous_user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+    def perform_create(self, instance, anonymous_user=''):
+        if anonymous_user == '':
+            instance.save(voted_by=self.request.user)
+        instance.save(anonymous_voter=anonymous_user)
+         
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
 # from django.shortcuts import get_object_or_404
