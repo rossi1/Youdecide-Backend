@@ -47,3 +47,6 @@ DATABASES = {
          'PORT': '5432',
          }
 }
+
+# IPWARE_META_PRECEDENCE_ORDER
+# https://github.com/un33k/django-ipware
