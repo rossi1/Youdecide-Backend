@@ -1,8 +1,12 @@
+from django.db.models import Q
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.exceptions import PermissionDenied
 
 from ipware import get_client_ip
 
@@ -14,19 +18,23 @@ from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
 
-class AnonymousUserPermission(IsAuthenticated):
+class AnonymousUserPermission(BasePermission):
 
-    'Override IsAuthenticated permission class to authenticate against AnonymousUser'
+    """Custom permission class to authenticate against AnonymousUser and stop double voting """
     
     def has_permission(self, request, view):
+        poll_pk = request.query_params.get('poll_pk')
+
         if request.user.is_authenticated:
+            if Vote.objects.filter(Q(poll=poll_pk), Q(voted_by=request.user)).exists():
+                raise PermissionDenied('Double voting disallowed')
             return True
+
+       
         ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
         
-        
-
-        if AnonymousUserModel.objects.filter(user_ip=ip_address).exists():
-            return False
+        if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__user_ip=ip_address)).exists():
+            raise PermissionDenied('Double voting disallowed')
         return True
 
 
@@ -48,7 +56,8 @@ class ChoiceList(generics.ListCreateAPIView):
 
 
 class CreateVote(generics.CreateAPIView):
-    permission_classes = (AnonymousUserPermission,)
+    permission_classes = (
+        AnonymousUserPermission,)
     serializer_class = VoteSerializer
     queryset = Vote
 
@@ -60,8 +69,9 @@ class CreateVote(generics.CreateAPIView):
         if request.user.is_authenticated:
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        detect_anonymous_user = get_client_ip(request)
-        anonymous_user = AnonymousUserModel.objects.create(user_ip=detect_anonymous_user[0])
+        detect_anonymous_user, is_routable = get_client_ip(request)
+
+        anonymous_user = AnonymousUserModel.objects.create(user_ip=detect_anonymous_user)
         self.perform_create(serializer, anonymous_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -69,7 +79,8 @@ class CreateVote(generics.CreateAPIView):
     def perform_create(self, instance, anonymous_user=''):
         if anonymous_user == '':
             instance.save(voted_by=self.request.user)
-        instance.save(anonymous_voter=anonymous_user)
+        else:
+            instance.save(anonymous_voter=anonymous_user)
          
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
