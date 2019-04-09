@@ -75,7 +75,6 @@ class CreateVote(generics.CreateAPIView):
         self.perform_create(serializer, anonymous_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
     def perform_create(self, instance, anonymous_user=''):
         if anonymous_user == '':
             instance.save(voted_by=self.request.user)
