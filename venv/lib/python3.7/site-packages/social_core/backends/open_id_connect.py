@@ -2,10 +2,11 @@ import json
 import datetime
 from calendar import timegm
 
+import six
 from jose import jwk, jwt
 from jose.jwt import JWTError, JWTClaimsError, ExpiredSignatureError
 from jose.utils import base64url_decode
-import six
+
 from social_core.backends.oauth import BaseOAuth2
 from social_core.utils import cache
 from social_core.exceptions import AuthTokenError
@@ -43,6 +44,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     REVOKE_TOKEN_URL = ''
     USERINFO_URL = ''
     JWKS_URI = ''
+    JWT_DECODE_OPTIONS = dict()
 
     def __init__(self, *args, **kwargs):
         self.id_token = None
@@ -147,7 +149,6 @@ class OpenIdConnectAuth(BaseOAuth2):
             decoded_sig = base64url_decode(encoded_sig.encode('utf-8'))
             if rsakey.verify(message.encode('utf-8'), decoded_sig):
                 return key
-        return False
 
     def validate_and_return_id_token(self, id_token, access_token):
         """
@@ -157,6 +158,10 @@ class OpenIdConnectAuth(BaseOAuth2):
         client_id, client_secret = self.get_key_and_secret()
 
         key = self.find_valid_key(id_token)
+
+        if not key:
+            raise AuthTokenError(self, 'Signature verification failed')
+
         alg = key['alg']
         rsakey = jwk.construct(key)
 
@@ -167,12 +172,13 @@ class OpenIdConnectAuth(BaseOAuth2):
                 algorithms=[alg],
                 audience=client_id,
                 issuer=self.id_token_issuer(),
-                access_token=access_token
+                access_token=access_token,
+                options=self.JWT_DECODE_OPTIONS,
             )
         except ExpiredSignatureError:
             raise AuthTokenError(self, 'Signature has expired')
-        except JWTClaimsError:
-            raise AuthTokenError(self, 'Invalid claims')
+        except JWTClaimsError as error:
+            raise AuthTokenError(self, str(error))
         except JWTError:
             raise AuthTokenError(self, 'Invalid signature')
 
