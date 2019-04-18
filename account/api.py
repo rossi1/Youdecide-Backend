@@ -16,6 +16,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from youdecide import settings
+from emailservice.utils import Mail
 from userprofile import models, serializers
 
 from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
@@ -35,6 +36,15 @@ class UserCreate(generics.CreateAPIView):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
     permission_classes = ()
     serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        email = serializer.validated_data['email']
+        username = serializer.validated_data['email']
+
+        send_mail = Mail()
+        send_mail.send_welcome_mail(email, username)
+
+        serializer.save()
 
     # def create(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)
