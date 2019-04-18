@@ -11,7 +11,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     )
 }
 
@@ -48,5 +48,15 @@ DATABASES = {
          }
 }
 
-# IPWARE_META_PRECEDENCE_ORDER
-# https://github.com/un33k/django-ipware
+
+# Email 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = config('HOST_USER')
+EMAIL_HOST_PASSWORD = config('HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+#sendgrid
+
+SENDGRID_API_KEY=config('SENDGRID_API_KEY')
