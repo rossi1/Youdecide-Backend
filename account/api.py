@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from django.core.mail import send_mail
+from django.conf import settings as st
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -41,9 +43,9 @@ class UserCreate(generics.CreateAPIView):
         email = serializer.validated_data['email']
         username = serializer.validated_data['email']
 
-        send_mail = Mail()
-        send_mail.send_welcome_mail(email, username)
-
+        mail =  Mail()
+        mail.send_welcome_mail(email, username)
+        
         serializer.save()
 
     # def create(self, request, *args, **kwargs):

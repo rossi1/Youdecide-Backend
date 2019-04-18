@@ -17,9 +17,9 @@ class Mail:
 
     def add_receipent_to_contact_list(self, payload):
         """This method is used to subscribe users to mailing lists """
-        data = [json.dumps(payload)]
+        data = [payload]
         
-        return requests.post(self.contact_api_url, data=data, headers=self.headers)
+        return requests.post(self.contact_api_url, json=data, headers=self.headers)
 
     def send_welcome_mail(self, email, username):
         subject = "Youdecide Registration Message"
