@@ -8,8 +8,14 @@ from django.core.mail import send_mail
 
 
 class Mail:
+    if hasattr(settings, 'SENDGRID_API_KEY'):
+        print(True) # debugging
+        api_key = getattr(settings, 'SENDGRID_API_KEY')
+    else:
+        print(False) # debugging
+        api_key = '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'
     headers = {
-    "authorization": "Bearer {}".format(settings.SENDGRID_API_KEY),
+    "authorization": "Bearer {}".format(api_key),
     "content-type": "application/json"
     }
 
