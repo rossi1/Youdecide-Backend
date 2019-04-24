@@ -49,7 +49,10 @@ DATABASES = {
 }
 
 
+
 # Email 
+
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = config('HOST_USER')

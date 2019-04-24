@@ -41,7 +41,7 @@ class UserCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         email = serializer.validated_data['email']
-        username = serializer.validated_data['email']
+        username = serializer.validated_data['username']
 
         mail =  Mail()
         mail.send_welcome_mail(email, username)

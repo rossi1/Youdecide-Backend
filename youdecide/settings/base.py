@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     # 'python-social-auth',
     'social_django',
     'corsheaders',
+    
 
     #  'tasks',
     #  'djcelery',

@@ -15,9 +15,9 @@ class Mail:
 
     contact_api_url = "https://api.sendgrid.com/v3/contactdb/recipients"
 
-    def add_receipent_to_contact_list(self, payload):
+    def add_receipent_to_contact_list(self, email_payload, first_name, last_name):
         """This method is used to subscribe users to mailing lists """
-        data = [payload]
+        data = [{'email': email_payload, 'first_name':first_name,  'last_name': last_name}]
         
         return requests.post(self.contact_api_url, json=data, headers=self.headers)
 
