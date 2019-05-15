@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     # 'python-social-auth',
     'social_django',
     'corsheaders',
+    'oauth2_provider',
+    'rest_framework_social_oauth2'
     
 
     #  'tasks',
@@ -81,11 +83,36 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.AllowAllUsersModelBackend', # for django 1.10 to test is_active user
     'account.customauthbackend.EmailOrUsernameModelBackend',
     # facebook auth backend
+    'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
+
+     # Google OAuth2
+    'social.backends.google.GoogleOAuth2',
+    
+     # Twitter Oauth
     'social_core.backends.twitter.TwitterOAuth',
+
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+
 )
-# SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
-# SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = config('FACEBOOK_APP_ID') # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = config('FACEBOOK_APP_SECRET') # Facebook App Secret
+
+
+# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook.
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_SECRET_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email',]
+
+SOCIAL_AUTH_TWITTER_KEY = config('TWITER_KEY')
+SOCIAL_AUTH_TWITTER_SECRET = config('TWITTER_SECRET_KEY')
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
@@ -123,6 +150,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 # OAuth
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },

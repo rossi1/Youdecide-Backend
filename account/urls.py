@@ -62,6 +62,7 @@ urlpatterns = [
 
     # sign up rest api
     path('signup/', UserCreate.as_view(), name="user_create"),
+    path('auth/', include('rest_framework_social_oauth2.urls')),
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', Logout.as_view(), name='logout'),
     path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
