@@ -15,9 +15,9 @@ from django.urls import reverse_lazy
 from decouple import config
 
 
-LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
+#LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
+#LOGIN_URL = reverse_lazy('login')
+#LOGOUT_URL = reverse_lazy('logout')
 
 # AUTH_USER_MODEL = 'account.CustomUser' # new to set the user auth to this
 
