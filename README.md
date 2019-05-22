@@ -106,3 +106,19 @@ Youdecide © 2015 - 2016 YOUDECIDE
 run the command below for testing with different machines
 ngrok http 8080 -host-header="localhost:8080"
 
+
+### SOCIAL OAUTH LOGIN
+-Now go to django admin and add a new Application.
+client_id and client_secret shouldn't be changed
+-user should be your superuser
+-redirect_uris should be left blank
+-client_type should be set to confidential
+-authorization_grant_type should be set to 'Resource owner password-based'
+-name can be set to whatever you want
+
+You can test by running this command
+
+curl -X POST -d "grant_type=convert_token&client_id=<client_id>&client_secret=<client_secret>&backend=facebook&token=<facebook_token>" http://localhost:8000/api/v1/account/auth/convert-token/
+
+This request returns the "access_token" that you should use on all HTTP requests to any of the endpoints . What is happening here is that we are converting a third-party access token (<user_access_token>) in an access token to use with the application  api and its clients ("access_token"). You should use this token on each request to any of the  api endpoint  to authenticate each request and avoid authenticating with FB/ or any other platforms  every time.
+
