@@ -87,7 +87,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
 
      # Google OAuth2
-    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.GoogleOAuth2',
     
      # Twitter Oauth
     'social_core.backends.twitter.TwitterOAuth',
