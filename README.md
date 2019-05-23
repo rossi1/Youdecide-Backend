@@ -108,8 +108,9 @@ ngrok http 8080 -host-header="localhost:8080"
 
 
 ### SOCIAL OAUTH LOGIN
--Now go to django admin and add a new Application.
-client_id and client_secret shouldn't be changed
+-Now go to django admin, click on the social application
+table  and add a new Application.
+-client_id and client_secret shouldn't be changed
 -user should be your superuser
 -redirect_uris should be left blank
 -client_type should be set to confidential
