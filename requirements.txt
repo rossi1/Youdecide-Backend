@@ -17,6 +17,7 @@ django-oauth-toolkit==1.2.0
 django-rest-framework-social-oauth2==1.1.0
 djangorestframework==3.9.2
 djangorestframework-simplejwt==4.1.1
+gunicorn==19.9.0
 idna==2.8
 kombu==3.0.37
 mailgun==0.1.1
