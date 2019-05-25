@@ -1,0 +1,1 @@
+web: gunicorn youdecide.wsgi --pythonpath youdecide
