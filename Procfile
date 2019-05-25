@@ -1,1 +1,1 @@
-web: gunicorn youdecide.wsgi --pythonpath youdecide
+web: gunicorn youdecide.wsgi 
