@@ -14,6 +14,8 @@ import os
 from django.urls import reverse_lazy
 from decouple import config
 
+import dj_database_url
+
 
 #LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
 #LOGIN_URL = reverse_lazy('login')
@@ -34,7 +36,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', '192.168.10.5']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
