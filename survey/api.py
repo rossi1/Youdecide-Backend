@@ -67,7 +67,6 @@ class SurveyQuestionAPIListView(APIView):
     """
     List all the  SurveyQuestion instances, or create a new SurveyQuestion instance.
     """
-    #queryset =
 
     def get(self, request, format=None):
         survey_question = SurveyQuestion.objects.all()

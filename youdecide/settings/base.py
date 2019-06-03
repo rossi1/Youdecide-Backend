@@ -15,9 +15,9 @@ from django.urls import reverse_lazy
 from decouple import config
 
 
-#LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-#LOGIN_URL = reverse_lazy('login')
-#LOGOUT_URL = reverse_lazy('logout')
+# LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
+# LOGIN_URL = reverse_lazy('login')
+# LOGOUT_URL = reverse_lazy('logout')
 
 # AUTH_USER_MODEL = 'account.CustomUser' # new to set the user auth to this
 
@@ -86,10 +86,10 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
 
-     # Google OAuth2
+    # Google OAuth2
     # 'social.backends.google.GoogleOAuth2',
     
-     # Twitter Oauth
+    # Twitter Oauth
     'social_core.backends.twitter.TwitterOAuth',
 
     # django-rest-framework-social-oauth2

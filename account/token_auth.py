@@ -50,8 +50,7 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
 obtain_expiring_auth_token = ObtainExpiringAuthToken.as_view()
 
 
-
-# And don't forget to modify the urls:
+#  And don't forget to modify the urls:
 #
 # urlpatterns += patterns(
 #     '',

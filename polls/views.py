@@ -1,5 +1,4 @@
 from django.db.models import Q
-
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
@@ -7,15 +6,10 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.exceptions import PermissionDenied
-
 from ipware import get_client_ip
-
 from anonymous_user.models import AnonymousUserModel
-
-
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
-
 
 
 class AnonymousUserPermission(BasePermission):
@@ -30,7 +24,6 @@ class AnonymousUserPermission(BasePermission):
                 raise PermissionDenied('Double voting disallowed')
             return True
 
-       
         ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
         
         if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__user_ip=ip_address)).exists():
