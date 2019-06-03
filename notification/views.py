@@ -1,5 +1,4 @@
-
-from django.shortcuts import get_object_or_404,
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -17,7 +16,6 @@ class NotificationUnreadListView(ListAPIView):
     the actual user"""
     queryset = Notification
     permission_classes = (IsAuthenticated,)
-    
 
     def get_queryset(self, **kwargs):
         return self.request.user.notifications.unread()
@@ -45,9 +43,9 @@ def mark_as_read(request, slug=None):
         notification.mark_as_read()
 
     msg = "The notification {} has been marked as read.".format(notification.slug)
-  
 
     return Response(data=msg, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

@@ -24,7 +24,6 @@ from userprofile import models, serializers
 from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
 
 
-
 class CsrfExemptSessionAuthentication(SessionAuthentication):
 
     def enforce_csrf(self, request):
@@ -43,7 +42,7 @@ class UserCreate(generics.CreateAPIView):
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
 
-        mail =  Mail()
+        mail = Mail()
         mail.send_welcome_mail(email, username)
         
         serializer.save()
@@ -73,7 +72,7 @@ class LoginView(APIView):
             username = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(username=username, password=password)
-        #token, created = Token.objects.get_or_create(user=user)
+        # token, created = Token.objects.get_or_create(user=user)
         if user:
             # user = json.dumps(user)
             token = self.get_tokens_for_user(user)
@@ -84,7 +83,7 @@ class LoginView(APIView):
 
     @staticmethod
     def get_tokens_for_user(user):
-        "custom method to create new refresh and access tokens for the given user"
+        """custom method to create new refresh and access tokens for the given user"""
 
         refresh = RefreshToken.for_user(user)
         
