@@ -7,7 +7,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.exceptions import PermissionDenied
 from ipware import get_client_ip
-from anonymous_user.models import AnonymousUserModel
+from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
@@ -64,7 +64,7 @@ class CreateVote(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         detect_anonymous_user, is_routable = get_client_ip(request)
 
-        anonymous_user = AnonymousUserModel.objects.create(user_ip=detect_anonymous_user)
+        anonymous_user = AnonymousVoter.objects.create(user_ip=detect_anonymous_user)
         self.perform_create(serializer, anonymous_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

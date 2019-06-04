@@ -47,17 +47,6 @@ class UserCreate(generics.CreateAPIView):
         
         serializer.save()
 
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     new_user = authenticate(email=request.POST.get('email'), password=request.POST.get('password'),)
-    #     if new_user is not None:
-    #         if new_user.is_active:
-    #             login(request, new_user)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
 class LoginView(APIView):
     """For /api/v1/users/login url path"""
@@ -72,9 +61,7 @@ class LoginView(APIView):
             username = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(username=username, password=password)
-        # token, created = Token.objects.get_or_create(user=user)
         if user:
-            # user = json.dumps(user)
             token = self.get_tokens_for_user(user)
 
             return Response({"token": token})
@@ -132,22 +119,7 @@ class UserRegisterAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
-# class UserLogoutAPIView(generics.UpdateAPIView):
-#     """For /api/v1/users/logout url path"""
-#
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = (IsOwner, )
 
-class Logout(APIView):
-    """For /api/v1/users/logout url path"""
-
-    def get(self, request, format=None):
-        # simply delete the token to force a login
-        if request.auth:
-            request.user.auth_token.delete()
-            return Response(status=status.HTTP_200_OK)
-        return HttpResponseRedirect(settings.LOGIN_URL)
 
 
 class ChangePasswordView(generics.UpdateAPIView):

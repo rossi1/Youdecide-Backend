@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
@@ -80,10 +81,10 @@ class Notification(models.Model):
 
     """
 
-    actor = models.ForeignKey(settings.AUTH_USER_MODEL,
+    actor = models.ForeignKey(User,
                               related_name="notify_actor",
                               on_delete=models.CASCADE)
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False,
+    recipient = models.ForeignKey(User, blank=False,
                                   related_name="notifications", on_delete=models.CASCADE)
     unread = models.BooleanField(default=True, db_index=True)
     timestamp = models.DateTimeField(auto_now_add=True)

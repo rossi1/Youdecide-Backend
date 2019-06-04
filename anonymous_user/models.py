@@ -4,15 +4,6 @@ from django.db import models
 # Create your models here.
 # to detect and ignore "duplicate" votes instead(i.e.votes for the same
 # option from the same ip and browser combination for certain time period may be considered "cheated").
-class AnonymousUserModel(models.Model):
-    user_ip = models.GenericIPAddressField()
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ('-date_created',)
-
-    def __str__(self):
-        return str(self.user_ip)
 
 
 class AnonymousVoter(models.Model):
@@ -23,11 +14,16 @@ class AnonymousVoter(models.Model):
     useragent = models.TextField(blank=True, null=True)  # Field name made lowercase.
     devicename = models.CharField(max_length=60, blank=True, null=True)  # Field name made lowercase.
     manufacturer = models.CharField(max_length=60, blank=True, null=True)
-    ip_address = models.CharField(max_length=40, blank=True, null=True)
+    ip_address = models.GenericIPAddressField()
     browsername = models.CharField(max_length=30, blank=True, null=True)  # Field name made lowercase.
     browserversion = models.CharField(max_length=10, blank=True, null=True)  # Field name made lowercase.
     operatingsystem = models.CharField(max_length=20, blank=True, null=True)  # Field name made lowercase.
-    created_date = models.DateTimeField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        ordering = ('-created_date',)
+
 
    
 

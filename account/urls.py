@@ -30,7 +30,7 @@ from django.contrib.auth.views import (PasswordResetView, PasswordResetConfirmVi
 from rest_framework_simplejwt.views import TokenRefreshView
 
 
-from account.api import UserCreate, LoginView, Logout, UserListAPIView, ChangePasswordView, UserDetailAPIView
+from account.api import UserCreate, LoginView,  UserListAPIView, ChangePasswordView, UserDetailAPIView
 
 from account import views, api
 

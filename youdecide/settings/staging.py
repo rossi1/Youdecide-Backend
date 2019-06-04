@@ -13,7 +13,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.IsAuthenticated',
     )
 }
 
@@ -40,7 +40,7 @@ SIMPLE_JWT = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-"""
+
 DATABASES = {
     'default': {
          'ENGINE': config('DB_POSTGRES_ENGINE'),
@@ -51,13 +51,13 @@ DATABASES = {
          'PORT': '5432',
          }
 }
-"""
 
+"""
 DATABASES = {}
 
 DATABASES['default'] =  dj_database_url.config(default=config('DATABASE_URL'))
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql',
-
+"""
 # Email
 
 

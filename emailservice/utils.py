@@ -11,8 +11,8 @@ class Mail:
     else:
         print(False)  # debugging
         api_key = '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'
-    headers = {"authorization": "Bearer {}".format(api_key), "content-type": "application/json"
-              }
+    headers = {"authorization": "Bearer {}".format(api_key), "content-type": "application/json"}
+    
     contact_api_url = "https://api.sendgrid.com/v3/contactdb/recipients"
 
     def add_receipent_to_contact_list(self, email_payload, first_name, last_name):

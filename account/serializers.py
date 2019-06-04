@@ -1,7 +1,10 @@
-from rest_framework import serializers
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.models import User
+
+from rest_framework import serializers
+from rest_framework.validators import ValidationError
+from rest_framework.authtoken.models import Token
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,8 +21,13 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        Token.objects.create(user=user)
+       
         return user
+    
+    def validate_email(self, value):
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError('A user with that email already exists.')
+        return value
 
 
 class AllUsersSerializer(serializers.ModelSerializer):

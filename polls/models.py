@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from anonymous_user.models import AnonymousUserModel
+from anonymous_user.models import AnonymousVoter
 
 
 class Poll(models.Model):
@@ -25,7 +25,7 @@ class Vote(models.Model):
     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     voted_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    anonymous_voter = models.ForeignKey(AnonymousUserModel, on_delete=models.CASCADE, null=True)
+    anonymous_voter = models.ForeignKey(AnonymousVoter, on_delete=models.CASCADE, null=True)
 
 
     class Meta:
