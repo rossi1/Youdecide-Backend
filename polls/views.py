@@ -18,6 +18,7 @@ class AnonymousUserPermission(BasePermission):
     
     def has_permission(self, request, view):
         poll_pk = request.query_params.get('poll_pk')
+        print(poll_pk)
 
         if request.user.is_authenticated:
             if Vote.objects.filter(Q(poll=poll_pk), Q(voted_by=request.user)).exists():
@@ -26,19 +27,29 @@ class AnonymousUserPermission(BasePermission):
 
         ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
         
-        if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__user_ip=ip_address)).exists():
+        if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__ipaddress=ip_address)).exists():
             raise PermissionDenied('Double voting disallowed')
         return True
 
 
-class PollList(generics.ListCreateAPIView):
-    queryset = Poll.objects.all()
+class PollCreate(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Poll 
     serializer_class = PollSerializer
 
 
-class PollDetail(generics.RetrieveDestroyAPIView):
+class PollList(generics.ListAPIView):
+    serializer_class = PollSerializer
+    queryset = Poll.objects.all()
+    
+
+
+class PollDetail(generics.RetrieveAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
+
+class PollDelete(generics.RetrieveDestroyAPIView):
+    pass
 
 
 class ChoiceList(generics.ListCreateAPIView):
@@ -62,9 +73,20 @@ class CreateVote(generics.CreateAPIView):
         if request.user.is_authenticated:
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        detect_anonymous_user, is_routable = get_client_ip(request)
+        email_address = request.data.get('email', 'testing@gmaiil.com') # testing if the email wasn't passed in the request data
+        phone_number = request.data.get('phone_number', '0703669887')# testing if the phone_number wasn't passed in the request data
+        anonymous_ip, is_routable = get_client_ip(request)
+        browsername= request.user_agent.browser.family 
+        browserversion = request.user_agent.os.version_string
+        operatingsystem = request.user_agent.os.family  
+        devicename = request.user_agent.os.family 
 
-        anonymous_user = AnonymousVoter.objects.create(user_ip=detect_anonymous_user)
+
+        anonymous_user = AnonymousVoter.objects.create(ipaddress=anonymous_ip,
+        browsername=browsername, browserversion=browserversion, operatingsystem=operatingsystem,
+        devicename=devicename, email_address=email_address, phone_number=phone_number
+        
+        )
         self.perform_create(serializer, anonymous_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

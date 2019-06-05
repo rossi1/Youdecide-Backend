@@ -2,6 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import AnonymousUserModel
+from .models import AnonymousVoter
 
-admin.site.register(AnonymousUserModel)
+admin.site.register(AnonymousVoter)

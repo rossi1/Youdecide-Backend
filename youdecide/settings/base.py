@@ -70,13 +70,18 @@ INSTALLED_APPS = [
     'social_django',
     'corsheaders',
     'oauth2_provider',
-    'rest_framework_social_oauth2'
+    'rest_framework_social_oauth2',
+    'django_user_agents',
+
     
 
     #  'tasks',
     #  'djcelery',
 
 ]
+
+# disable django user agent cache
+USER_AGENTS_CACHE = None
 
 # authentication backends
 # user can login with username or email as username
@@ -89,7 +94,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
 
     # Google OAuth2
-    'social.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
     
     # Twitter Oauth
     'social_core.backends.twitter.TwitterOAuth',
@@ -125,10 +130,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware'
 ]
 
 # enable CORS for all domains

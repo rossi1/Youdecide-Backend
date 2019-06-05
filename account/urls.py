@@ -40,7 +40,7 @@ jwt_urlpattern = [
 
 urlpatterns = [
     # re_path('^logout/$', LogoutView.as_view(), name='logout'),
-    re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
+    #re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
 
     # change password urls
     re_path('^password-change/$', PasswordChangeView.as_view(), name='password_change'),
@@ -64,7 +64,7 @@ urlpatterns = [
     path('signup/', UserCreate.as_view(), name="user_create"),
     path('auth/', include('rest_framework_social_oauth2.urls')),
     path('login/', LoginView.as_view(), name="login"),
-    path('logout/', Logout.as_view(), name='logout'),
+    #path('logout/', Logout.as_view(), name='logout'),
     path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('', include(jwt_urlpattern))

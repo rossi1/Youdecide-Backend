@@ -16,6 +16,7 @@ django-ipware==2.1.0
 django-nose==1.4.6
 django-oauth-toolkit==1.2.0
 django-rest-framework-social-oauth2==1.1.0
+django-user-agents==0.3.2
 djangorestframework==3.9.2
 djangorestframework-simplejwt==4.1.1
 gunicorn==19.9.0
@@ -35,6 +36,7 @@ python-decouple==3.1
 python-http-client==3.1.0
 python3-openid==3.1.0
 pytz==2018.9
+PyYAML==5.1
 requests==2.21.0
 requests-oauthlib==1.2.0
 sendgrid==3.6.5
@@ -42,5 +44,7 @@ sendgrid-django==4.2.0
 six==1.12.0
 social-auth-app-django==3.1.0
 social-auth-core==3.1.0
+ua-parser==0.8.0
 urllib3==1.24.1
+user-agents==2.0
 whitenoise==4.1.2

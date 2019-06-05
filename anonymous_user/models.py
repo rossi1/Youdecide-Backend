@@ -11,10 +11,10 @@ class AnonymousVoter(models.Model):
     # username = models.CharField(max_length=60)
     phone_number = models.CharField(max_length=16)
     email_address = models.CharField(unique=True, max_length=255, blank=True, null=True)
-    useragent = models.TextField(blank=True, null=True)  # Field name made lowercase.
+    #useragent = models.TextField(blank=True, null=True)  # Field name made lowercase.
     devicename = models.CharField(max_length=60, blank=True, null=True)  # Field name made lowercase.
-    manufacturer = models.CharField(max_length=60, blank=True, null=True)
-    ip_address = models.GenericIPAddressField()
+    #manufacturer = models.CharField(max_length=60, blank=True, null=True)
+    ipaddress = models.GenericIPAddressField()
     browsername = models.CharField(max_length=30, blank=True, null=True)  # Field name made lowercase.
     browserversion = models.CharField(max_length=10, blank=True, null=True)  # Field name made lowercase.
     operatingsystem = models.CharField(max_length=20, blank=True, null=True)  # Field name made lowercase.
