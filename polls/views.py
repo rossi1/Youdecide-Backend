@@ -73,8 +73,8 @@ class CreateVote(generics.CreateAPIView):
         if request.user.is_authenticated:
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        email_address = request.data.get('email', 'testing@gmaiil.com') # testing if the email wasn't passed in the request data
-        phone_number = request.data.get('phone_number', '0703669887')# testing if the phone_number wasn't passed in the request data
+        email_address = request.data.get('email', 'testing12@gmaiil.com') # testing if the email wasn't passed in the request data
+        phone_number = request.data.get('phone_number', '0703699887')# testing if the phone_number wasn't passed in the request data
         anonymous_ip, is_routable = get_client_ip(request)
         browsername= request.user_agent.browser.family 
         browserversion = request.user_agent.os.version_string
