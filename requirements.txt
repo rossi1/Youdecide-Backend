@@ -54,7 +54,3 @@ ua-parser==0.8.0
 urllib3==1.24.1
 user-agents==2.0
 whitenoise==4.1.2
-elasticsearch==6.3.0
-elasticsearch-dsl==6.1.0
-#elasticsearch-dsl==6.2.1
-django-elasticsearch-dsl==0.5.0
