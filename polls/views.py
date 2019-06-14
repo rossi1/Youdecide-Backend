@@ -1,4 +1,5 @@
 from django.db.models import Q
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
@@ -6,10 +7,22 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.exceptions import PermissionDenied
+
+
 from ipware import get_client_ip
+
+from django_elasticsearch_dsl_drf.filter_backends import (
+    FilteringFilterBackend,
+    OrderingFilterBackend,
+    SearchFilterBackend,
+)
+from django_elasticsearch_dsl_drf.views import BaseDocumentViewSet
+
+
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
-from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
+from .document import PollDocument
+from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, PollDocumentSerializer
 
 
 class AnonymousUserPermission(BasePermission):
@@ -95,6 +108,43 @@ class CreateVote(generics.CreateAPIView):
             instance.save(voted_by=self.request.user)
         else:
             instance.save(anonymous_voter=anonymous_user)
+
+class PollDocumentView(BaseDocumentViewSet):
+    """The PollDocument view."""
+
+    document = PollDocument
+    serializer_class = PollDocumentSerializer
+    lookup_field = 'id'
+    filter_backends = [
+        FilteringFilterBackend,
+        OrderingFilterBackend,
+        SearchFilterBackend,
+    ]
+    # Define search fields
+    search_fields = (
+        'question',
+        'created_by',
+        'pub_date'
+    )
+    """
+    # Define filtering fields
+    filter_fields = {
+        'id': None,
+        'question': 'question.raw',
+        'created_by': 'created_by.raw',
+        'pub_date': 'pub_date.raw',
+    }
+    # Define ordering fields
+    ordering_fields = {
+        'id': None,
+        'question': None,
+        'created_by': None,
+        'pub_date': None,
+    }
+    """
+    # Specify default ordering
+    ordering = ('id', 'pub_date',)
+    
          
 # from rest_framework.views import APIView
 # from rest_framework.response import Response

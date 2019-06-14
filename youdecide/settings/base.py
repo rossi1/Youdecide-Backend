@@ -73,6 +73,13 @@ INSTALLED_APPS = [
     'rest_framework_social_oauth2',
     'django_user_agents',
 
+    # Django Elasticsearch integration
+    'django_elasticsearch_dsl',
+
+     # Django REST framework Elasticsearch integration (this package)
+    'django_elasticsearch_dsl_drf'
+
+
     
 
     #  'tasks',
