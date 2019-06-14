@@ -76,7 +76,7 @@ You'll need to install postgres for this. If you don't have it installed, downlo
 5. Run `coverage run manage.py test` to run coverage for codango.
 
 ## REST API
-Youdecide has a REpresentational State Transfer (REST) Application Program Interface (API)
+Youdecide has a Representational State Transfer (REST) Application Program Interface (API)
 The documentation done on Apiary is [here](http://docs.youdecide.apiary.io/).
 
 The API endpoints are accessible at [localhost:8000/api/v1/](http://localhost:8000/api/v1/)
@@ -119,7 +119,34 @@ table  and add a new Application.
 
 You can test by running this command
 
-curl -X POST -d "grant_type=convert_token&client_id=<client_id>&client_secret=<client_secret>&backend=facebook&token=<facebook_token>" http://localhost:8000/api/v1/account/auth/convert-token/
+curl -X POST -d "grant_type=convert_token&client_id=<client_id>&client_secret=<client_secret>&backend=facebook&token=<facebook_token>" https://youdecide.herokuapp.com/api/v1/account/auth/convert-token/
 
 This request returns the "access_token" that you should use on all HTTP requests to any of the endpoints . What is happening here is that we are converting a third-party access token (<user_access_token>) in an access token to use with the application  api and its clients ("access_token"). You should use this token on each request to any of the  api endpoint  to authenticate each request and avoid authenticating with FB/ or any other platforms  every time.
 
+# How to vote an anynonmous user
+
+Make a request to the endpoint with this curl format 
+
+curl --header "Content-Type: application/json" -d '{"choice": "1", "poll": "1", "email":"somemail@ymail.com",  "phone_number": "08106125357"}'  https://youdecide-io.herokuapp.com/api/v1/polls/1/choices/1/vote/?poll_pk=1
+
+# Elastic Search
+
+Query param name reserved for search is search. 
+
+Search in all fields (question, pub_date, user) for word “how to become a developer”.
+
+https://youdecide-io.herokuapp.com/api/v1/polls/search/?search=how-to become-a-developer
+
+
+Search a single term on specific field
+
+In order to search in specific field (question) for term “how to become a developer”, add the field question separated with | to the search term.
+
+http://youdecide-io.herokuapp.com/search/publisher/?search=question|how-to become-a-developer
+
+
+Search for multiple terms in specific fields
+
+In order to search for multiple terms “how to become a developer”, and the with the pub_date, in specific fields add multiple search query params and field names separated with | to each of the search terms.
+
+http://127.0.0.1:8080/search/publisher/?search=question|how-to become-a-developer&search=pub_date|<date-format-here>

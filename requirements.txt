@@ -12,13 +12,18 @@ dj-database-url==0.5.0
 Django==2.0.2
 django-braces==1.13.0
 django-cors-headers==2.5.2
+django-elasticsearch-dsl==0.5.1
+django-elasticsearch-dsl-drf==0.17.7
 django-ipware==2.1.0
+django-nine==0.2.2
 django-nose==1.4.6
 django-oauth-toolkit==1.2.0
 django-rest-framework-social-oauth2==1.1.0
 django-user-agents==0.3.2
 djangorestframework==3.9.2
 djangorestframework-simplejwt==4.1.1
+elasticsearch==7.0.2
+elasticsearch-dsl==7.0.0
 gunicorn==19.9.0
 idna==2.8
 kombu==3.0.37
@@ -32,6 +37,7 @@ psycopg2==2.7.7
 pyactiveresource==1.0.1
 pycparser==2.19
 PyJWT==1.7.1
+python-dateutil==2.8.0
 python-decouple==3.1
 python-http-client==3.1.0
 python3-openid==3.1.0
