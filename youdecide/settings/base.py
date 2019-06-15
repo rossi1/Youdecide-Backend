@@ -76,7 +76,7 @@ INSTALLED_APPS = [
     # Django Elasticsearch integration
     'django_elasticsearch_dsl',
 
-     # Django REST framework Elasticsearch integration (this package)
+     # Django REST framework Elasticsearch integration
     'django_elasticsearch_dsl_drf'
 
 
@@ -89,6 +89,13 @@ INSTALLED_APPS = [
 
 # disable django user agent cache
 USER_AGENTS_CACHE = None
+
+# Elasticsearch configuration
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
 
 # authentication backends
 # user can login with username or email as username
