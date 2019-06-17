@@ -135,16 +135,15 @@ Query param name reserved for search is search.
 
 Search in all fields (question, pub_date, user) for word “how to become a developer”.
 
-https://youdecide-io.herokuapp.com/api/v1/polls/search/?search=how-to become-a-developer
-
+curl --header "Content-Type: application/json" -X GET http://127.0.0.1:8000/api/v1/polls/search/?search=que
 
 Search a single term on specific field
 
 In order to search in specific field (question) for term “how to become a developer”, add the field question separated with | to the search term.
 
-http://youdecide-io.herokuapp.com/search/publisher/?search=question|how-to become-a-developer
 
-
+curl --header "Content-Type: application/json" -X GET http://127.0.0.1:8000/api/v1/polls/search/?search=question|how-to become-a-developer
+ 
 Search for multiple terms in specific fields
 
 In order to search for multiple terms “how to become a developer”, and the with the pub_date, in specific fields add multiple search query params and field names separated with | to each of the search terms.

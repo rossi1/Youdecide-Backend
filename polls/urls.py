@@ -10,7 +10,7 @@ from .views import ChoiceList, CreateVote, PollList, PollDetail, PollCreate, Pol
 
 router = routers.SimpleRouter()
 
-router.register(r'polls', PollDocumentView)
+router.register('', PollDocumentView)
 
 urlpatterns = [
     path("<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
@@ -20,5 +20,5 @@ urlpatterns = [
     path("polls/", PollList.as_view(), name="polls_list"),
     path("create-polls", PollCreate.as_view(), name='poll_create'),
     path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail"),
-    path("polls/search/", include(router.urls), name="poll_search")
+    path("search/", include(router.urls), name="poll_search")
 ]

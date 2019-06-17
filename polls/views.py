@@ -14,9 +14,10 @@ from ipware import get_client_ip
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
-    SearchFilterBackend,
+    CompoundSearchFilterBackend,
 )
-from django_elasticsearch_dsl_drf.views import BaseDocumentViewSet
+
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 
 
 from anonymous_user.models import AnonymousVoter
@@ -113,12 +114,13 @@ class PollDocumentView(BaseDocumentViewSet):
     """The PollDocument view."""
 
     document = PollDocument
+    queryset = Poll.objects.all()
     serializer_class = PollDocumentSerializer
     lookup_field = 'id'
     filter_backends = [
         FilteringFilterBackend,
         OrderingFilterBackend,
-        SearchFilterBackend,
+        CompoundSearchFilterBackend,
     ]
     # Define search fields
     search_fields = (
@@ -126,7 +128,7 @@ class PollDocumentView(BaseDocumentViewSet):
         'created_by',
         'pub_date'
     )
-    """
+    
     # Define filtering fields
     filter_fields = {
         'id': None,
@@ -141,7 +143,7 @@ class PollDocumentView(BaseDocumentViewSet):
         'created_by': None,
         'pub_date': None,
     }
-    """
+    
     # Specify default ordering
     ordering = ('id', 'pub_date',)
     

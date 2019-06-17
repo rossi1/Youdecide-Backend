@@ -4,6 +4,7 @@ import json
 from django.contrib.auth.models import User
 
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from .document import PollDocument
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -36,6 +37,9 @@ class PollDocumentSerializer(DocumentSerializer):
     """Serializer for Poll document."""
 
     class Meta(object):
+        # = Poll
+        document = PollDocument
+        
         """Meta options."""
 
         
