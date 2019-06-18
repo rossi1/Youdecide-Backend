@@ -93,9 +93,10 @@ USER_AGENTS_CACHE = None
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'localhost:9200'
+        'hosts': 'localhost:8000'
     },
 }
+
 
 # authentication backends
 # user can login with username or email as username
