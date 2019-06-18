@@ -46,5 +46,5 @@ class PollDocumentSerializer(DocumentSerializer):
         fields = (
             'question',
             'pub_date',
-            'created_by'
+            
         )

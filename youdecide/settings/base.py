@@ -97,6 +97,13 @@ ELASTICSEARCH_DSL = {
     },
 }
 
+# Name of the Elasticsearch index
+
+ELASTICSEARCH_INDEX_NAMES = {
+    'polls.document': 'poll',
+    
+}
+
 
 # authentication backends
 # user can login with username or email as username
