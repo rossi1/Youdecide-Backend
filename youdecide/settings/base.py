@@ -93,7 +93,7 @@ USER_AGENTS_CACHE = None
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'localhost:8000'
+        'hosts': config('BONSAI_URL')
     },
 }
 
