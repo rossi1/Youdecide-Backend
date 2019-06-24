@@ -11,17 +11,15 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
+
 from django.urls import reverse_lazy
 from decouple import config
 
 import dj_database_url
 
 
-# LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-# LOGIN_URL = reverse_lazy('login')
-# LOGOUT_URL = reverse_lazy('logout')
 
-# AUTH_USER_MODEL = 'account.CustomUser' # new to set the user auth to this
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,13 +39,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+
+
+# local default apps
+LOCAL_APPS = [
     'account',
     'api',
     'anonymous_user',
@@ -59,14 +54,26 @@ INSTALLED_APPS = [
     'voting',
     'votes',
     'userprofile',
-    'django_nose',
     'search',
-    #  'youdecide_frontend',
+
+    
+    ]
+
+DEFAULT_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+]
+
+EXTERNAL_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    # social authentication
-    # 'python-social-auth',
+    'django_nose',
     'social_django',
     'corsheaders',
     'oauth2_provider',
@@ -79,13 +86,9 @@ INSTALLED_APPS = [
      # Django REST framework Elasticsearch integration
     'django_elasticsearch_dsl_drf'
 
-
-    
-
-    #  'tasks',
-    #  'djcelery',
-
 ]
+
+INSTALLED_APPS += DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
 
 # disable django user agent cache
 USER_AGENTS_CACHE = None
@@ -252,3 +255,59 @@ STATICFILES_FINDERS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(DIR, 'media')
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+        
+    )
+}
+
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # testing
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # testing
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': config('SECRET_KEY'),
+    'VERIFYING_KEY': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    
+}
+
+
+# Email
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = config('HOST_USER')
+EMAIL_HOST_PASSWORD = config('HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# sendgrid
+
+SENDGRID_API_KEY=config('SENDGRID_API_KEY')
