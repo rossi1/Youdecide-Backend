@@ -11,27 +11,21 @@ from rest_framework.exceptions import PermissionDenied
 
 from ipware import get_client_ip
 
-from django_elasticsearch_dsl_drf.filter_backends import (
-    FilteringFilterBackend,
-    OrderingFilterBackend,
-    CompoundSearchFilterBackend,
-)
-
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-
 
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
-from .document import PollDocument
-from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, PollDocumentSerializer
+
+from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
 class AnonymousUserPermission(BasePermission):
+    
 
     """Custom permission class to authenticate against AnonymousUser and stop double voting """
     
     def has_permission(self, request, view):
-        poll_pk = request.query_params.get('poll_pk')
+        
+        poll_pk = request.query_params.get('pk')
         print(poll_pk)
 
         if request.user.is_authenticated:
@@ -61,6 +55,8 @@ class PollList(generics.ListAPIView):
 class PollDetail(generics.RetrieveAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
+
+    
 
 class PollDelete(generics.RetrieveDestroyAPIView):
     pass
@@ -110,42 +106,6 @@ class CreateVote(generics.CreateAPIView):
         else:
             instance.save(anonymous_voter=anonymous_user)
 
-class PollDocumentView(BaseDocumentViewSet):
-    """The PollDocument view."""
-
-    document = PollDocument
-    queryset = Poll.objects.all()
-    serializer_class = PollDocumentSerializer
-    lookup_field = 'id'
-    filter_backends = [
-        FilteringFilterBackend,
-        OrderingFilterBackend,
-        CompoundSearchFilterBackend,
-    ]
-    # Define search fields
-    search_fields = (
-        'question',
-        'created_by',
-        'pub_date'
-    )
-    
-    # Define filtering fields
-    filter_fields = {
-        'id': None,
-        'question': 'question.raw',
-        'created_by': 'created_by.raw',
-        'pub_date': 'pub_date.raw',
-    }
-    # Define ordering fields
-    ordering_fields = {
-        'id': None,
-        'question': None,
-        'created_by': None,
-        'pub_date': None,
-    }
-    
-    # Specify default ordering
-    ordering = ('id', 'pub_date',)
     
          
 # from rest_framework.views import APIView

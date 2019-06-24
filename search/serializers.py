@@ -1,6 +1,10 @@
 from .models import SearchHistory, FailedSearchHistory
 from rest_framework import serializers
 
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+
+from .document import PollDocument
+
 
 class SearchHistorySerializer(serializers.ModelSerializer):
 
@@ -15,4 +19,20 @@ class FailedSearchHistorySerializer(serializers.ModelSerializer):
         model = FailedSearchHistory
         fields = '__all__'
 
+
+class PollDocumentSerializer(DocumentSerializer):
+    """Serializer for Poll document."""
+
+    class Meta(object):
+        # = Poll
+        document = PollDocument
+        
+        """Meta options."""
+
+        
+        fields = (
+            'question',
+            'pub_date',
+            
+        )
 

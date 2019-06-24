@@ -3,14 +3,12 @@ from django.urls import path, include, re_path
 
 from django.urls import path, include
 
-from rest_framework import routers
+
 
 from polls import api
-from .views import ChoiceList, CreateVote, PollList, PollDetail, PollCreate, PollDocumentView
+from .views import ChoiceList, CreateVote, PollList, PollDetail, PollCreate
 
-router = routers.SimpleRouter()
 
-router.register('', PollDocumentView)
 
 urlpatterns = [
     path("<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
@@ -20,5 +18,5 @@ urlpatterns = [
     path("polls/", PollList.as_view(), name="polls_list"),
     path("create-polls", PollCreate.as_view(), name='poll_create'),
     path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail"),
-    path("search/", include(router.urls), name="poll_search")
+    
 ]
