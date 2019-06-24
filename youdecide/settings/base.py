@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-
+INSTALLED_APPS = []
 
 # local default apps
 LOCAL_APPS = [
@@ -103,7 +103,7 @@ ELASTICSEARCH_DSL = {
 # Name of the Elasticsearch index
 
 ELASTICSEARCH_INDEX_NAMES = {
-    'polls.document': 'poll',
+    'search.document': 'poll',
     
 }
 
