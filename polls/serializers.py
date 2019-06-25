@@ -7,13 +7,18 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from .models import Poll, Choice, Vote
+from .models import Poll, Choice, Vote, VoteCount
+
+
+
 
 
 class VoteSerializer(serializers.ModelSerializer):
+    
+    
     class Meta:
         model = Vote
-        exclude = ('voted_by', 'anonymous_voter')
+        fields = ('choice', 'poll')
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -26,6 +31,9 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     choices = ChoiceSerializer(many=True, read_only=True, required=False)
+    
+    
+    
 
     class Meta:
         model = Poll

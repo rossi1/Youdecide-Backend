@@ -1,4 +1,7 @@
+import json
+
 from django.db.models import Q
+from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -13,7 +16,7 @@ from ipware import get_client_ip
 
 
 from anonymous_user.models import AnonymousVoter
-from .models import Poll, Choice, Vote
+from .models import Poll, Choice, Vote, VoteCount
 
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
@@ -25,7 +28,7 @@ class AnonymousUserPermission(BasePermission):
     
     def has_permission(self, request, view):
         
-        poll_pk = request.query_params.get('pk')
+        poll_pk = view.kwargs['pk']
         print(poll_pk)
 
         if request.user.is_authenticated:
@@ -53,8 +56,14 @@ class PollList(generics.ListAPIView):
 
 
 class PollDetail(generics.RetrieveAPIView):
+
+    """custom response updates coming soon"""
+
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
+    lookup_url_kwarg = 'pk'
+    
+    
 
     
 
@@ -82,7 +91,10 @@ class CreateVote(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         if request.user.is_authenticated:
             self.perform_create(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            count = self.get_poll_votes_count(data['poll'])
+            votes = {'votes': serializer.data, 'vote_count': count.poll_vote_count.vote_count}
+
+            return Response(votes, status=status.HTTP_201_CREATED)
         email_address = request.data.get('email', 'testing12@gmaiil.com') # testing if the email wasn't passed in the request data
         phone_number = request.data.get('phone_number', '0703699887')# testing if the phone_number wasn't passed in the request data
         anonymous_ip, is_routable = get_client_ip(request)
@@ -98,13 +110,27 @@ class CreateVote(generics.CreateAPIView):
         
         )
         self.perform_create(serializer, anonymous_user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
+        count = self.get_poll_votes_count(data['poll'])
+
+        
+        
+        votes = {'votes': serializer.data, 'vote_count': count.poll_vote_count.vote_count}
+
+        return Response(votes, status=status.HTTP_201_CREATED)
 
     def perform_create(self, instance, anonymous_user=''):
         if anonymous_user == '':
             instance.save(voted_by=self.request.user)
         else:
             instance.save(anonymous_voter=anonymous_user)
+
+    @staticmethod
+    def get_poll_votes_count(queryset_params):
+        vote_count = Poll.objects.get(pk=queryset_params)
+        return vote_count
+        
 
     
          

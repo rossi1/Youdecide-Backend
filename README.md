@@ -127,7 +127,7 @@ This request returns the "access_token" that you should use on all HTTP requests
 
 Make a request to the endpoint with this curl format 
 
-curl --header "Content-Type: application/json" -d '{"choice": "1", "poll": "1", "email":"somemail@ymail.com",  "phone_number": "08106125357"}'  https://youdecide-io.herokuapp.com/api/v1/polls/1/choices/1/vote/?poll_pk=1
+curl --header "Content-Type: application/json" -d '{"choice": "1", "poll": "1", "email":"somemail@ymail.com",  "phone_number": "08106125357"}'  https://youdecide-io.herokuapp.com/api/v1/polls/1/choices/1/vote/
 
 # Elastic Search
 
