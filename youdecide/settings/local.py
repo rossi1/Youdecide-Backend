@@ -2,7 +2,6 @@ from youdecide.settings.base import *
 from decouple import config
 
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 

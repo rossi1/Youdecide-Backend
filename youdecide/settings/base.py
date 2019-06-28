@@ -12,13 +12,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from datetime import timedelta
-
 from django.urls import reverse_lazy
 from decouple import config
-
 import dj_database_url
-
-
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -55,8 +51,6 @@ LOCAL_APPS = [
     'votes',
     'userprofile',
     'search',
-
-    
     ]
 
 DEFAULT_APPS = [
@@ -66,7 +60,6 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 ]
 
 EXTERNAL_APPS = [
@@ -79,11 +72,9 @@ EXTERNAL_APPS = [
     'oauth2_provider',
     'rest_framework_social_oauth2',
     'django_user_agents',
-
     # Django Elasticsearch integration
     'django_elasticsearch_dsl',
-
-     # Django REST framework Elasticsearch integration
+    # Django REST framework Elasticsearch integration
     'django_elasticsearch_dsl_drf'
 
 ]
@@ -151,11 +142,10 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -240,9 +230,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(DIR,'static')
 
-#STATICFILES_DIRS = ( os.path.join('static'), )
-
- 
+# STATICFILES_DIRS = ( os.path.join('static'), )
 
 
 STATICFILES_FINDERS = [
@@ -257,7 +245,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(DIR, 'media')
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
@@ -269,13 +256,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        #'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
         
     )
 }
-
-
 
 
 SIMPLE_JWT = {
