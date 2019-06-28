@@ -1,10 +1,8 @@
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.models import User
-
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
-
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,7 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-       
         return user
     
     def validate_email(self, value):
@@ -35,7 +32,6 @@ class AllUsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-
         # Note that id is non-updatable, therefore not required in the
         # read-only fields
         fields = ('id', 'username',)

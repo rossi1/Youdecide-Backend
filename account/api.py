@@ -119,9 +119,6 @@ class UserRegisterAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
-
-
-
 class ChangePasswordView(generics.UpdateAPIView):
     """
     For /api/v1/users/change-password url path
@@ -173,4 +170,3 @@ class ChangePasswordView(generics.UpdateAPIView):
 #         except:
 #             raise serializers.serializers.ValidationError(
 #                 'You have already followed this person')
-

@@ -1,34 +1,24 @@
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-
-
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication
-
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     CompoundSearchFilterBackend,
-
-
 )
 from .document import PollDocument
-
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-
-
 from polls.models import Poll
 from polls.serializers import PollSerializer
 from search.serializers import SearchHistorySerializer, FailedSearchHistorySerializer, PollDocumentSerializer
 from search.models import SearchHistory, FailedSearchHistory
 from account.api import CsrfExemptSessionAuthentication
-
-
 
 
 class SearchPollAPIListView(APIView):
@@ -106,9 +96,6 @@ class FailedSearchesAPIListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-
-
 class PollDocumentSearchView(BaseDocumentViewSet):
     """The PollDocument view."""
 
@@ -145,7 +132,3 @@ class PollDocumentSearchView(BaseDocumentViewSet):
     
     # Specify default ordering
     ordering = ('id', 'pub_date',)
-
-
-
-

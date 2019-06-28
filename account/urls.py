@@ -17,21 +17,14 @@ Including another URLconf
 
 from django.urls import path, include, re_path
 from django.views.decorators.csrf import csrf_exempt
-
 from django.contrib.auth.views import (login, logout, logout_then_login, password_change, password_change_done,
                                        password_reset, password_reset_done, password_reset_confirm,
                                        password_reset_complete)
-
 from django.contrib.auth.views import (PasswordResetView, PasswordResetConfirmView,
                                        PasswordResetDoneView, PasswordResetCompleteView, PasswordChangeView,
-                                       PasswordChangeDoneView,)
-                                         # LogoutView, LoginView,
-
+                                       PasswordChangeDoneView,)  # LogoutView, LoginView,
 from rest_framework_simplejwt.views import TokenRefreshView
-
-
 from account.api import UserCreate, LoginView,  UserListAPIView, ChangePasswordView, UserDetailAPIView
-
 from account import views, api
 
 jwt_urlpattern = [
@@ -40,8 +33,7 @@ jwt_urlpattern = [
 
 urlpatterns = [
     # re_path('^logout/$', LogoutView.as_view(), name='logout'),
-    #re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
-
+    # re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
     # change password urls
     re_path('^password-change/$', PasswordChangeView.as_view(), name='password_change'),
     re_path('^password-change/done/$', PasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -64,7 +56,7 @@ urlpatterns = [
     path('signup/', UserCreate.as_view(), name="user_create"),
     path('auth/', include('rest_framework_social_oauth2.urls')),
     path('login/', LoginView.as_view(), name="login"),
-    #path('logout/', Logout.as_view(), name='logout'),
+    # path('logout/', Logout.as_view(), name='logout'),
     path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('', include(jwt_urlpattern))

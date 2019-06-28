@@ -1,8 +1,6 @@
 import json
-
 from django.db.models import Q
 from django.core.serializers.json import DjangoJSONEncoder
-
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
@@ -10,19 +8,13 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.exceptions import PermissionDenied
-
-
 from ipware import get_client_ip
-
-
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote, VoteCount
-
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
 class AnonymousUserPermission(BasePermission):
-    
 
     """Custom permission class to authenticate against AnonymousUser and stop double voting """
     
@@ -54,7 +46,6 @@ class PollList(generics.ListAPIView):
     queryset = Poll.objects.all()
     
 
-
 class PollDetail(generics.RetrieveAPIView):
 
     """custom response updates coming soon"""
@@ -62,9 +53,6 @@ class PollDetail(generics.RetrieveAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
-    
-    
-
     
 
 class PollDelete(generics.RetrieveDestroyAPIView):
@@ -85,7 +73,6 @@ class CreateVote(generics.CreateAPIView):
     queryset = Vote
 
     def create(self, request, pk, choice_pk):
-        
         data = {'choice': choice_pk, 'poll': pk}
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -93,31 +80,24 @@ class CreateVote(generics.CreateAPIView):
             self.perform_create(serializer)
             count = self.get_poll_votes_count(data['poll'])
             votes = {'votes': serializer.data, 'vote_count': count.poll_vote_count.vote_count}
-
             return Response(votes, status=status.HTTP_201_CREATED)
-        email_address = request.data.get('email', 'testing12@gmaiil.com') # testing if the email wasn't passed in the request data
-        phone_number = request.data.get('phone_number', '0703699887')# testing if the phone_number wasn't passed in the request data
+        email_address = request.data.get('email', 'testing12@gmaiil.com')  # testing if the email wasn't passed in the
+        # request data
+        phone_number = request.data.get('phone_number', '0703699887')  # testing if the phone_number wasn't passed in
+        # the request data
         anonymous_ip, is_routable = get_client_ip(request)
         browsername= request.user_agent.browser.family 
         browserversion = request.user_agent.os.version_string
         operatingsystem = request.user_agent.os.family  
-        devicename = request.user_agent.os.family 
-
-
+        devicename = request.user_agent.os.family
         anonymous_user = AnonymousVoter.objects.create(ipaddress=anonymous_ip,
         browsername=browsername, browserversion=browserversion, operatingsystem=operatingsystem,
         devicename=devicename, email_address=email_address, phone_number=phone_number
         
         )
         self.perform_create(serializer, anonymous_user)
-        
-
         count = self.get_poll_votes_count(data['poll'])
-
-        
-        
         votes = {'votes': serializer.data, 'vote_count': count.poll_vote_count.vote_count}
-
         return Response(votes, status=status.HTTP_201_CREATED)
 
     def perform_create(self, instance, anonymous_user=''):
@@ -132,8 +112,6 @@ class CreateVote(generics.CreateAPIView):
         return vote_count
         
 
-    
-         
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
 # from django.shortcuts import get_object_or_404
