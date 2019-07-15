@@ -31,7 +31,5 @@ class Vote(models.Model):
     class Meta:
         unique_together = ("poll", "voted_by")
 
-
-class VoteCount(models.Model):
-    poll_vote = models.OneToOneField(Poll, on_delete=models.CASCADE, related_name='poll_vote_count')
-    vote_count = models.PositiveIntegerField(default=0)
+    def __str__(self):
+        return str(self.choice)
