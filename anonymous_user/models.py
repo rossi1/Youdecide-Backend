@@ -8,7 +8,7 @@ from django.db import models
 
 class AnonymousVoter(models.Model):
     # anonymous_voter_id = models.AutoField(primary_key=True)
-    # username = models.CharField(max_length=60)
+    username = models.CharField(max_length=60, null=True)
     phone_number = models.CharField(max_length=16)
     email_address = models.CharField(unique=True, max_length=255, blank=True, null=True)
     #useragent = models.TextField(blank=True, null=True)  # Field name made lowercase.
@@ -23,6 +23,9 @@ class AnonymousVoter(models.Model):
 
     class Meta:
         ordering = ('-created_date',)
+
+    def __str__(self):
+        return str(self.email_address)
 
 
    

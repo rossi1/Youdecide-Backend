@@ -24,7 +24,7 @@ class Choice(models.Model):
 class Vote(models.Model):
     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_vote')
-    voted_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    voted_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='voters')
     anonymous_voter = models.ForeignKey(AnonymousVoter, on_delete=models.CASCADE, null=True, related_name='anonymous_votes')
 
 
