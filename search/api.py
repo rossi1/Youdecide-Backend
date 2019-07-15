@@ -7,18 +7,12 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication
-from django_elasticsearch_dsl_drf.filter_backends import (
-    FilteringFilterBackend,
-    OrderingFilterBackend,
-    CompoundSearchFilterBackend,
-)
-from .document import PollDocument
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-from polls.models import Poll
-from polls.serializers import PollSerializer
+
 from search.serializers import SearchHistorySerializer, FailedSearchHistorySerializer, PollDocumentSerializer
 from search.models import SearchHistory, FailedSearchHistory
 from account.api import CsrfExemptSessionAuthentication
+from polls.models import Poll
+from polls.serializers import PollSerializer
 
 
 class SearchPollAPIListView(APIView):
@@ -96,39 +90,3 @@ class FailedSearchesAPIListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class PollDocumentSearchView(BaseDocumentViewSet):
-    """The PollDocument view."""
-
-    document = PollDocument
-    queryset = Poll.objects.all()
-    serializer_class = PollDocumentSerializer
-    lookup_field = 'id'
-    filter_backends = [
-        FilteringFilterBackend,
-        OrderingFilterBackend,
-        CompoundSearchFilterBackend,
-    ]
-    # Define search fields
-    search_fields = (
-        'question',
-        'created_by',
-        'pub_date'
-    )
-    
-    # Define filtering fields
-    filter_fields = {
-        'id': None,
-        'question': 'question.raw',
-        'created_by': 'created_by.raw',
-        'pub_date': 'pub_date.raw',
-    }
-    # Define ordering fields
-    ordering_fields = {
-        'id': None,
-        'question': None,
-        'created_by': None,
-        'pub_date': None,
-    }
-    
-    # Specify default ordering
-    ordering = ('id', 'pub_date',)

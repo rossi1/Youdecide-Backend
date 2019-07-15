@@ -28,6 +28,7 @@ class PollDocumentSerializer(DocumentSerializer):
         document = PollDocument
         """Meta options."""
         fields = (
+            'id',
             'question',
             'pub_date',
         )
