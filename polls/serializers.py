@@ -6,9 +6,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from anonymous_user.models import AnonymousVoter
-from .models import Poll, Choice, Vote, VoteCount
-
-
+from .models import Poll, Choice, Vote
 
 
 
@@ -21,9 +19,9 @@ class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vote
+
         fields = ('choice', 'poll')
 
-    
 
 
 
@@ -37,6 +35,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
     
     def to_representation(self, instance):
+        from .utils import filter_votes
         ret = super(ChoiceSerializer, self).to_representation(instance)
     
         try:
@@ -45,6 +44,11 @@ class ChoiceSerializer(serializers.ModelSerializer):
             return ret
         else:
             ret['choice_vote_count'] = choice_vote_count
+        registered_voters = filter_votes(instance.votes.values('voted_by__username'))
+        anonymous_voters = filter_votes(instance.votes.values('anonymous_voter__username'))
+        ret['registered_voters'] = registered_voters
+        ret['anonymous_voter'] = anonymous_voters
+        
 
         return ret
     
@@ -58,5 +62,10 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         fields = '__all__'
+
+    def to_representation(self, instance):
+        ret = super(PollSerializer, self).to_representation(instance)
+        ret['vote_count'] = instance.poll_vote.count()
+        return ret
 
 
