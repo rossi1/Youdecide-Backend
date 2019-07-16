@@ -94,7 +94,7 @@ ELASTICSEARCH_DSL = {
 # Name of the Elasticsearch index
 
 ELASTICSEARCH_INDEX_NAMES = {
-    'search.document': 'poll',
+    'search.document': 'document',
     
 }
 
