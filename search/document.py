@@ -18,13 +18,8 @@ POLL_INDEX.settings(
 class PollDocument(DocType):
     """Poll Elasticsearch document."""
     id = fields.IntegerField(attr='id')
-    question = fields.StringField(
-        fields={
-            'raw': fields.StringField(
-                analyzer='keyword'
-            )
-        }
-    )
+    question = fields.StringField(fields={'raw': fields.StringField(analyzer='keyword'),})
+
    
     pub_date = fields.DateField()
 
