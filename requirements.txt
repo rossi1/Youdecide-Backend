@@ -22,7 +22,7 @@ django-rest-framework-social-oauth2==1.1.0
 django-user-agents==0.3.2
 djangorestframework==3.9.2
 djangorestframework-simplejwt==4.1.1
-elasticsearch==6.4.0
+elasticsearch==6.5.1
 elasticsearch-dsl==6.1.0
 gunicorn==19.9.0
 idna==2.8
