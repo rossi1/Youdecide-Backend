@@ -73,9 +73,9 @@ EXTERNAL_APPS = [
     'rest_framework_social_oauth2',
     'django_user_agents',
     # Django Elasticsearch integration
-    'django_elasticsearch_dsl',
+    #'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration
-    'django_elasticsearch_dsl_drf'
+    #'django_elasticsearch_dsl_drf'
 
 ]
 
@@ -83,7 +83,7 @@ INSTALLED_APPS += DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
 
 # disable django user agent cache
 USER_AGENTS_CACHE = None
-
+"""
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
@@ -92,7 +92,7 @@ ELASTICSEARCH_DSL = {
 }
 
 # Name of the Elasticsearch index
-"""
+
 ELASTICSEARCH_INDEX_NAMES = {
     'search.document': 'document',
     
