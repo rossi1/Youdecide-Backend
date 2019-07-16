@@ -4,6 +4,8 @@ from django_elasticsearch_dsl import DocType, Index, fields
 from polls.models import Poll
 
 
+"""
+
 # Name of the Elasticsearch index
 POLL_INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
 
@@ -26,3 +28,4 @@ class PollDocument(DocType):
     class Meta(object):
         """Meta options."""
         model = Poll
+"""
