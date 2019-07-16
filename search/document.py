@@ -21,7 +21,7 @@ class PollDocument(DocType):
     question = fields.StringField(fields={'raw': fields.StringField(analyzer='keyword'),})
 
    
-    pub_date = fields.DateField()
+    pub_date = fields.StringField()
 
     class Meta(object):
         """Meta options."""
