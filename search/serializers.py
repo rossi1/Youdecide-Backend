@@ -23,12 +23,12 @@ class FailedSearchHistorySerializer(serializers.ModelSerializer):
 
 
 class PollDocumentSerializer(DocumentSerializer):
-    """Serializer for Poll document."""
+    #Serializer for Poll document.
 
     class Meta(object):
         # = Poll
         document = PollDocument
-        """Meta options."""
+        #Meta options.
         fields = (
             'id',
             'question',
