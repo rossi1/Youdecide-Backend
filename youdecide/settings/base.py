@@ -92,11 +92,12 @@ ELASTICSEARCH_DSL = {
 }
 
 # Name of the Elasticsearch index
-
+"""
 ELASTICSEARCH_INDEX_NAMES = {
     'search.document': 'document',
     
 }
+"""
 
 
 # authentication backends
