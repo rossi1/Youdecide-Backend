@@ -1,10 +1,11 @@
+
+"""
 from elasticsearch_dsl import analyzer
 from django.conf import settings
 from django_elasticsearch_dsl import DocType, Index, fields
 from polls.models import Poll
 
 
-"""
 
 # Name of the Elasticsearch index
 POLL_INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
