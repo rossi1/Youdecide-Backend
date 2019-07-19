@@ -53,8 +53,6 @@ class ChoiceSerializer(serializers.ModelSerializer):
         return ret
     
     
-    
-
 
 class PollSerializer(serializers.ModelSerializer):
     choices = ChoiceSerializer(many=True, read_only=True, required=False)

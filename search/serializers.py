@@ -31,5 +31,5 @@ class PollDocumentSerializer(DocumentSerializer):
             'id',
             'question',
             'pub_date',
-        )
+            )
 

@@ -20,11 +20,8 @@ class PollDocument(DocType):
     id = fields.IntegerField(attr='id')
     question = fields.StringField(
         fields={
-            'raw': fields.StringField(
-                analyzer='keyword'
-            )
-        }
-    )
+            'raw': fields.StringField(analyzer='keyword')
+                })
    
     pub_date = fields.DateField()
 
