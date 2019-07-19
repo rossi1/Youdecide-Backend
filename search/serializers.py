@@ -1,3 +1,5 @@
+
+"""
 from .models import SearchHistory, FailedSearchHistory
 from rest_framework import serializers
 
@@ -21,15 +23,16 @@ class FailedSearchHistorySerializer(serializers.ModelSerializer):
 
 
 class PollDocumentSerializer(DocumentSerializer):
-    """Serializer for Poll document."""
+    #Serializer for Poll document.
 
     class Meta(object):
         # = Poll
         document = PollDocument
-        """Meta options."""
+        #Meta options.
         fields = (
             'id',
             'question',
             'pub_date',
             )
 
+"""

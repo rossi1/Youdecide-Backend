@@ -1,3 +1,5 @@
+
+"""
 from django.urls import path, include, re_path
 
 from rest_framework import routers
@@ -20,3 +22,4 @@ urlpatterns = [
     path("search/", include(router.urls), name="poll_search")
 
 ]
+"""

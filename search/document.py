@@ -1,7 +1,10 @@
+
+"""
 from elasticsearch_dsl import analyzer
 from django.conf import settings
 from django_elasticsearch_dsl import DocType, Index, fields
 from polls.models import Poll
+
 
 
 # Name of the Elasticsearch index
@@ -18,13 +21,12 @@ POLL_INDEX.settings(
 class PollDocument(DocType):
     """Poll Elasticsearch document."""
     id = fields.IntegerField(attr='id')
-    question = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword')
-                })
+    question = fields.StringField(fields={'raw': fields.StringField(analyzer='keyword'),})
+
    
-    pub_date = fields.DateField()
+    pub_date = fields.StringField()
 
     class Meta(object):
         """Meta options."""
         model = Poll
+"""

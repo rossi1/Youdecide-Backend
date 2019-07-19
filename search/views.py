@@ -1,3 +1,5 @@
+
+"""
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -56,3 +58,4 @@ class PollDocumentSearchView(BaseDocumentViewSet):
     
     # Specify default ordering
     ordering = ('pub_date',)
+"""
