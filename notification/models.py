@@ -7,9 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-from slugify import slugify
+#from asgiref.sync import async_to_sync
+#from channels.layers import get_channel_layer
+#from slugify import slugify
 
 
 class NotificationQuerySet(models.query.QuerySet):
@@ -23,71 +23,59 @@ class NotificationQuerySet(models.query.QuerySet):
         """Return only read items in the current queryset"""
         return self.filter(unread=False)
 
-    def mark_all_as_read(self, recipient=None):
+    def mark_all_as_read(self, poll_viewers=None):
         """Mark as read any unread elements in the current queryset with
-        optional filter by recipient first.
+        optional filter by poll_viewers first.
         """
         qs = self.unread()
-        if recipient:
-            qs = qs.filter(recipient=recipient)
+        if poll_viewers:
+            qs = qs.filter(poll_viewers=poll_viewers)
 
         return qs.update(unread=False)
 
-    def mark_all_as_unread(self, recipient=None):
+    def mark_all_as_unread(self, poll_viewers=None):
         """Mark as unread any read elements in the current queryset with
-        optional filter by recipient first.
+        optional filter by poll_viewers first.
         """
         qs = self.read()
-        if recipient:
-            qs = qs.filter(recipient=recipient)
+        if poll_viewers:
+            qs = qs.filter(poll_viewers=poll_viewers)
 
         return qs.update(unread=True)
 
-    def serialize_latest_notifications(self, recipient=None):
+    def serialize_latest_notifications(self, poll_viewers=None):
         """Returns a serialized version of the most recent unread elements in
         the queryset"""
         qs = self.unread()[:5]
-        if recipient:
-            qs = qs.filter(recipient=recipient)[:5]
+        if poll_viewers:
+            qs = qs.filter(poll_viewers=poll_viewers)[:5]
 
         notification_dic = serializers.serialize("json", qs)
         return notification_dic
 
-    def get_most_recent(self, recipient=None):
+    def get_most_recent(self, poll_viewers=None):
         """Returns the most recent unread elements in the queryset"""
         qs = self.unread()[:5]
-        if recipient:
-            qs = qs.filter(recipient=recipient)[:5]
+        if poll_viewers:
+            qs = qs.filter(poll_viewers=poll_viewers)[:5]
 
         return qs
 
 
 class Notification(models.Model):
-    """
-    Action model describing the actor acting out a verb (on an optional target).
-    Nomenclature based on http://activitystrea.ms/specs/atom/1.0/
+    
 
-    This model is an adaptation from the django package django-notifications at
-    https://github.com/django-notifications/django-notifications
-
-    Generalized Format::
-
-        <actor> <verb> <time>
-        <actor> <verb> <action_object> <time>
-
-    """
-
-    actor = models.ForeignKey(User,
+    creator = models.ForeignKey(User,
                               related_name="notify_actor",
                               on_delete=models.CASCADE)
-    recipient = models.ForeignKey(User, blank=False,
+    poll_viewers = models.ForeignKey(User, blank=False,
                                   related_name="notifications", on_delete=models.CASCADE)
     unread = models.BooleanField(default=True, db_index=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=210, null=True, blank=True)
-    verb = models.CharField(max_length=1, choices=NOTIFICATION_TYPES)
+    verb = models.CharField(max_length=1)
     action_object_content_type = models.ForeignKey(ContentType,
                                                    blank=True, null=True, related_name="notify_action_object",
                                                    on_delete=models.CASCADE)
@@ -107,13 +95,14 @@ class Notification(models.Model):
             return '{} {} {self.action_object} {} ago'.format(self.actor,self.get_verb_display(), self.time_since())
 
         return '{} {} {} ago'.format(self.actor, self.get_verb_display(), self.time_since())
-
+    """
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify('{} {} {}'.format(self.recipient,self.uuid_id, self.verb ),
+            self.slug = slugify('{} {} {}'.format(self.poll_viewers,self.uuid_id, self.verb ),
                                 to_lower=True, max_length=200)
 
         super().save(*args, **kwargs)
+    """
 
     def time_since(self, now=None):
         """
@@ -135,12 +124,12 @@ class Notification(models.Model):
             self.save()
 
 
-def notification_handler(actor, recipient, verb, **kwargs):
+def notification_handler(actor, poll_viewers, verb, **kwargs):
     """
     Handler function to create a Notification instance.
     :requires:
     :param actor: User instance of that user who makes the action.
-    :param recipient: User instance, a list of User instances or string
+    :param poll_viewers: User instance, a list of User instances or string
                       'global' defining who should be notified.
     :param verb: Notification attribute with the right choice from the list.
 
@@ -151,35 +140,35 @@ def notification_handler(actor, recipient, verb, **kwargs):
     """
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
-    if recipient == 'global':
+    if poll_viewers == 'global':
         users = get_user_model().objects.all().exclude(username=actor.username)
         for user in users:
             Notification.objects.create(
                 actor=actor,
-                recipient=user,
+                poll_viewers=user,
                 verb=verb,
                 action_object=kwargs.pop('action_object', None)
             )
         notification_broadcast(actor, key)
 
-    elif isinstance(recipient, list):
-        for user in recipient:
+    elif isinstance(poll_viewers, list):
+        for user in poll_viewers:
             Notification.objects.create(
                 actor=actor,
-                recipient=get_user_model().objects.get(username=user),
+                poll_viewers=get_user_model().objects.get(username=user),
                 verb=verb,
                 action_object=kwargs.pop('action_object', None)
             )
 
-    elif isinstance(recipient, get_user_model()):
+    elif isinstance(poll_viewers, get_user_model()):
         Notification.objects.create(
             actor=actor,
-            recipient=recipient,
+            poll_viewers=poll_viewers,
             verb=verb,
             action_object=kwargs.pop('action_object', None)
         )
         notification_broadcast(
-            actor, key, id_value=id_value, recipient=recipient.username)
+            actor, key, id_value=id_value, poll_viewers=poll_viewers.username)
 
     else:
         pass
@@ -195,17 +184,19 @@ def notification_broadcast(actor, key, **kwargs):
 
     :optional:
     :param id_value: UUID value assigned to a specific element in the DOM.
-    :param recipient: String indicating the name of that who needs to be
+    :param poll_viewers: String indicating the name of that who needs to be
                       notified.
+    """
     """
     channel_layer = get_channel_layer()
     id_value = kwargs.pop('id_value', None)
-    recipient = kwargs.pop('recipient', None)
+    poll_viewers = kwargs.pop('poll_viewers', None)
     payload = {
             'type': 'receive',
             'key': key,
             'actor_name': actor.username,
             'id_value': id_value,
-            'recipient': recipient
+            'poll_viewers': poll_viewers
         }
     async_to_sync(channel_layer.group_send)('notifications', payload)
+    """

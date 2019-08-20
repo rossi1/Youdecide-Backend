@@ -1,4 +1,3 @@
-"""
 
 from django.http import Http404
 from django.utils.decorators import method_decorator
@@ -91,4 +90,3 @@ class FailedSearchesAPIListView(APIView):
         serializer = FailedSearchHistorySerializer(failed_searches, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-"""

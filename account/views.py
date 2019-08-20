@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm  # LoginForm, UserRegistrationForm
-from account.models import Profile
+#from account.models import Profile
 
 
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def dashboard(request):

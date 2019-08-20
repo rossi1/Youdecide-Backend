@@ -1,10 +1,13 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile2, Follow, BookMark, Share
+from django.core import serializers
+
+from rest_framework import serializers
+
+from .models import Profile, BookMark, Share, Likes
 
 
+"""
 class FollowSerializer(serializers.ModelSerializer):
-    """Follow Serializer"""
 
     class Meta:
         model = Follow
@@ -12,19 +15,21 @@ class FollowSerializer(serializers.ModelSerializer):
 
         read_only_fields = ('date_of_follow', 'follower')
 
-
+"""
 class UserProfileSerializer(serializers.ModelSerializer):
     """UserProfile Serializer"""
 
+
     class Meta:
-        model = UserProfile2
-        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'github_username', 'frequency',
-                  'followers', 'followings', 'languages')
+        model = Profile
+        fields = ('social_id', 'first_name', 'last_name', 'place_of_work', 'position', 'about')
+
+   
 
 
 class SingleUserSerializer(serializers.ModelSerializer):
     """Serializer for User model having only the field required for all users"""
-
+    
     class Meta:
         model = User
 
@@ -38,7 +43,13 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookMark
-        fields = '__all__'
+        fields = ('id', 'poll', 'user', 'created')
+
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['poll_question_text'] = str(instance.poll)
+        return ret
 
 
 class ShareSerializer(serializers.ModelSerializer):
@@ -46,5 +57,25 @@ class ShareSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Share
-        fields = '__all__'
+        fields = ('id', 'poll', 'user', 'share_date')
+        
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['poll_question_text'] = str(instance.poll)
+        return ret
+
+class LikeSerializer(serializers.ModelSerializer):
+    """ Serialize the liked polls"""
+
+    class Meta:
+        model = Likes
+        fields = ('id', 'poll', 'user', 'like_date')
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['poll_question_text'] = str(instance.poll)
+        return ret
+
+    
+
 

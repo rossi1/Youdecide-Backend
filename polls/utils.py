@@ -1,5 +1,4 @@
-
-def filter_votes(instance, is_anonymous=True):
+def filter_votes(instance):
     """ 
     Custom function to filter related voters ids 
     And return list of voters username on a poll 
@@ -8,10 +7,10 @@ def filter_votes(instance, is_anonymous=True):
     voter_list = []
 
     for voter_id in instance:
-            for value in voter_id.values():
-                if value is None:
+            for voters_name in voter_id.values():
+                if voters_name is None:
                     continue
                 else:
-                    voter_list.append(value)
+                    voter_list.append(voters_name)
     
     return voter_list

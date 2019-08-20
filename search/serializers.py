@@ -1,5 +1,4 @@
 
-"""
 from .models import SearchHistory, FailedSearchHistory
 from rest_framework import serializers
 
@@ -35,4 +34,3 @@ class PollDocumentSerializer(DocumentSerializer):
             'pub_date',
             )
 
-"""

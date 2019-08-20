@@ -1,5 +1,4 @@
 
-"""
 from django.urls import path, include, re_path
 
 from rest_framework import routers
@@ -19,7 +18,8 @@ urlpatterns = [
     re_path('^polls/histories/$', SearchPollHistoriesAPIListView.as_view(), name='search-poll-histories'),
     re_path('^polls/(?P<id>.+)/$', SearchPollHistoriesAPIListView.as_view(), name='search-poll-history'),
     re_path('^failed-searches/', FailedSearchesAPIListView.as_view(), name='failed-searches'),
-    path("search/", include(router.urls), name="poll_search")
+    path("poll", include(router.urls), name="poll_search")
 
 ]
-"""
+
+

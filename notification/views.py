@@ -6,16 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Notification
+from .serializers import NotificationSerializer
 
 
 class NotificationUnreadListView(ListAPIView):
     """Basic ListView implementation to show the unread notifications for
     the actual user"""
     queryset = Notification
+    serializer_class = NotificationSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self, **kwargs):
         return self.request.user.notifications.unread()
+
+
 
 
 @api_view(['GET'])

@@ -20,6 +20,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from youdecide import settings
 from emailservice.utils import Mail
 from userprofile import models, serializers
+from tasks.tasks import send_registration_welcome_mail
 
 from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
 
@@ -41,12 +42,8 @@ class UserCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
-
-        mail = Mail()
-        mail.send_welcome_mail(email, username)
-        
+        #send_registration_welcome_mail.delay('Mail', email, username)
         serializer.save()
-
 
 class LoginView(APIView):
     """For /api/v1/users/login url path"""
@@ -62,9 +59,11 @@ class LoginView(APIView):
         password = request.data.get("password")
         user = authenticate(username=username, password=password)
         if user:
+            login(request, user)
             token = self.get_tokens_for_user(user)
 
-            return Response({"token": token})
+            return Response({"token": token,
+            'pk': user.pk})
         else:
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 

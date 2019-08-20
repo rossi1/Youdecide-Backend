@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from polls.models import Poll
 from django.db.models.signals import post_save
+
+
 # from cloudinary.models import CloudinaryField
 
 
@@ -28,14 +30,19 @@ class UserProfile(models.Model):
 
 
 class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    poll = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_likes')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_likes')
     like_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-like_date',)
+        unique_together = ('poll', 'user')
+        
 
 
 class BookMark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_bookmarks')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_bookmarks')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -43,12 +50,13 @@ class BookMark(models.Model):
 
     class Meta:
         ordering = ('-created',)
+        unique_together = ('poll', 'user')
+       
 
 
 class Share(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # poll = models.CharField(max_length=255)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_share')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_share')
     share_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -56,10 +64,11 @@ class Share(models.Model):
 
     class Meta:
         ordering = ('-share_date',)
+        unique_together = ('poll', 'user')
 
+    
 
-class UserProfile2(models.Model):
-
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     social_id = models.CharField(max_length=200, null=True)
     first_name = models.CharField(max_length=100, null=True)
@@ -69,39 +78,30 @@ class UserProfile2(models.Model):
     about = models.TextField(max_length=1200, null=True, blank=True)
     # image = CloudinaryField(
     #     'image', default="image/upload/v1443782603/vqr7n59zfxyeybttleug.gif")
-
+ 
     def get_user(self):
         return User.objects.get(id=self.user_id)
 
-    def get_followers(self):
-        # return a list of users following this instance
-        return self.user.follower.all()
+    """
+    def follow(self, user_profile):
+        self.follows.add(user_profile)
 
-    def get_following(self):
-        # return a list of users followed by this instance
-        return self.user.following.all()
+    def unfollow(self, user_profile):
+        self.follows.remove(user_profile)
 
-    @property
-    def followings(self):
-        followers = self.user.follower.all()
-        follow = []
-        for follower in followers:
-            follow.append(
-                {'id': follower.followed.id,
-                 'following': follower.followed.username,
-                 'follow_date': follower.date_of_follow})
-        return follow
+    def is_following(self, user_profile):
+        return self.follows.filter(pk=user_profile.pk).exists()
 
-    @property
-    def followers(self):
-        followings = self.user.following.all()
-        follow = []
-        for following in followings:
-            follow.append(
-                {'id': following.follower.id,
-                 'follower': following.follower.username,
-                 'follow_date': following.date_of_follow})
-        return follow
+    def is_followed_by(self, user_profile):
+        return self.followed_by.filter(pk=user_profile.pk).exists()
+
+    def followed_by(self, user_profile):
+        return self.followed_by.filter(pk=user_profile.pk).all()
+    """
+
+
+    def __str__(self):
+        return 'user id {} of {}'.format(self.user, self.pk)
 
 
 # User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -123,15 +123,5 @@ class UserSettings(models.Model):
     # @property
     # def languages(self):
     #     return [language for language in self.user.languages.all()]
-
-
-class Follow(models.Model):
-
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
-    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    date_of_follow = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = (('follower', 'followed'),)
 
 

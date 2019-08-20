@@ -1,4 +1,6 @@
 import json
+from datetime import timedelta, datetime
+
 from django.db.models import Q
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -25,15 +27,14 @@ class AnonymousUserPermission(BasePermission):
     def has_permission(self, request, view):
         
         poll_pk = view.kwargs['pk']
-        choice_pk = view.kwargs['choice_pk']
         if request.method == "POST":
             if request.user.is_authenticated:
-                if Vote.objects.filter(Q(poll=poll_pk), Q(voted_by=request.user), Q(choice=choice_pk)).exists():
+                if Vote.objects.filter(Q(poll=poll_pk), Q(voted_by=request.user)).exists():
                     raise PermissionDenied('Double voting disallowed')
                 return True
                 
             ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
-            if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__ipaddress=ip_address), Q(choice=choice_pk)).exists():
+            if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__ipaddress=ip_address)).exists():
                 raise PermissionDenied('Double voting disallowed')
             return True
         return True
@@ -43,6 +44,39 @@ class PollCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Poll 
     serializer_class = PollSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        poll_expiry_date = None
+        poll_expiry_day = request.query_params.get('expiry_day', None)
+        poll_expiry_hour = request.query_params.get('expiry_hour', None)
+        poll_expiry_minute = request.query_params.get('expiry_minute', None)
+        if poll_expiry_day and poll_expiry_hour and poll_expiry_minute:
+            calculate_poll_expiry_date = datetime.now() + timedelta(days=int(poll_expiry_day),
+            hours=int(poll_expiry_hour), minutes=int(poll_expiry_minute)
+            )
+            poll_expiry_date = calculate_poll_expiry_date
+            self.perform_create(serializer, poll_expiry_date)
+
+        elif poll_expiry_hour and poll_expiry_minute:
+            calculate_poll_expiry_date = datetime.now() + timedelta(hours=int(poll_expiry_hour), minutes=int(poll_expiry_minute)
+            )
+            poll_expiry_date = calculate_poll_expiry_date
+            self.perform_create(serializer, poll_expiry_date)
+
+        elif poll_expiry_minute:
+            calculate_poll_expiry_date = datetime.now() + timedelta(minutes=int(poll_expiry_minute))
+            poll_expiry_date = calculate_poll_expiry_date
+            self.perform_create(serializer, poll_expiry_date)
+
+        else:
+            self.perform_create(serializer, poll_expiry_date)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer, poll_expiry_date):
+        serializer.save(expire_date=poll_expiry_date)
 
 
 class PollList(generics.ListAPIView):

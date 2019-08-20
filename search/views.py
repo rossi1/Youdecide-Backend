@@ -1,5 +1,3 @@
-
-"""
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -11,10 +9,12 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     CompoundSearchFilterBackend,
+    SuggesterFilterBackend
 )
-from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
-
+#from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+
 from polls.models import Poll
 from polls.serializers import PollSerializer
 
@@ -32,12 +32,12 @@ class PollDocumentSearchView(BaseDocumentViewSet):
         FilteringFilterBackend,
         OrderingFilterBackend,
         CompoundSearchFilterBackend,
+        SuggesterFilterBackend
     ]
     # Define search fields
     search_fields = (
 
         'question',
-        'created_by',
         'pub_date'
     )
     
@@ -45,17 +45,28 @@ class PollDocumentSearchView(BaseDocumentViewSet):
     filter_fields = {
         'id': None,
         'question': 'question.raw',
-        'created_by': 'created_by.raw',
         'pub_date': 'pub_date.raw',
     }
     # Define ordering fields
     ordering_fields = {
         'id': None,
         'question': None,
-        'created_by': None,
         'pub_date': None,
     }
-    
+
+    suggester_fields = {
+        'question_suggest': {
+            'field': 'question.suggest',
+            'suggesters': [
+                SUGGESTER_COMPLETION,
+            ],
+            'options': {
+                'size': 20,  
+            },
+        },
+       
+       
+    }
+
     # Specify default ordering
     ordering = ('pub_date',)
-"""

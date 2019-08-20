@@ -8,21 +8,15 @@ from rest_framework.authtoken.models import Token
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 
+from userprofile.models import BookMark
+
 
 
 class VoteSerializer(serializers.ModelSerializer):
 
-    def __init__(self, *args, **kwargs):
-        """ Overriding Init method to return custom model fields """
-        super(VoteSerializer, self).__init__(*args, **kwargs)
-       
-
     class Meta:
         model = Vote
-
         fields = ('choice', 'poll')
-
-
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -31,11 +25,11 @@ class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
         fields = '__all__'
-
-
     
+
     def to_representation(self, instance):
         from .utils import filter_votes
+
         ret = super(ChoiceSerializer, self).to_representation(instance)
     
         try:
@@ -44,26 +38,46 @@ class ChoiceSerializer(serializers.ModelSerializer):
             return ret
         else:
             ret['choice_vote_count'] = choice_vote_count
-        registered_voters = filter_votes(instance.votes.values('voted_by__username'))
-        anonymous_voters = filter_votes(instance.votes.values('anonymous_voter__username'))
-        ret['registered_voters'] = registered_voters
-        ret['anonymous_voter'] = anonymous_voters
-        
 
+        ret['registered_voter'] = filter_votes(instance.votes.values('voted_by__username'))
+        ret['anonymous_voter'] = filter_votes(instance.votes.values('anonymous_voter__username'))
+       
         return ret
-    
-    
 
 class PollSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True, read_only=True, required=False)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = kwargs['context']['request']
+        if request.method == "GET":
+            try:
+                self.Meta.fields.append('expire_date')
+                self.Meta.fields.append('slug')
+            except ValueError:
+                pass
 
+            
+    choices = ChoiceSerializer(many=True, read_only=True, required=False)
+    poller_username = serializers.SerializerMethodField()
+  
+  
     class Meta:
         model = Poll
-        fields = '__all__'
+        fields = ['id', 'created_by', 'pub_date',  'question', 'choices', 'poller_username']
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)
+        
+        poll_has_been_bookmarked = False
+        if instance.poll_bookmarks.exists() and instance.created_by.user_bookmarks.exists():
+            poll_has_been_bookmarked = True
+            
+        ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
+        ret['total_likes'] = instance.poll_likes.all().count()
+        ret['total_shares'] = instance.poll_share.all().count()
         ret['vote_count'] = instance.poll_vote.count()
         return ret
 
-
+    def get_poller_username(self, instance):
+        print(instance.created_by.username)
+        return instance.created_by.username

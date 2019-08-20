@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django import forms
-from account.models import Profile
+#from account.models import Profile
 
 # users/forms.py
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -36,7 +36,7 @@ class UserEditForm(forms.ModelForm):
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        #model = Profile
         fields = ('date_of_birth', 'photo')
 
 
