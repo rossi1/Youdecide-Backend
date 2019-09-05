@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -22,23 +22,18 @@ class FollowUserAPIView(generics.CreateAPIView):
             return Response({'status': 'failed', 'message': 'User cant follow itself'}, \
                 status=status.HTTP_400_BAD_REQUEST)
         
-        if  Follow.objects.validate_follow(serializer.validated_data['follower']):
-            return Response({'status': 'failed', 'message': 'User already followed'}, \
-                status=status.HTTP_400_BAD_REQUEST)
-    
+       
         create = super().create(request, *args, **kwargs)
             
         return create
     
 
-    
-    
     def perform_create(self, serializer):
         try:
             serializer.save()
         except:
-            pass
-        
+            raise ValidationError('User already followed')
+            
 
 class ListFollowersAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
@@ -62,6 +57,13 @@ class ListFollowingAPIView(ListFollowersAPIView):
 
     def get_queryset(self):
         return self.queryset.objects.get_followings(self.request.user)
+
+
+class UnfollowAPIView(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Follow
+    serializer_class = FollowSerializer
+    lookup_field = 'id'
 
     
 

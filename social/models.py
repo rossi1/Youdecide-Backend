@@ -9,9 +9,6 @@ from userprofile.models import Share, Likes
 class FollowQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability."""
 
-    def validate_follow(self, follower):
-        query = self.filter(follower=follower, following=follower)
-        return False
 
     def get_followers(self, user):
         followers = self.filter(following=user).order_by('-date_follow').all()
@@ -19,8 +16,10 @@ class FollowQuerySet(models.query.QuerySet):
         follow = [{'total_followers_no': total_followers_no}]
         for follower in followers:
             follow.append(
-                {'id': follower.follower.id,
-                 'follower': follower.follower.username,
+                
+                {'id': follower.pk,
+                 'follwer_id': follower.follower.id,
+                 'follower_username': follower.follower.username,
                  'follow_date': follower.date_follow}
                  )
         return follow
@@ -31,8 +30,9 @@ class FollowQuerySet(models.query.QuerySet):
         follow = [{'total_followed_no': total_followers_no}]
         for following in followings:
             follow.append(
-                {'id': following.following.id,
-                 'following': following.following.username,
+                {'id': following.pk,
+                 'following_id': following.following.id,
+                 'following_username': following.following.username,
                  'following_date': following.date_follow}
                  )
         return follow

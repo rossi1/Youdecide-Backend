@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import generics
+
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,6 +19,7 @@ from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 from .utils import filter_votes
+
 
 
 class AnonymousUserPermission(BasePermission):
@@ -38,6 +40,8 @@ class AnonymousUserPermission(BasePermission):
                 raise PermissionDenied('Double voting disallowed')
             return True
         return True
+
+
 
 
 class PollCreate(generics.CreateAPIView):
@@ -84,11 +88,26 @@ class PollList(generics.ListAPIView):
     queryset = Poll.objects.all()
     
 
-class PollDetail(generics.RetrieveAPIView):
+class PollDetail(generics.RetrieveUpdateAPIView):
+    #permission_classes = (PollPermission,)
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
- 
+
+
+    def update(self, request, *args, **kwargs):
+       
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if not request.user.is_authenticated:
+            return Response({'message':'Unable to process request'}, status=status.HTTP_403_FORBIDDEN)
+        if instance.created_by != request.user:
+            return Response({'message':'Unable to process request'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+            
+       
 
 class PollDelete(generics.RetrieveDestroyAPIView):
     queryset = Poll
@@ -98,10 +117,28 @@ class PollDelete(generics.RetrieveDestroyAPIView):
     
 
 class ChoiceList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
     def get_queryset(self):
         queryset = Choice.objects.filter(poll_id=self.kwargs["pk"])
         return queryset
     serializer_class = ChoiceSerializer
+
+    def perform_create(self, serializer):
+        poll = generics.get_object_or_404(Poll, id=self.kwargs["pk"])
+        serializer.save(poll=poll)
+
+
+        
+class ChoiceDelete(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChoiceSerializer
+    lookup_url_kwarg = 'pk'
+
+    def get_queryset(self):
+        queryset = Choice.objects.filter(pk=self.kwargs["pk"])
+        return queryset
+
+
 
 
 class CreateVote(generics.CreateAPIView):

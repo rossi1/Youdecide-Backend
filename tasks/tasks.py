@@ -24,7 +24,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from celery import shared_task
 from celery.schedules import crontab
-#from celery.schedules import contrab
+
 from celery.decorators import periodic_task
 
 from polls.models import Poll

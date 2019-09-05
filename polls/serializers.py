@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 
-from userprofile.models import BookMark
+from userprofile.models import BookMark, Likes, Share
 
 
 
@@ -24,7 +24,10 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Choice
-        fields = '__all__'
+        fields = ['choice_text', 'votes', 'id']
+
+    def create(self, **validated_data):
+        pass
     
 
     def to_representation(self, instance):
@@ -67,17 +70,27 @@ class PollSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)
-        
+        request = self.context['request']
         poll_has_been_bookmarked = False
-        if instance.poll_bookmarks.exists() and instance.created_by.user_bookmarks.exists():
-            poll_has_been_bookmarked = True
-            
+        poll_has_been_liked = False
+        poll_has_been_shared = False
+        if request.user.is_authenticated:
+            if BookMark.objects.filter(user=request.user, poll=instance).exists():
+                poll_has_been_bookmarked = True
+            if Likes.objects.filter(user=request.user, poll=instance).exists():
+                poll_has_been_liked = True
+
+            if Share.objects.filter(user=request.user, poll=instance).exists():
+                poll_has_been_shared = True
+        
         ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
+        ret['poll_has_been_liked'] =  poll_has_been_liked
+        ret['poll_has_been_shared'] =  poll_has_been_shared
         ret['total_likes'] = instance.poll_likes.all().count()
         ret['total_shares'] = instance.poll_share.all().count()
         ret['vote_count'] = instance.poll_vote.count()
         return ret
 
     def get_poller_username(self, instance):
-        print(instance.created_by.username)
+        
         return instance.created_by.username

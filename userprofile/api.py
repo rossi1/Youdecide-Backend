@@ -24,6 +24,8 @@ from polls.models import Poll
 
 
 class UpdateUserProfiileAPIView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset =Profile
     serializer_class = UserProfileSerializer
 
@@ -32,6 +34,7 @@ class UpdateUserProfiileAPIView(generics.RetrieveUpdateAPIView):
 
 
 class SingleUserAPIDetailView(RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
     """
     Retrieve instance.
     /api/v1/users/<id> url path
@@ -45,7 +48,7 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
     def get(self, request, pk, format=None):
         user_info = OrderedDict()
         user = self.get_object()
-        serializer = SingleUserSerializer(user)
+        serializer = SingleUserSerializer(user, context=self.get_serializer_context())
         poll = Poll.objects.filter(created_by=user).values('question', 'pub_date', 'pk')
         share = Share.objects.filter(user=user).values('share_date', question=F('poll__question'), 
         pk=F('poll__pk'), pub_date=F('poll__pub_date'))
@@ -57,7 +60,6 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user_info['user'] = serializer.data
         user_info['followers']= Follow.objects.get_followers(user) 
         user_info['followed'] = Follow.objects.get_followings(user)
-        user_info['user'] = serializer.data
         user_info['polls'] = poll
         user_info['likes'] =like 
         user_info['shares'] = share

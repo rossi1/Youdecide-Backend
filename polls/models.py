@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from anonymous_user.models import AnonymousVoter
 
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
@@ -73,6 +74,7 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=100)
+    dynamic_choice = JSONField()
 
     def __str__(self):
         return str(self.pk)

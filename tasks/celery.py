@@ -23,10 +23,10 @@
 
 
 import os
-try:
-    from celery import Celery
-except ImportError:
-    import celery
+
+from django.conf import settings
+
+from celery import Celery
 
 
 
@@ -34,6 +34,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'youdecide.settings')
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
 
 app = Celery('tasks')
+
 app.config_from_object('django.conf:settings')
 
-app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

@@ -5,7 +5,8 @@ from polls.models import Poll
 from django.db.models.signals import post_save
 
 
-# from cloudinary.models import CloudinaryField
+
+#import cloudinary
 
 
 # Create your models here.
@@ -76,28 +77,14 @@ class Profile(models.Model):
     place_of_work = models.CharField(max_length=150, null=True, blank=True)
     position = models.CharField(max_length=100, null=True, blank=True)
     about = models.TextField(max_length=1200, null=True, blank=True)
+    #image = cloudinary.models.CloudinaryField('images', default='avatar/customer.png')
     # image = CloudinaryField(
     #     'image', default="image/upload/v1443782603/vqr7n59zfxyeybttleug.gif")
  
     def get_user(self):
         return User.objects.get(id=self.user_id)
 
-    """
-    def follow(self, user_profile):
-        self.follows.add(user_profile)
-
-    def unfollow(self, user_profile):
-        self.follows.remove(user_profile)
-
-    def is_following(self, user_profile):
-        return self.follows.filter(pk=user_profile.pk).exists()
-
-    def is_followed_by(self, user_profile):
-        return self.followed_by.filter(pk=user_profile.pk).exists()
-
-    def followed_by(self, user_profile):
-        return self.followed_by.filter(pk=user_profile.pk).all()
-    """
+  
 
 
     def __str__(self):

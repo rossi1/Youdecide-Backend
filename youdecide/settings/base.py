@@ -12,9 +12,15 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from datetime import timedelta
+
 from django.urls import reverse_lazy
+
+
 from decouple import config
 import dj_database_url
+#import cloudinary
+#import cloudinary.uploader
+#import cloudinary.api
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -78,6 +84,7 @@ EXTERNAL_APPS = [
     'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration
     'django_elasticsearch_dsl_drf'
+    #'cloudinary',
 
 ]
 
@@ -297,3 +304,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # sendgrid
 
 SENDGRID_API_KEY=config('SENDGRID_API_KEY')
+
+
+# cloudinary
+
+#cloudinary.config( 
+  #cloud_name = "dos4bdnql", 
+ # api_key = config('CLOUDINARY_KEY'),
+  #api_secret = config('CLOUDINARY_SECRET_KEY')
+#)
