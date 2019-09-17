@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from social.models import Follow
 
-from .models import Profile, BookMark, Share, Likes
+from .models import Profile, BookMark, Likes
 
 
 
@@ -85,17 +85,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
         return ret
 
 
-class ShareSerializer(serializers.ModelSerializer):
-    """ Serialize the shared polls"""
-
-    class Meta:
-        model = Share
-        fields = ('id', 'poll', 'user', 'share_date')
-        
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret['poll_question_text'] = str(instance.poll)
-        return ret
 
 class LikeSerializer(serializers.ModelSerializer):
     """ Serialize the liked polls"""

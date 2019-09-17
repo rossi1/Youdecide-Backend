@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 from polls.models import Poll
-from userprofile.models import Share, Likes
+from userprofile.models import  Likes
 
 
 class FollowQuerySet(models.query.QuerySet):

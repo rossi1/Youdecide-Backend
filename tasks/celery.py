@@ -33,7 +33,7 @@ from celery import Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'youdecide.settings')
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
 
-app = Celery('tasks')
+app = Celery('tasks', broker='redis://localhost:6379')
 
 app.config_from_object('django.conf:settings')
 

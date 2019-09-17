@@ -14,9 +14,9 @@ from rest_framework.validators import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
 
-from .models import BookMark, Share, Likes,Profile
+from .models import BookMark, Likes,Profile
 from userprofile.serializers import SingleUserSerializer, UserProfileSerializer, \
-    BookmarkSerializer, ShareSerializer, LikeSerializer
+    BookmarkSerializer,LikeSerializer
 
 from social.models import Follow
 from polls.models import Poll
@@ -50,9 +50,7 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user = self.get_object()
         serializer = SingleUserSerializer(user, context=self.get_serializer_context())
         poll = Poll.objects.filter(created_by=user).values('question', 'pub_date', 'pk')
-        share = Share.objects.filter(user=user).values('share_date', question=F('poll__question'), 
-        pk=F('poll__pk'), pub_date=F('poll__pub_date'))
-
+       
         like = Likes.objects.filter(user=user).values('like_date', question=F('poll__question'), 
         pk=F('poll__pk'), pub_date=F('poll__pub_date'))
 
@@ -62,8 +60,7 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user_info['followed'] = Follow.objects.get_followings(user)
         user_info['polls'] = poll
         user_info['likes'] =like 
-        user_info['shares'] = share
-        
+       
         return Response(user_info, status=status.HTTP_200_OK)
 
 
@@ -85,15 +82,6 @@ class BookMarkAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user).all()
-
-
-class SharesAPIView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = Share.objects.all()
-    serializer_class = ShareSerializer
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).all()
    
 
 class LikesAPIView(generics.ListCreateAPIView):
@@ -107,11 +95,6 @@ class LikesAPIView(generics.ListCreateAPIView):
 class DeleteBookMarkedAPIView(generics.DestroyAPIView):
     queryset = BookMark
     serializer_class = BookmarkSerializer
-    lookup_field = 'pk'
-
-class DeleteSharesAPIView(generics.DestroyAPIView):
-    queryset = Share
-    serializer_class = ShareSerializer
     lookup_field = 'pk'
 
 class DeleteLikesAPIView(generics.DestroyAPIView):

@@ -13,7 +13,7 @@ from polls.models import Poll, Vote
 from polls.serializers import PollSerializer, VoteSerializer
 
 from social.models import Follow
-from userprofile.models import Share, Likes
+from userprofile.models import  Likes
 
 
 class PollTrendingAPIListView(APIView):

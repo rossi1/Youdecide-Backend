@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, BookMark, Share, Likes
+from .models import Profile, BookMark, Likes
 
 # Register your models here.
 
@@ -12,8 +12,7 @@ class BookmarksAdmin(admin.ModelAdmin):
     list_display = ['user', 'poll', 'created']
 
 
-class SharesAdmin(admin.ModelAdmin):
-    list_display = ['user', 'poll', 'share_date']
+
 
 class LikesAdmin(admin.ModelAdmin):
     list_display = ['user', 'poll', 'like_date']
@@ -21,5 +20,4 @@ class LikesAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile)
 admin.site.register(BookMark, BookmarksAdmin)
-admin.site.register(Share, SharesAdmin)
 admin.site.register(Likes, LikesAdmin)

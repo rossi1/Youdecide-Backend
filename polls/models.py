@@ -74,7 +74,7 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=100)
-    dynamic_choice = JSONField()
+    #dynamic_choice = JSONField()
 
     def __str__(self):
         return str(self.pk)

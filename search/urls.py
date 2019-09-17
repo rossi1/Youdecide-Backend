@@ -1,4 +1,4 @@
-
+"""
 from django.urls import path, include, re_path
 
 from rest_framework import routers
@@ -21,5 +21,32 @@ urlpatterns = [
     path("poll", include(router.urls), name="poll_search")
 
 ]
+"""
 
 
+
+
+#from django.conf.urls import patterns, url, include
+#from rest_framework import routers
+#from django.urls import include , path 
+
+#from .views import PollSearchView
+
+#router = routers.DefaultRouter()
+#router.register("", PollSearchView, base_name="poll-search")
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+from .views import PollDocumentView
+
+router = DefaultRouter()
+router.register(r'',  PollDocumentView, basename='polldocument')
+
+
+urlpatterns = [
+
+
+    path("poll/", include(router.urls))
+
+]

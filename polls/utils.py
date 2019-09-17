@@ -1,3 +1,6 @@
+from django_celery_beat.models import  PeriodicTask, ClockedSchedule
+
+
 def filter_votes(instance):
     """ 
     Custom function to filter related voters ids 
@@ -14,3 +17,18 @@ def filter_votes(instance):
                     voter_list.append(voters_name)
     
     return voter_list
+
+
+def schedule_task(date):
+    schedule = ClockedSchedule.objects.create(clocked_time=date)
+
+    return schedule
+
+
+def create_task(schedule, id):
+    task =''
+
+    print(task)
+
+    return task
+    

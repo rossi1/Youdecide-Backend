@@ -18,7 +18,7 @@ from ipware import get_client_ip
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
-from .utils import filter_votes
+from .utils import filter_votes, schedule_task, create_task
 
 
 
@@ -61,6 +61,8 @@ class PollCreate(generics.CreateAPIView):
             hours=int(poll_expiry_hour), minutes=int(poll_expiry_minute)
             )
             poll_expiry_date = calculate_poll_expiry_date
+
+            #schedule = schedule_task(date=poll_expiry_date.date(), time=poll_expiry_date.time())
             self.perform_create(serializer, poll_expiry_date)
 
         elif poll_expiry_hour and poll_expiry_minute:
@@ -70,8 +72,10 @@ class PollCreate(generics.CreateAPIView):
             self.perform_create(serializer, poll_expiry_date)
 
         elif poll_expiry_minute:
+
             calculate_poll_expiry_date = datetime.now() + timedelta(minutes=int(poll_expiry_minute))
             poll_expiry_date = calculate_poll_expiry_date
+            
             self.perform_create(serializer, poll_expiry_date)
 
         else:

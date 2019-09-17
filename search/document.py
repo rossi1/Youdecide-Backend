@@ -1,11 +1,9 @@
-
 from django.conf import settings
-from django_elasticsearch_dsl import  DocType, Index, fields
+
+from django_elasticsearch_dsl import Document, Index, fields
+from elasticsearch_dsl import analyzer
 
 from polls.models import Poll
-
-
-
 
 # Name of the Elasticsearch index
 INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
@@ -17,24 +15,46 @@ INDEX.settings(
 )
 
 
-INDEX.doc_type
-class PollDocument(DocType):
+from django_elasticsearch_dsl.registries import registry
+
+
+@INDEX.doc_type
+class PollDocument(Document):
     """Book Elasticsearch document."""
 
     id = fields.IntegerField(attr='id')
 
     question = fields.StringField(
+        
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(multi=True)
+            'suggest': fields.CompletionField(),
         }
     )
-    
-    pub_date = fields.DateField()
+
+    slug = fields.StringField(
+        
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
 
    
+    """
+    created_by = fields.StringField(
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    """
 
-    class Meta(object):
+    pub_date = fields.DateField()
+
+    expire_date = fields.DateField()
+
+
+
+    class Django(object):
         """Meta options."""
 
-        model = Poll  # The model associate with this Document
+        model = Poll # The model associate with this Document

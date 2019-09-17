@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from datetime import timedelta
+import cloudinary
 
 from django.urls import reverse_lazy
 
@@ -57,7 +58,7 @@ LOCAL_APPS = [
     'social',
 
     'userprofile',
-    'search',
+    #'search',
     'notification'
     ]
 
@@ -80,10 +81,16 @@ EXTERNAL_APPS = [
     'oauth2_provider',
     'rest_framework_social_oauth2',
     'django_user_agents',
-    # Django Elasticsearch integration
+      # Django Elasticsearch integration
     'django_elasticsearch_dsl',
+
+    # Django REST framework Elasticsearch integration (this package)
+    'django_elasticsearch_dsl_drf',
+     'django_celery_beat'
+    # Django Elasticsearch integration
+    #'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration
-    'django_elasticsearch_dsl_drf'
+    #'django_elasticsearch_dsl_drf'
     #'cloudinary',
 
 ]
@@ -92,11 +99,18 @@ INSTALLED_APPS += DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
 
 # disable django user agent cache
 USER_AGENTS_CACHE = None
-
+"""
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': config('BONSAI_URL')
+    },
+}
+"""
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
     },
 }
 
@@ -267,6 +281,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
         
+        
     )
 }
 
@@ -308,8 +323,29 @@ SENDGRID_API_KEY=config('SENDGRID_API_KEY')
 
 # cloudinary
 
-#cloudinary.config( 
-  #cloud_name = "dos4bdnql", 
- # api_key = config('CLOUDINARY_KEY'),
-  #api_secret = config('CLOUDINARY_SECRET_KEY')
-#)
+cloudinary.config(
+   cloud_name = "dwzk9ckul", 
+  api_key = config('CLOUDINARY_KEY'),
+  api_secret = config('CLOUDINARY_SECRET_KEY')
+  )
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+
+
+
+CELERY_TASK_TIME_LIMIT = 5 * 60
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
+# TODO: set to whatever value is adequate in your circumstances
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+USE_TZ = False
+

@@ -1,11 +1,10 @@
-
-from .models import SearchHistory, FailedSearchHistory
+"'"
+#from .models import SearchHistory, FailedSearchHistory
 from rest_framework import serializers
 
-from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 
-from .document import PollDocument
 
+"""
 
 class SearchHistorySerializer(serializers.ModelSerializer):
 
@@ -21,16 +20,38 @@ class FailedSearchHistorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PollDocumentSerializer(DocumentSerializer):
-    #Serializer for Poll document.
+from drf_haystack.serializers import HaystackSerializer
+from drf_haystack.viewsets import HaystackViewSet
+
+from polls.models import Poll
+from .search_index import PollIndex
+
+"""
+
+
+from polls.models import Poll
+
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+
+from .document import PollDocument
+
+class PollBookSerializer(DocumentSerializer):
+    """Serializer for the Book document."""
 
     class Meta(object):
-        # = Poll
+        """Meta options."""
+
+        # Specify the correspondent document class
         document = PollDocument
-        #Meta options.
+
+        # List the serializer fields. Note, that the order of the fields
+        # is preserved in the ViewSet.
         fields = (
             'id',
             'question',
+            'slug',
+            'expire_date',
             'pub_date',
-            )
-
+            #'created_by'
+        
+        )

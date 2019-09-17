@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 
-from userprofile.models import BookMark, Likes, Share
+from userprofile.models import BookMark, Likes
 
 
 
@@ -49,6 +49,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = kwargs['context']['request']
@@ -77,17 +78,17 @@ class PollSerializer(serializers.ModelSerializer):
         if request.user.is_authenticated:
             if BookMark.objects.filter(user=request.user, poll=instance).exists():
                 poll_has_been_bookmarked = True
+                
             if Likes.objects.filter(user=request.user, poll=instance).exists():
                 poll_has_been_liked = True
-
-            if Share.objects.filter(user=request.user, poll=instance).exists():
-                poll_has_been_shared = True
+            
+            ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
+            ret['poll_has_been_liked'] =  poll_has_been_liked
+      
+   
         
-        ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
-        ret['poll_has_been_liked'] =  poll_has_been_liked
-        ret['poll_has_been_shared'] =  poll_has_been_shared
+    
         ret['total_likes'] = instance.poll_likes.all().count()
-        ret['total_shares'] = instance.poll_share.all().count()
         ret['vote_count'] = instance.poll_vote.count()
         return ret
 

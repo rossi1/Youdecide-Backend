@@ -4,7 +4,7 @@ from decouple import config
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
          'ENGINE': config('DB_POSTGRES_ENGINE'),
@@ -15,9 +15,24 @@ DATABASES = {
          'PORT': '5432',
          }
 }
+"""
+
+
+DATABASES = {
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'youdecide',
+         'USER': 'postgres',
+         'PASSWORD': 'emma',
+         'HOST': '',
+         'PORT': '5432',
+         }
+}
 
 CELERY_LOCALHOST = 'redis://localhost:6379'
+
 BROKEN_URL = CELERY_LOCALHOST
+CELERY_BROKER_URL = CELERY_LOCALHOST
 CELERY_RESULT_BACKEND = CELERY_LOCALHOST
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'

@@ -27,6 +27,8 @@ from celery.schedules import crontab
 
 from celery.decorators import periodic_task
 
+
+
 from polls.models import Poll
 
 
@@ -37,17 +39,7 @@ def send_registration_welcome_mail(email, username):
     mail_user = send_mail(subject, message_body, settings.EMAIL_HOST_USER, [email], fail_silently=False)
     return mail_user
 
-
-@periodic_task(
-    run_every=(crontab('*/1')),
-    name='task_update_polls',
-    ignore_result=True
-)
-def mark_expired_polls():
-    for polls in Poll.objects.all():
-        if polls.expire_date is None:
-            pass
-        elif polls.expire_date == datetime.today():
-                polls.has_expired = True
-                return polls.save()
+@shared_task
+def mark_expired_polls(id):
+    return Poll.objects.filter(id=id).update(has_expired=True)
 
