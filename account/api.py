@@ -22,13 +22,11 @@ from emailservice.utils import Mail
 from userprofile import models, serializers
 from tasks.tasks import send_registration_welcome_mail
 
+from .authentication import CsrfExemptSessionAuthentication
+
 from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
 
 
-class CsrfExemptSessionAuthentication(SessionAuthentication):
-
-    def enforce_csrf(self, request):
-        return  # To not perform the csrf check previously happening
 
 
 @method_decorator(csrf_exempt, name='post')
@@ -42,7 +40,7 @@ class UserCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
-        #send_registration_welcome_mail.delay('Mail', email, username)
+        send_registration_welcome_mail.delay('Mail', email, username)
         serializer.save()
 
 class LoginView(APIView):
@@ -145,6 +143,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response("Success.", status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # class UserFollowAPIView(generics.CreateAPIView):
 #     """

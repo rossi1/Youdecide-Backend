@@ -32,8 +32,8 @@ jwt_urlpattern = [
 ]
 
 urlpatterns = [
-    # re_path('^logout/$', LogoutView.as_view(), name='logout'),
-    # re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
+    re_path('^logout/$', logout, name='logout'),
+    re_path('^logout-then-login/$', logout_then_login, name='logout_then_login'),
     # change password urls
     re_path('^password-change/$', PasswordChangeView.as_view(), name='password_change'),
     re_path('^password-change/done/$', PasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -47,7 +47,7 @@ urlpatterns = [
 
 
     re_path('^register/$', views.register, name='register'),
-    # re_path('^$', views.dashboard, name='dashboard'),
+    re_path('^$', views.dashboard, name='dashboard'),
     re_path('^edit/$', views.edit, name='edit'),
     # get all users
     re_path('^$', UserListAPIView.as_view(), name='users'),

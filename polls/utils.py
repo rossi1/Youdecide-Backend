@@ -1,3 +1,4 @@
+import cloudinary
 from django_celery_beat.models import  PeriodicTask, ClockedSchedule
 
 
@@ -31,4 +32,14 @@ def create_task(schedule, id):
     print(task)
 
     return task
+
+def cloudinary_upload_image(file):
+    upload = cloudinary.uploader.upload(file, resource_type = "video")
+    return upload['secure_url']
+
+
+def cloudinary_upload_video(file):
+    upload = cloudinary.uploader.upload(file, resource_type = "video")
+    return upload['secure_url']
+
     

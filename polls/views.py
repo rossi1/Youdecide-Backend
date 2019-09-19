@@ -127,6 +127,7 @@ class ChoiceList(generics.ListCreateAPIView):
         return queryset
     serializer_class = ChoiceSerializer
 
+
     def perform_create(self, serializer):
         poll = generics.get_object_or_404(Poll, id=self.kwargs["pk"])
         serializer.save(poll=poll)

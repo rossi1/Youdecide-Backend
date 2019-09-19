@@ -35,11 +35,7 @@ class PollFeed(APIView):
 
     def get(self, request, *args, **kwargs):
         followings = Follow.objects.get_followings_list(request.user)
-    
-
         polls = Poll.objects.filter(created_by__in=followings).distinct('id', 'pub_date').all()
-        
-       
         serializer = PollSerializer(polls, many=True, context={'request': request})
 
         return Response(serializer.data, status=status.HTTP_200_OK)

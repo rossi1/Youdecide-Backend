@@ -40,12 +40,12 @@ class Poll(models.Model):
     expire_date = models.DateTimeField(blank=True, null=True) #creata a function to return duration of a poll
     has_expired  = models.BooleanField(default=False)
     slug = models.SlugField(max_length=250)
-    #CHOICES_TYPE = (
-        #('TEXT', 'TEXT'),
-        #('AUDIO', 'AUDIO'),
-        #('VIDEO', 'VIDEO'),
-    #)
-    #choice_type = models.CharField(max_length=10, choices=CHOICES_TYPE, default='TEXT')
+    CHOICES_TYPE = (
+        ('TEXT', 'TEXT'),
+        ('AUDIO', 'AUDIO'),
+        ('VIDEO', 'VIDEO'),
+    )
+    choice_type = models.CharField(max_length=10, choices=CHOICES_TYPE, default='TEXT')
     # options = models.ForeignKey(Options, on_delete=models.CASCADE)
 
     def _get_unique_slug(self):
@@ -73,7 +73,11 @@ class Poll(models.Model):
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=100)
+    choice_text = models.CharField(max_length=100, null=True, blank=True)
+    choice_audio = models.URLField(max_length=100, null=True, blank=True)
+    choice_video = models.URLField(max_length=100, null=True, blank=True)
+    
+
     #dynamic_choice = JSONField()
 
     def __str__(self):

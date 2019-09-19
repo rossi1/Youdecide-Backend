@@ -1,4 +1,6 @@
 import json
+import os
+
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -7,6 +9,7 @@ from rest_framework.authtoken.models import Token
 
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
+from .utils import cloudinary_upload_image, cloudinary_upload_video
 
 from userprofile.models import BookMark, Likes
 
@@ -21,13 +24,31 @@ class VoteSerializer(serializers.ModelSerializer):
 
 class ChoiceSerializer(serializers.ModelSerializer):
     votes = VoteSerializer(many=True, required=False)
+    audio = serializers.FileField(required=False)
+    video = serializers.FileField(required=False)
+
 
     class Meta:
         model = Choice
-        fields = ['choice_text', 'votes', 'id']
+        fields = ['choice_text', 'votes', 'id', 'audio', 'video', 'choice_audio', 'choice_video']
+        read_only_fields = ('choice_audio', 'choice_video')
 
-    def create(self, **validated_data):
-        pass
+    def create(self, validated_data):
+        try:
+            audio = validated_data.pop('audio')
+            upload_audio = cloudinary_upload_image(audio)
+        except KeyError:
+            try:
+                video = validated_data.pop('video')
+                upload_video = cloudinary_upload_video(video)
+            except KeyError:
+                return Choice.objects.create(**validated_data)
+            else:
+                return Choice.objects.create(choice_video=upload_video, **validated_data)
+
+        else:
+            return Choice.objects.create(choice_audio=upload_audio, **validated_data)
+
     
 
     def to_representation(self, instance):
@@ -46,6 +67,31 @@ class ChoiceSerializer(serializers.ModelSerializer):
         ret['anonymous_voter'] = filter_votes(instance.votes.values('anonymous_voter__username'))
        
         return ret
+    
+    def validate_choice_audio(self, value):
+        if value.size < 5*1024*1024:
+            raise serializers.ValidationError("Audio file too large ( > 5mb )")
+        if not value.content_type in ["audio/mpeg", "audio/wav"]:
+            raise serializers.ValidationError("Content-Type is not mpeg")
+        if not os.path.splitext(value.name)[1] in [".mp3",".wav"]:
+            raise serializers.ValidationError("Doesn't have proper extension")
+
+        
+        return value
+        
+    def validate_choice_video(self, value):
+        if value.size > 5*1024*1024:
+            raise serializers.ValidationError("Large file too large ( >54mb )")
+        if value.content_type in ["video/mp4", "video/webm"]:
+            raise serializers.ValidationError("Content-Type is not mpeg")
+        if not os.path.splitext(value.name)[1] in [".mp4"]:
+            raise serializers.ValidationError("Doesn't have proper extension")
+
+            return value
+        else:
+            raise serializers.alidationError("Couldn't read uploaded file")
+
+    
 
 class PollSerializer(serializers.ModelSerializer):
     
@@ -67,7 +113,7 @@ class PollSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = Poll
-        fields = ['id', 'created_by', 'pub_date',  'question', 'choices', 'poller_username']
+        fields = ['id', 'created_by', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type']
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)
@@ -84,6 +130,9 @@ class PollSerializer(serializers.ModelSerializer):
             
             ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
             ret['poll_has_been_liked'] =  poll_has_been_liked
+
+        
+    
       
    
         
