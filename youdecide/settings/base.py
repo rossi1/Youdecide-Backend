@@ -99,20 +99,7 @@ INSTALLED_APPS += DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
 
 # disable django user agent cache
 USER_AGENTS_CACHE = None
-"""
-# Elasticsearch configuration
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': config('BONSAI_URL')
-    },
-}
-"""
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200'
-    },
-}
 
 # Name of the Elasticsearch index
 

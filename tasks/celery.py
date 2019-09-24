@@ -29,11 +29,13 @@ from django.conf import settings
 from celery import Celery
 
 
+from decouple import config
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'youdecide.settings')
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
 
-app = Celery('tasks', broker='redis://localhost:6379')
+app = Celery('tasks', broker=config('REDIS_URL'))
 
 app.config_from_object('django.conf:settings')
 
