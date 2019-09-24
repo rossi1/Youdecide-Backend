@@ -18,7 +18,7 @@ from ipware import get_client_ip
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
-from .utils import filter_votes, schedule_task, create_task
+from .utils import filter_votes, schedule_task
 
 
 

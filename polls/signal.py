@@ -7,7 +7,7 @@ from django.conf import settings
 
 from django_celery_beat.models import  PeriodicTask
 
-from .utils import filter_votes, schedule_task, create_task
+from .utils import filter_votes, schedule_task
 
 from tasks.tasks import mark_expired_polls
 
