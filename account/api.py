@@ -40,7 +40,7 @@ class UserCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
-        send_registration_welcome_mail.delay('Mail', email, username)
+        send_registration_welcome_mail.delay(email, username)
         serializer.save()
 
 class LoginView(APIView):
