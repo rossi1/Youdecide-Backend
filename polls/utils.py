@@ -26,13 +26,6 @@ def schedule_task(date):
     return schedule
 
 
-def create_task(schedule, id):
-    task =''
-
-    print(task)
-
-    return task
-
 def cloudinary_upload_image(file):
     upload = cloudinary.uploader.upload(file, resource_type = "video")
     return upload['secure_url']

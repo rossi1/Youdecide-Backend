@@ -149,3 +149,17 @@ Search for multiple terms in specific fields
 In order to search for multiple terms “how to become a developer”, and the with the pub_date, in specific fields add multiple search query params and field names separated with | to each of the search terms.
 
 http://youdecide-io.herokuapp.com/search/publisher/?search=question|pitbull&search=pub_date|<date-format-here>
+
+
+
+# CELERY TASK QUEUE
+
+Please install redis on your local machine and start the redis server, once done please follow this steps below
+
+
+
+1. Navigate into the project directory.
+2. Run `celery -A tasks worker --loglevel=info` to start a Celery worker service.
+3. Run `celery -A tasks beat -l info -S django>` as a separate process, start the beat service .
+
+

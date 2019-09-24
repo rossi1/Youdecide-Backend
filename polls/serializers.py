@@ -31,7 +31,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
         fields = ['choice_text', 'votes', 'id', 'audio', 'video', 'choice_audio', 'choice_video']
-        read_only_fields = ('choice_audio', 'choice_video')
+        
 
     def create(self, validated_data):
         try:
@@ -131,11 +131,7 @@ class PollSerializer(serializers.ModelSerializer):
             ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
             ret['poll_has_been_liked'] =  poll_has_been_liked
 
-        
-    
-      
-   
-        
+
     
         ret['total_likes'] = instance.poll_likes.all().count()
         ret['vote_count'] = instance.poll_vote.count()
