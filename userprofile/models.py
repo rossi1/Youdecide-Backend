@@ -36,6 +36,20 @@ class Likes(models.Model):
     class Meta:
         ordering = ('-like_date',)
         unique_together = ('poll', 'user')
+
+
+class Share(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # poll = models.CharField(max_length=255)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    share_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.poll.question
+
+    class Meta:
+        ordering = ('-share_date',)
+
         
 
 
