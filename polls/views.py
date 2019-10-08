@@ -45,11 +45,12 @@ class AnonymousUserPermission(BasePermission):
 
 
 class PollCreate(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, )
     queryset = Poll 
     serializer_class = PollSerializer
 
     def create(self, request, *args, **kwargs):
+        print(request.user)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         poll_expiry_date = None
@@ -84,7 +85,7 @@ class PollCreate(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer, poll_expiry_date):
-        serializer.save(expire_date=poll_expiry_date)
+        serializer.save(expire_date=poll_expiry_date, created_by=self.request.user)
 
 
 class PollList(generics.ListAPIView):

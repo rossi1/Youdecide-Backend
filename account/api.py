@@ -15,7 +15,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework_simplejwt.tokens import RefreshToken
+
 
 from youdecide import settings
 from emailservice.utils import Mail
@@ -23,9 +23,10 @@ from userprofile import models, serializers
 from tasks.tasks import send_registration_welcome_mail
 
 from .authentication import CsrfExemptSessionAuthentication
+from .utils import encode_user_payload
+from .customauthbackend import EmailOrUsernameModelBackend
 
-from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer
-
+from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer, LoginSerializer
 
 
 
@@ -43,39 +44,30 @@ class UserCreate(generics.CreateAPIView):
         send_registration_welcome_mail.delay(email, username)
         serializer.save()
 
-class LoginView(APIView):
+class LoginView(generics.GenericAPIView):
     """For /api/v1/users/login url path"""
     permission_classes = ()
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+    serializer_class = LoginSerializer
+    
 
-    def post(self, request,):
-        username = None
-        if request.data.get("username") is not None:
-            username = request.data.get("username")
-        else:
-            username = request.data.get("email")
-        password = request.data.get("password")
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            token = self.get_tokens_for_user(user)
-
+            token = encode_user_payload(user)
+            
             return Response({"token": token,
             'pk': user.pk})
         else:
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @staticmethod
-    def get_tokens_for_user(user):
-        """custom method to create new refresh and access tokens for the given user"""
-
-        refresh = RefreshToken.for_user(user)
-        
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            }
-
+    
 
 class IsOwner(permissions.BasePermission):
     """

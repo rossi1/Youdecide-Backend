@@ -113,7 +113,7 @@ class PollSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = Poll
-        fields = ['id', 'created_by', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type']
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)

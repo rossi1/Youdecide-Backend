@@ -14,7 +14,7 @@ from tasks.tasks import mark_expired_polls
 
 from .models import Poll
 
-
+"""
 @receiver(post_save, sender=Poll)
 def create_task(sender, created, instance, **kwargs):
     if created and instance:
@@ -28,4 +28,5 @@ def create_task(sender, created, instance, **kwargs):
         name=name,
         task='tasks.tasks.mark_expired_polls',
         args=json.dumps((instance.id,)))
+"""
         

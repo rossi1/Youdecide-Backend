@@ -79,18 +79,7 @@ class PollDocumentView(BaseDocumentViewSet):
         'pub_date': 'pub_date',
         'expire_date': 'expire_date',
         'slug': 'slug.raw',
-        'question': {
-            'field': 'price.raw',
-            # Note, that we limit the lookups of `price` field in this
-            # example, to `range`, `gt`, `gte`, `lt` and `lte` filters.
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
+        
     }
     # Define ordering fields
     ordering_fields = {

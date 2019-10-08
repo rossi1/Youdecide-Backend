@@ -59,7 +59,10 @@ LOCAL_APPS = [
 
     'userprofile',
     #'search',
-    'notification'
+    'notification',
+    
+
+    'drf_yasg'
     ]
 
 DEFAULT_APPS = [
@@ -259,10 +262,13 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
         # 'rest_framework.authentication.TokenAuthentication',
         'account.authentication.CsrfExemptSessionAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        'rest_framework.authentication.SessionAuthentication',
+    
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'account.authentication.JwtAuthentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
+          # django-oauth-toolkit >= 1.0.0
+    
         
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -275,25 +281,9 @@ REST_FRAMEWORK = {
 }
 
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # testing
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # testing
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
-
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': config('SECRET_KEY'),
-    'VERIFYING_KEY': None,
-
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    
-}
-
+JWT_SECRET = SECRET_KEY
+JWT_ALGORITHM = 'HS256'
+JWT_EXP_DELTA_MINTUES = 60
 
 # Email
 
@@ -318,7 +308,18 @@ cloudinary.config(
   api_secret = config('CLOUDINARY_SECRET_KEY')
   )
 
-
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Basic': {
+            'type': 'basic'
+      },
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   }
+}
 
 
 

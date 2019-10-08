@@ -27,9 +27,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from account.api import UserCreate, LoginView,  UserListAPIView, ChangePasswordView, UserDetailAPIView
 from account import views, api
 
-jwt_urlpattern = [
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
-]
+
 
 urlpatterns = [
     re_path('^logout/$', logout, name='logout'),
@@ -58,8 +56,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login"),
     # path('logout/', Logout.as_view(), name='logout'),
     path('<int:pk>/', UserDetailAPIView.as_view(), name='user'),
-    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
-    path('', include(jwt_urlpattern))
+    path('change-password/', ChangePasswordView.as_view(), name='change-password')
 
 ]
 
