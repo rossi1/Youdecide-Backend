@@ -9,7 +9,6 @@ from userprofile.models import  Likes
 class FollowQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability."""
 
-
     def get_followers(self, user):
         followers = self.filter(following=user).order_by('-date_follow').all()
         total_followers_no = self.filter(following=user).all().count()
@@ -56,15 +55,3 @@ class Follow(models.Model):
     def __str__(self):
         return u'%s follows %s' % (self.follower, self.following)
 
-
-"""
-class Follower(models.Model):
-    follower = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
-    following = models.ForeignKey(User, related_name='follower_set', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('follower', 'following')
-
-    def __str__(self):
-        return u'%s follows %s' % (self.follower, self.following)
-"""

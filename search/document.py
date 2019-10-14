@@ -39,19 +39,11 @@ class PollDocument(Document):
         }
     )
 
-   
-    """
-    created_by = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    """
+
 
     pub_date = fields.DateField()
 
     expire_date = fields.DateField()
-
 
 
     class Django(object):

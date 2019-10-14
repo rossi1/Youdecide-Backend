@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import BasicAuthentication
 
 
 from youdecide import settings
@@ -27,7 +27,7 @@ from .utils import encode_user_payload
 from .customauthbackend import EmailOrUsernameModelBackend
 
 from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer, LoginSerializer
-
+from .permissions import IsOwner
 
 
 @method_decorator(csrf_exempt, name='post')
@@ -41,7 +41,7 @@ class UserCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
-        send_registration_welcome_mail.delay(email, username)
+        #send_registration_welcome_mail(email, username)
         serializer.save()
 
 class LoginView(generics.GenericAPIView):
@@ -61,27 +61,10 @@ class LoginView(generics.GenericAPIView):
         if user:
             login(request, user)
             token = encode_user_payload(user)
-            
-            return Response({"token": token,
-            'pk': user.pk})
+            return Response({"token": token, 'pk': user.pk})
         else:
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-    
-
-class IsOwner(permissions.BasePermission):
-    """
-    Custom of class IsOwnerOrReadOnly(permissions.BasePermission)
-    That an APIexception is raised instead
-    We do not want a ReadOnly
-    """
-
-    def has_object_permission(self, request, view, obj):
-
-        # First check if authentication is True
-        permission_classes = (permissions.IsAuthenticated, )
-        # Instance is the user
-        return obj.id == request.user.id
 
 
 class UserListAPIView(generics.ListAPIView):
@@ -130,7 +113,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             if not self.object.check_password(serializer.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
+            self.object.set_password(serializer.data.get("new_password")) 
             self.object.save()
             return Response("Success.", status=status.HTTP_200_OK)
 

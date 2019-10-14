@@ -1,34 +1,12 @@
-
-from rest_framework.authentication import SessionAuthentication
-
-
 import jwt
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 from rest_framework import authentication
 from rest_framework import exceptions
-from rest_framework.authentication import BaseAuthentication, \
-    get_authorization_header
-
-
-
-try:
-    from django.urls import reverse
-except ImportError:  # Will be removed in Django 2.0
-    from django.core.urlresolvers import reverse
-
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
-from rest_framework import exceptions, HTTP_HEADER_ENCODING
-
-from social_django.views import NAMESPACE
-from social_django.utils import load_backend, load_strategy
-from social_core.exceptions import MissingBackend
-from social_core.utils import requests
-
-
-
+from rest_framework.authentication import SessionAuthentication
 
 class JwtAuthentication(authentication.BaseAuthentication):
     keyword = 'Token'
@@ -51,19 +29,13 @@ class JwtAuthentication(authentication.BaseAuthentication):
                 user = jwt.decode(token[1].decode(), settings.JWT_SECRET, algorithms=settings.JWT_ALGORITHM)
             
             except jwt.ExpiredSignatureError:
-                raise exceptions.AuthenticationFailed({
-                    'message': 'false',
-                    'res': False,
-                    'reason': 'Token expired'})
+                raise exceptions.AuthenticationFailed({ 'message': 'false', 'res': False, 'reason': 'Token expired'})
             
             except jwt.DecodeError:
-                raise exceptions.AuthenticationFailed({
-                    'message': 'false',
-                    'res': False,
-                    'reason': 'Invalid Token'})
+                raise exceptions.AuthenticationFailed({'message': 'false', 'res': False, 'reason': 'Invalid Token'})
 
             else:
-                user_ = get_user_model().objects.get(email__iexact=user['user'])
+                user_ = User.objects.get(email__iexact=user['user'])
                 return (user_, token)
 
     def authenticate_header(self, request):

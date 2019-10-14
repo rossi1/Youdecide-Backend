@@ -14,7 +14,6 @@ from .utils import cloudinary_upload_image, cloudinary_upload_video
 from userprofile.models import BookMark, Likes
 
 
-
 class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -30,7 +29,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Choice
-        fields = ['choice_text', 'votes', 'id', 'audio', 'video', 'choice_audio', 'choice_video']
+        fields = ['choice_text', 'votes', 'id', 'audio', 'video']
         
 
     def create(self, validated_data):
@@ -95,7 +94,6 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = kwargs['context']['request']
@@ -106,6 +104,7 @@ class PollSerializer(serializers.ModelSerializer):
             except ValueError:
                 pass
 
+    
             
     choices = ChoiceSerializer(many=True, read_only=True, required=False)
     poller_username = serializers.SerializerMethodField()
@@ -130,13 +129,10 @@ class PollSerializer(serializers.ModelSerializer):
             
             ret['poll_has_been_bookmarked'] =  poll_has_been_bookmarked
             ret['poll_has_been_liked'] =  poll_has_been_liked
-
-
     
         ret['total_likes'] = instance.poll_likes.all().count()
         ret['vote_count'] = instance.poll_vote.count()
         return ret
 
     def get_poller_username(self, instance):
-        
         return instance.created_by.username

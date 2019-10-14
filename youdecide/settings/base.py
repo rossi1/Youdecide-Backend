@@ -262,7 +262,6 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
         # 'rest_framework.authentication.TokenAuthentication',
         'account.authentication.CsrfExemptSessionAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'account.authentication.JwtAuthentication',

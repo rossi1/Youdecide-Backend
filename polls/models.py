@@ -1,3 +1,5 @@
+import random, base64
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -8,7 +10,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
-import random, base64
+
 
 
 # class Options(models.Model):
@@ -77,11 +79,8 @@ class Choice(models.Model):
     choice_audio = models.URLField(max_length=100, null=True, blank=True)
     choice_video = models.URLField(max_length=100, null=True, blank=True)
     
-
-    #dynamic_choice = JSONField()
-
     def __str__(self):
-        return str(self.pk)
+        return str(self.poll.question)
 
 
 class Vote(models.Model):

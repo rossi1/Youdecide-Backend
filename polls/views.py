@@ -1,7 +1,7 @@
 import json
 from datetime import timedelta, datetime
 
-from django.db.models import Q
+
 from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import generics
@@ -11,36 +11,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
-from rest_framework.exceptions import PermissionDenied
+
 
 from ipware import get_client_ip
+
+from account.permissions import IsOwner
 
 from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 from .utils import filter_votes, schedule_task
-
-
-
-class AnonymousUserPermission(BasePermission):
-
-    """Custom permission class to authenticate against AnonymousUser and stop double voting """
-    
-    def has_permission(self, request, view):
-        
-        poll_pk = view.kwargs['pk']
-        if request.method == "POST":
-            if request.user.is_authenticated:
-                if Vote.objects.filter(Q(poll=poll_pk), Q(voted_by=request.user)).exists():
-                    raise PermissionDenied('Double voting disallowed')
-                return True
-                
-            ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
-            if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__ipaddress=ip_address)).exists():
-                raise PermissionDenied('Double voting disallowed')
-            return True
-        return True
-
+from .permissions import AnonymousUserPermission
 
 
 
@@ -94,7 +75,6 @@ class PollList(generics.ListAPIView):
     
 
 class PollDetail(generics.RetrieveUpdateAPIView):
-    #permission_classes = (PollPermission,)
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
@@ -109,16 +89,19 @@ class PollDetail(generics.RetrieveUpdateAPIView):
             return Response({'message':'Unable to process request'}, status=status.HTTP_403_FORBIDDEN)
         if instance.created_by != request.user:
             return Response({'message':'Unable to process request'}, status=status.HTTP_403_FORBIDDEN)
+        if instance.poll_vote.count() > 0:
+        
+            return Response({'message':'Poll ongoing unable to edit poll '}, status=status.HTTP_403_FORBIDDEN)
         self.perform_update(serializer)
         return Response(serializer.data)
             
        
 
-class PollDelete(generics.RetrieveDestroyAPIView):
+class PollDelete(generics.DestroyAPIView):
     queryset = Poll
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwner)
     
 
 class ChoiceList(generics.ListCreateAPIView):
@@ -135,16 +118,23 @@ class ChoiceList(generics.ListCreateAPIView):
 
 
         
-class ChoiceDelete(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+class ChoiceDelete(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated, IsOwner)
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
 
-    def get_queryset(self):
-        queryset = Choice.objects.filter(pk=self.kwargs["pk"])
-        return queryset
 
 
+class ChoiceEdit(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated, IsOwner)
+    serializer_class = ChoiceSerializer
+    lookup_url_kwarg = 'pk'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.votes.count() > 0:
+            return Response({'message':'Poll ongoing unable to edit poll '}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
 
 
 class CreateVote(generics.CreateAPIView):
@@ -188,51 +178,3 @@ class CreateVote(generics.CreateAPIView):
             instance.save(voted_by=self.request.user)
         else:
             instance.save(anonymous_voter=anonymous_user)
-
-    
-    
-        
-
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from django.shortcuts import get_object_or_404
-#
-# from .models import Poll, Choice
-# from .serializers import PollSerializer
-#
-#
-# class PollList(APIView):
-#
-#     def get(self, request):
-#         polls = Poll.objects.all()[:20]
-#         data = PollSerializer(polls, many=True).data
-#         return Response(data)
-#
-#
-# class PollDetail(APIView):
-#
-#     def get(self, request, pk):
-#         poll = get_object_or_404(Poll, pk=pk)
-#         data = PollSerializer(poll).data
-#         return Response(data)
-
-# from django.shortcuts import render, get_object_or_404
-# from django.http import JsonResponse
-#
-# from .models import Poll
-#
-# def polls_list(request):
-#     MAX_OBJECTS = 20
-#     polls = Poll.objects.all()[:MAX_OBJECTS]
-#     data = {"results": list(polls.values("question", "created_by__username", "pub_date"))}
-#     return JsonResponse(data)
-#
-#
-# def polls_detail(request, pk):
-#     poll = get_object_or_404(Poll, pk=pk)
-#     data = {"results": {
-#         "question": poll.question,
-#         "created_by": poll.created_by.username,
-#         "pub_date": poll.pub_date
-#     }}
-#     return JsonResponse(data)

@@ -10,7 +10,4 @@ from emailservice.utils import Mail
 def create_business_account_for_new_user(sender, created, instance, **kwargs):
     if created and instance:
         Profile.objects.create(user=instance)
-            #"""
-           # mail = Mail()
-           # mail.add_receipent_to_contact_list(instance.email, instance.first_name, instance.last_name)
-           # """
+         
