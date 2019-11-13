@@ -17,7 +17,7 @@ from anonymous_user.models import AnonymousVoter
 
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
-from .utils import filter_votes, schedule_task
+from .utils import filter_votes
 from .permissions import AnonymousUserPermission
 
 
