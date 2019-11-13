@@ -1,4 +1,3 @@
-
 from collections import OrderedDict
 
 from django.http import Http404
@@ -14,12 +13,12 @@ from rest_framework.validators import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
 
+from social.models import Follow
+from polls.models import Poll
+
 from .models import BookMark, Likes,Profile
 from userprofile.serializers import SingleUserSerializer, UserProfileSerializer, \
     BookmarkSerializer,LikeSerializer
-
-from social.models import Follow
-from polls.models import Poll
 
 
 
@@ -60,7 +59,6 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
         user_info['followed'] = Follow.objects.get_followings(user)
         user_info['polls'] = poll
         user_info['likes'] =like 
-       
         return Response(user_info, status=status.HTTP_200_OK)
 
 
@@ -81,7 +79,7 @@ class BookMarkAPIView(generics.ListCreateAPIView):
     serializer_class = BookmarkSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).all()
+        return super().get_queryset().filter(user=self.request.user).all()
    
 
 class LikesAPIView(generics.ListCreateAPIView):
@@ -90,7 +88,7 @@ class LikesAPIView(generics.ListCreateAPIView):
     serializer_class = LikeSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).all()
+        return super().get_queryset().filter(user=self.request.user).all()
     
 class DeleteBookMarkedAPIView(generics.DestroyAPIView):
     queryset = BookMark

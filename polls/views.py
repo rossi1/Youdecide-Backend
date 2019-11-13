@@ -1,11 +1,8 @@
 import json
-from datetime import timedelta, datetime
-
 
 from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import generics
-
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -16,8 +13,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from ipware import get_client_ip
 
 from account.permissions import IsOwner
-
 from anonymous_user.models import AnonymousVoter
+
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 from .utils import filter_votes, schedule_task
@@ -26,47 +23,18 @@ from .permissions import AnonymousUserPermission
 
 
 class PollCreate(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = Poll 
     serializer_class = PollSerializer
 
     def create(self, request, *args, **kwargs):
-        print(request.user)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        poll_expiry_date = None
-        poll_expiry_day = request.query_params.get('expiry_day', None)
-        poll_expiry_hour = request.query_params.get('expiry_hour', None)
-        poll_expiry_minute = request.query_params.get('expiry_minute', None)
-        if poll_expiry_day and poll_expiry_hour and poll_expiry_minute:
-            calculate_poll_expiry_date = datetime.now() + timedelta(days=int(poll_expiry_day),
-            hours=int(poll_expiry_hour), minutes=int(poll_expiry_minute)
-            )
-            poll_expiry_date = calculate_poll_expiry_date
-
-            #schedule = schedule_task(date=poll_expiry_date.date(), time=poll_expiry_date.time())
-            self.perform_create(serializer, poll_expiry_date)
-
-        elif poll_expiry_hour and poll_expiry_minute:
-            calculate_poll_expiry_date = datetime.now() + timedelta(hours=int(poll_expiry_hour), minutes=int(poll_expiry_minute)
-            )
-            poll_expiry_date = calculate_poll_expiry_date
-            self.perform_create(serializer, poll_expiry_date)
-
-        elif poll_expiry_minute:
-
-            calculate_poll_expiry_date = datetime.now() + timedelta(minutes=int(poll_expiry_minute))
-            poll_expiry_date = calculate_poll_expiry_date
-            
-            self.perform_create(serializer, poll_expiry_date)
-
-        else:
-            self.perform_create(serializer, poll_expiry_date)
-
+        self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer, poll_expiry_date):
-        serializer.save(expire_date=poll_expiry_date, created_by=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 
 class PollList(generics.ListAPIView):
@@ -76,9 +44,12 @@ class PollList(generics.ListAPIView):
 
 class PollDetail(generics.RetrieveUpdateAPIView):
     queryset = Poll.objects.all()
+    #permission_classes = (IsAuthenticated,)
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
-
+    
+    def retrieve(self, request, *arg, **kwargs):
+        return super().retrieve(request, *arg, **kwargs)
 
     def update(self, request, *args, **kwargs):
        
@@ -111,11 +82,9 @@ class ChoiceList(generics.ListCreateAPIView):
         return queryset
     serializer_class = ChoiceSerializer
 
-
     def perform_create(self, serializer):
         poll = generics.get_object_or_404(Poll, id=self.kwargs["pk"])
         serializer.save(poll=poll)
-
 
         
 class ChoiceDelete(generics.DestroyAPIView):
@@ -123,6 +92,11 @@ class ChoiceDelete(generics.DestroyAPIView):
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
 
+    def delete(self, request, *args, **kwargs):
+        instance = self.object()
+        if instance.votes().count() > 0:
+            return Response({'message':'Poll ongoing unable to delete poll choice '}, status=status.HTTP_403_FORBIDDEN)
+        return super().delete(request, *args, **kwargs)
 
 
 class ChoiceEdit(generics.UpdateAPIView):
@@ -133,7 +107,7 @@ class ChoiceEdit(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.votes.count() > 0:
-            return Response({'message':'Poll ongoing unable to edit poll '}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message':'Poll ongoing unable to edit poll choice '}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
 
 

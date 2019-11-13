@@ -20,12 +20,6 @@ def filter_votes(instance):
     return voter_list
 
 
-def schedule_task(date):
-    schedule = ClockedSchedule.objects.create(clocked_time=date)
-
-    return schedule
-
-
 def cloudinary_upload_image(file):
     upload = cloudinary.uploader.upload(file, resource_type = "video")
     return upload['secure_url']

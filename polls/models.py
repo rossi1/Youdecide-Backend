@@ -2,16 +2,13 @@ import random, base64
 
 from django.db import models
 from django.contrib.auth.models import User
-
-from anonymous_user.models import AnonymousVoter
-
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 
-
+from anonymous_user.models import AnonymousVoter
 
 # class Options(models.Model):
 #     option_text = models.CharField(max_length=100)
@@ -39,8 +36,7 @@ class Poll(models.Model):
     question = models.CharField(max_length=200)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now=True)
-    expire_date = models.DateTimeField(blank=True, null=True) #creata a function to return duration of a poll
-    has_expired  = models.BooleanField(default=False)
+    expire_date = models.DateTimeField(blank=True, null=True)
     slug = models.SlugField(max_length=250)
     CHOICES_TYPE = (
         ('TEXT', 'TEXT'),
@@ -82,13 +78,11 @@ class Choice(models.Model):
     def __str__(self):
         return str(self.poll.question)
 
-
 class Vote(models.Model):
     choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='poll_vote')
     voted_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='voters')
     anonymous_voter = models.ForeignKey(AnonymousVoter, on_delete=models.CASCADE, null=True, related_name='anonymous_votes')
-
 
     class Meta:
         unique_together = ("poll", "voted_by")

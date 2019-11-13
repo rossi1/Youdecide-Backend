@@ -22,7 +22,7 @@ class AnonymousUserPermission(BasePermission):
                     raise PermissionDenied('Double voting disallowed')
                 return True
                 
-            ip_address, is_routable =  get_client_ip(request)# fetch anonymous_user current ip address
+            ip_address, is_routable =  get_client_ip(request)
             if Vote.objects.filter(Q(poll=poll_pk), Q(anonymous_voter__ipaddress=ip_address)).exists():
                 raise PermissionDenied('Double voting disallowed')
             return True

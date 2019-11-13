@@ -3,11 +3,8 @@ from django.urls import path, include, re_path
 
 from django.urls import path, include
 
-
-
 from polls import api
-from .views import ChoiceList, CreateVote, PollList, PollDetail, PollCreate, ChoiceDelete
-
+from .views import ChoiceList, CreateVote, PollList, PollDetail, PollCreate, ChoiceDelete, ChoiceEdit
 
 
 urlpatterns = [
@@ -18,6 +15,7 @@ urlpatterns = [
     path("polls/", PollList.as_view(), name="polls_list"),
     path("create-polls/", PollCreate.as_view(), name='poll_create'),
     path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail"),
-    path('choice/<int:pk>/', ChoiceDelete.as_view(), name='choice_delete')
+    path('choice/<int:pk>/', ChoiceDelete.as_view(), name='choice_delete'),
+    path('choice-edit/<int:pk>/', ChoiceEdit.as_view(), name='choice_edit')
     
 ]

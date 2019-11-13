@@ -19,8 +19,9 @@ class FollowQuerySet(models.query.QuerySet):
                 {'id': follower.pk,
                  'follwer_id': follower.follower.id,
                  'follower_username': follower.follower.username,
-                 'follow_date': follower.date_follow}
-                 )
+                 'follow_date': follower.date_follow
+                }
+                )
         return follow
 
     def get_followings(self, user):

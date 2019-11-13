@@ -1,13 +1,20 @@
 from youdecide.settings.base import *
 
 
-DATABASES = {}
-
-DATABASES['default'] =  dj_database_url.config(default=config('DATABASE_URL'))
-DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql',
-
+DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
+    }
 
 DEBUG = True
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
+STATIC_URL = '/static/'
 
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {

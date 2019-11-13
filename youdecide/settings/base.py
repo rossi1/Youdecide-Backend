@@ -19,9 +19,6 @@ from django.urls import reverse_lazy
 
 from decouple import config
 import dj_database_url
-#import cloudinary
-#import cloudinary.uploader
-#import cloudinary.api
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -61,8 +58,6 @@ LOCAL_APPS = [
     #'search',
     'notification',
     
-
-    'drf_yasg'
     ]
 
 DEFAULT_APPS = [
@@ -86,15 +81,17 @@ EXTERNAL_APPS = [
     'django_user_agents',
       # Django Elasticsearch integration
     'django_elasticsearch_dsl',
+    'drf_yasg',
 
     # Django REST framework Elasticsearch integration (this package)
     'django_elasticsearch_dsl_drf',
-     'django_celery_beat'
+    'django_celery_beat',
     # Django Elasticsearch integration
     #'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration
     #'django_elasticsearch_dsl_drf'
-    #'cloudinary',
+    'cloudinary',
+    'channels'
 
 ]
 
@@ -201,6 +198,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'youdecide.wsgi.application'
 
+ASGI_APPLICATION = "youdecide.routing.application"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -262,6 +261,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
         # 'rest_framework.authentication.TokenAuthentication',
         'account.authentication.CsrfExemptSessionAuthentication',
+        
     
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'account.authentication.JwtAuthentication',

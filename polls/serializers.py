@@ -68,14 +68,12 @@ class ChoiceSerializer(serializers.ModelSerializer):
         return ret
     
     def validate_choice_audio(self, value):
-        if value.size < 5*1024*1024:
+        if value.size > 5*1024*1024:
             raise serializers.ValidationError("Audio file too large ( > 5mb )")
         if not value.content_type in ["audio/mpeg", "audio/wav"]:
             raise serializers.ValidationError("Content-Type is not mpeg")
         if not os.path.splitext(value.name)[1] in [".mp3",".wav"]:
             raise serializers.ValidationError("Doesn't have proper extension")
-
-        
         return value
         
     def validate_choice_video(self, value):
@@ -104,15 +102,12 @@ class PollSerializer(serializers.ModelSerializer):
             except ValueError:
                 pass
 
-    
-            
     choices = ChoiceSerializer(many=True, read_only=True, required=False)
     poller_username = serializers.SerializerMethodField()
   
-  
     class Meta:
         model = Poll
-        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date']
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)

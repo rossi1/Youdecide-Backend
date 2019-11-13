@@ -21,10 +21,7 @@ class FollowUserAPIView(generics.CreateAPIView):
         if serializer.validated_data['follower'] == serializer.validated_data['following']:
             return Response({'status': 'failed', 'message': 'User cant follow itself'}, \
                 status=status.HTTP_400_BAD_REQUEST)
-        
-       
         create = super().create(request, *args, **kwargs)
-            
         return create
     
 
@@ -43,13 +40,11 @@ class ListFollowersAPIView(generics.ListAPIView):
     def get_queryset(self):
         return self.queryset.objects.get_followers(self.request.user)
 
-
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
             return self.get_paginated_response(queryset)
-
         return Response(queryset)
 
 

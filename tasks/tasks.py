@@ -39,7 +39,3 @@ def send_registration_welcome_mail(email, username):
     mail_user = send_mail(subject, message_body, settings.EMAIL_HOST_USER, [email], fail_silently=False)
     return mail_user
 
-@shared_task
-def mark_expired_polls(id):
-    return Poll.objects.filter(id=id).update(has_expired=True)
-
