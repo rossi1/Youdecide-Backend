@@ -28,7 +28,6 @@ def mark_all_as_read(request):
     """View to call the model method which marks as read all the notifications
     directed to the actual user."""
     request.user.notifications.mark_all_as_read()
-    
     msg = "All notifications to {} have been marked as read.".format(str(request.user.username))
 
     return Response(data=msg, status=status.HTTP_200_OK)

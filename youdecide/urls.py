@@ -14,3 +14,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler500 = 'youdecide.account.api.server_error'
+handler404 = 'youdecide.account.api.not_found_request'

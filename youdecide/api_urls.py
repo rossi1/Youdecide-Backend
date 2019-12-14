@@ -55,7 +55,7 @@ urlpatterns = [
 
     # account urls
     path('users/', include(account_urls)),
-    path('feeds/', include(feed_urls)),
+    #path('feeds/', include(feed_urls)),
     path('trending/', include(trending_urls)),
     path('search/', include(search_urls)),
     path('sms/', include(sms_urls)),

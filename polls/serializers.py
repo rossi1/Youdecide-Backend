@@ -86,28 +86,26 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
             return value
         else:
-            raise serializers.alidationError("Couldn't read uploaded file")
+            raise serializers.ValidationError("Couldn't read uploaded file")
 
     
 
 class PollSerializer(serializers.ModelSerializer):
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        request = kwargs['context']['request']
-        if request.method == "GET":
-            try:
-                self.Meta.fields.append('expire_date')
-                self.Meta.fields.append('slug')
-            except ValueError:
-                pass
-
     choices = ChoiceSerializer(many=True, read_only=True, required=False)
     poller_username = serializers.SerializerMethodField()
-  
+    slug_field = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Poll
-        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field']
+
+    def get_poller_username(self, instance):
+        return instance.created_by.username
+
+    def get_slug_field(self, instance):
+        return instance.slug
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)
@@ -129,5 +127,4 @@ class PollSerializer(serializers.ModelSerializer):
         ret['vote_count'] = instance.poll_vote.count()
         return ret
 
-    def get_poller_username(self, instance):
-        return instance.created_by.username
+    

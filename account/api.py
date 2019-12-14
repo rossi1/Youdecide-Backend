@@ -143,3 +143,23 @@ class ChangePasswordView(generics.UpdateAPIView):
 #         except:
 #             raise serializers.serializers.ValidationError(
 #                 'You have already followed this person')
+
+def server_error(request, *args, **kwargs):
+    """
+    Generic 500 error handler.
+    """
+    data = {
+        'error': 'Sorry an error occured'
+    }
+    return Response(data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+def not_found_request(request, exception, *args, **kwargs):
+    """
+    Generic 400 error handler.
+    """
+    data = {
+        'error': 'An error occured, please this endpoint does not exist'
+    }
+    return Response(data, status=status.HTTP_404_NOT_FOUND)
