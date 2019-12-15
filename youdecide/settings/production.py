@@ -1,6 +1,6 @@
 from youdecide.settings.base import *
 
-
+""""
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -11,6 +11,7 @@ DATABASES = {
             'PORT': os.environ['RDS_PORT'],
         }
     }
+"""
 
 DEBUG = True
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")

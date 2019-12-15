@@ -13,6 +13,6 @@ def create_profile_account_for_new_user(sender, created, instance, **kwargs):
     if created:
         poll_viewers = Follow.objects.get_followers_list(instance.created_by)
         verb = "{} created a new poll".format(instance.created_by.username)
-        notification = Notification.objects.create()
+        #notification = Notification.objects.create()
 
        
