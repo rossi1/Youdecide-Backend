@@ -22,14 +22,15 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
-    votes = VoteSerializer(many=True, required=False)
+    id = serializers.IntegerField(required=False)
+    votes = VoteSerializer(many=True, required=False, read_only=True)
     audio = serializers.FileField(required=False)
     video = serializers.FileField(required=False)
 
 
     class Meta:
         model = Choice
-        fields = ['choice_text', 'votes', 'id', 'audio', 'video']
+        fields = ['id', 'choice_text', 'votes',  'audio', 'video']
         
 
     def create(self, validated_data):
@@ -92,7 +93,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     
-    choices = ChoiceSerializer(many=True, read_only=True, required=False)
+    choices = ChoiceSerializer(many=True, required=False)
     poller_username = serializers.SerializerMethodField()
     slug_field = serializers.SerializerMethodField()
 
@@ -106,6 +107,37 @@ class PollSerializer(serializers.ModelSerializer):
 
     def get_slug_field(self, instance):
         return instance.slug
+
+    def create(self, validated_data):
+        choices = validated_data.pop('choices')
+        poll = Poll.objects.create(**validated_data)
+        for choice in choices:
+            Choice.objects.create(poll=poll, **choice)
+            
+        return poll
+
+    def update(self, instance, validated_data):
+        instance.question = validated_data.get('question', instance.question)
+        instance.expire_date = validated_data.get('expire_date', instance.expire_date)
+        instance.choice_type = validated_data.get('choice_type', instance.choice_type)
+        instance.save()
+        poll_choices = validated_data.get('choices', None)
+        if poll_choices is not None:
+            for choices in poll_choices:
+                try:
+                    choice = Choice.objects.get(poll=instance, id=choices.get('id'))
+                    if choice.votes.count() > 0:
+                        raise serializers.ValidationError('Poll ongoing unable to edit poll choice ')
+                    choice.choice_text = choices.get('choice_text', choice.choice_text)
+                    choice.choice_audio = choices.get('choice_audio', choice.choice_audio)
+                    choice.choice_video = choices.get('choice_videi', choice.choice_video)
+                    choice.save()
+                except Choice.DoesNotExist:
+                    pass
+
+        return instance
+        
+
 
     def to_representation(self, instance):
         ret = super(PollSerializer, self).to_representation(instance)
