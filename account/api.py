@@ -1,33 +1,29 @@
 import json
 
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
-from django.core.mail import send_mail
 from django.conf import settings as st
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework import generics, permissions, status
-from rest_framework.permissions import AllowAny
-from rest_framework.authentication import BasicAuthentication
-
-
-from youdecide import settings
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from emailservice.utils import Mail
-from userprofile import models, serializers
+from rest_framework import generics, permissions, status
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from tasks.tasks import send_registration_welcome_mail
+from userprofile import models, serializers
+from youdecide import settings
 
 from .authentication import CsrfExemptSessionAuthentication
-from .utils import encode_user_payload
 from .customauthbackend import EmailOrUsernameModelBackend
-
-from .serializers import UserSerializer, AllUsersSerializer, ChangePasswordSerializer, LoginSerializer
 from .permissions import IsOwner
+from .serializers import (AllUsersSerializer, ChangePasswordSerializer,
+                          LoginSerializer, UserSerializer)
+from .utils import encode_user_payload
 
 
 @method_decorator(csrf_exempt, name='post')
@@ -81,14 +77,6 @@ class UserDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsOwner, )
-
-
-class UserRegisterAPIView(generics.CreateAPIView):
-    """For /api/v1/auth/register url path"""
-    permission_classes = (permissions.AllowAny,)
-
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class ChangePasswordView(generics.UpdateAPIView):

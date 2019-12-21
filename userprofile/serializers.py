@@ -1,11 +1,9 @@
 from django.contrib.auth.models import User
 from django.core import serializers
-
 from rest_framework import serializers
-
 from social.models import Follow
 
-from .models import Profile, BookMark, Likes
+from .models import BookMark, Likes, Profile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -13,7 +11,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('social_id', 'first_name', 'last_name', 'place_of_work', 'position', 'about', 'image')
+        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'image')
 
 
 class SingleUserSerializer(serializers.ModelSerializer):
@@ -74,8 +72,3 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Likes
         fields = ('id', 'poll', 'user', 'like_date',  'poll_question_text')
-
-    
-    
-
-

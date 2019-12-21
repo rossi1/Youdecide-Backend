@@ -1,11 +1,10 @@
-from django.db import models
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
 from django.utils import timezone
 from polls.models import Poll
-from django.db.models.signals import post_save
 
-
-from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -104,5 +103,3 @@ class UserSettings(models.Model):
     # @property
     # def languages(self):
     #     return [language for language in self.user.languages.all()]
-
-

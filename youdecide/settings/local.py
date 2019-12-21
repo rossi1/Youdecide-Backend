@@ -41,6 +41,7 @@ CELERY_TIMEZONE = 'Africa/Lagos'
  
 
 
+
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': config('BONSAI_URL')

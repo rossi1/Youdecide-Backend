@@ -1,15 +1,19 @@
-from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
+from rest_framework.validators import ValidationError
+
+from userprofile.serializers import  UserProfileSerializer
+from userprofile.models import Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
+    profile =  UserProfileSerializer(required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -19,6 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
+        profile = validated_data.pop('profile')
+        Profile.objects.create(user=user, **profile)
         return user
     
     def validate_email(self, value):
