@@ -36,7 +36,7 @@ class Poll(models.Model):
     question = models.CharField(max_length=200)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now=True)
-    expire_date = models.DateTimeField(blank=True, null=True)
+    expire_date = models.DateField(blank=True, null=True)
     slug = models.SlugField(max_length=250)
     CHOICES_TYPE = (
         ('TEXT', 'TEXT'),
