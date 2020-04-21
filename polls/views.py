@@ -78,12 +78,12 @@ class PollDelete(generics.DestroyAPIView):
 class ChoiceList(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     def get_queryset(self):
-        queryset = Choice.objects.filter(poll_id=self.kwargs["pk"])
+        queryset = Choice.objects.filter(poll_id=self.kwargs.get("pk"))
         return queryset
     serializer_class = ChoiceSerializer
 
     def perform_create(self, serializer):
-        poll = generics.get_object_or_404(Poll, id=self.kwargs["pk"])
+        poll = generics.get_object_or_404(Poll, id=self.kwargs.get("pk"))
         serializer.save(poll=poll)
 
         

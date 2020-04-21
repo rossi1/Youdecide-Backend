@@ -4,8 +4,16 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.validators import ValidationError
 
-from userprofile.serializers import  UserProfileSerializer
+
 from userprofile.models import Profile
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """UserProfile Serializer"""
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'image')
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -3,27 +3,23 @@ from django.core import serializers
 from rest_framework import serializers
 from social.models import Follow
 
+from account.serializers import UserSerializer
+
 from .models import BookMark, Likes, Profile
 
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    """UserProfile Serializer"""
-
-    class Meta:
-        model = Profile
-        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'image')
 
 
 class SingleUserSerializer(serializers.ModelSerializer):
     """Serializer for User model having only the field required for all users"""
 
     follow_status = serializers.SerializerMethodField()
+    profile_data = UserSerializer(read_only=True)
     
     class Meta:
         model = User
         # Note that id is non-updatable, therefore not required in the
         # read-only fields
-        fields = ('id', 'username', 'follow_status')
+        fields = ('id', 'username', 'follow_status', 'profile_data')
 
     def get_follow_status(self, instance):
         follow_stat = {}
@@ -36,16 +32,16 @@ class SingleUserSerializer(serializers.ModelSerializer):
                     return follow_stat
 
                 if user.pk in follower_list:
-                    follow_stat['following_user'] = True
+                    follow_stat['is_following'] = True
                 else:
-                    follow_stat['following_user'] = False
+                    follow_stat['is_following'] = False
 
                 following_list = Follow.objects.get_followings_list(instance)
 
                 if user.pk in following_list:
-                    follow_stat['user_following'] = True
+                    follow_stat['is_followed'] = True
                 else:
-                    follow_stat['user_following'] = False
+                    follow_stat['is_followed'] = False
                 
         return follow_stat
 

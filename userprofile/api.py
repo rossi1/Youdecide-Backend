@@ -17,8 +17,9 @@ from social.models import Follow
 from polls.models import Poll
 
 from .models import BookMark, Likes,Profile
-from userprofile.serializers import SingleUserSerializer, UserProfileSerializer, \
-    BookmarkSerializer,LikeSerializer
+
+from account.serializers import  UserProfileSerializer
+from userprofile.serializers import SingleUserSerializer, BookmarkSerializer, LikeSerializer
 
 
 
@@ -32,7 +33,7 @@ class UpdateUserProfiileAPIView(generics.RetrieveUpdateAPIView):
         return self.queryset.objects.get(user=self.request.user)
 
 
-class SingleUserAPIDetailView(RetrieveUpdateAPIView):
+class SingleUserAPIDetailView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     """
     Retrieve instance.
@@ -41,19 +42,16 @@ class SingleUserAPIDetailView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     lookup_url_kwarg = 'pk'
     serializer_class = SingleUserSerializer
-    queryset  = User    
+    queryset  = User
 
-
+    
     def get(self, request, pk, format=None):
         user_info = OrderedDict()
         user = self.get_object()
         serializer = SingleUserSerializer(user, context=self.get_serializer_context())
         poll = Poll.objects.filter(created_by=user).values('question', 'pub_date', 'pk')
-       
         like = Likes.objects.filter(user=user).values('like_date', question=F('poll__question'), 
         pk=F('poll__pk'), pub_date=F('poll__pub_date'))
-
-        user_info['profile_data'] = UserProfileSerializer(user, context=self.get_serializer_context()).data
         user_info['user'] = serializer.data
         user_info['followers']= Follow.objects.get_followers(user) 
         user_info['followed'] = Follow.objects.get_followings(user)

@@ -65,8 +65,6 @@ class NotificationQuerySet(models.query.QuerySet):
 
 
 class Notification(models.Model):
-    
-
     creator = models.ForeignKey(User,
                               related_name="notify_actor",
                               on_delete=models.CASCADE)

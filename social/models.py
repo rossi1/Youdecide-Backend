@@ -52,6 +52,9 @@ class Follow(models.Model):
     date_follow = models.DateTimeField(auto_now_add=True)
     objects = FollowQuerySet.as_manager()
 
+    class Meta:
+        unique_together = ("follower", "following")
+     
 
     def __str__(self):
         return u'%s follows %s' % (self.follower, self.following)

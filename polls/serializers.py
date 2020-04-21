@@ -22,7 +22,7 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
+    id = serializers.IntegerField(required=False, read_only=True)
     votes = VoteSerializer(many=True, required=False, read_only=True)
     audio = serializers.FileField(required=False)
     video = serializers.FileField(required=False)
@@ -109,11 +109,15 @@ class PollSerializer(serializers.ModelSerializer):
         return instance.slug
 
     def create(self, validated_data):
-        choices = validated_data.pop('choices')
+        choices = validated_data.pop('choices', None)
         poll = Poll.objects.create(**validated_data)
-        for choice in choices:
-            Choice.objects.create(poll=poll, **choice)
+
+        if choices is not None:
+            for choice in choices:
+                Choice.objects.create(poll=poll, **choice)
             
+            return poll
+        
         return poll
 
     def update(self, instance, validated_data):
