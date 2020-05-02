@@ -3,6 +3,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -20,6 +21,13 @@ class VoteSerializer(serializers.ModelSerializer):
         model = Vote
         fields = ('choice', 'poll')
 
+    def validate_poll(self, instance):
+        if self.context['request'].user.is_authenticated:
+            if instance.created_by.id == self.context['request'].user:
+                raise serializers.ValidationError("User cant vote on its poll")
+        if instance.expire_date == timezone.now().date() or instance.expire_date >= timezone.now().date():
+            raise serializers.ValidationError("Poll Ended, Unable to vote")
+        return instance
 
 class ChoiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, read_only=True)
@@ -92,19 +100,22 @@ class ChoiceSerializer(serializers.ModelSerializer):
     
 
 class PollSerializer(serializers.ModelSerializer):
-    
     choices = ChoiceSerializer(many=True, required=False)
     poller_username = serializers.SerializerMethodField()
     poller_username_id = serializers.SerializerMethodField()
     slug_field = serializers.SerializerMethodField()
+    poll_has_expired = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Poll
-        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field', 'poller_username_id']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field', 'poller_username_id', 'poll_has_expired']
 
     def get_poller_username(self, instance):
         return instance.created_by.username
+
+    def get_poll_has_expired(self, instance):
+        return instance.expire_date == timezone.now().date() or instance.expire_date >= timezone.now().date()
 
     def get_poller_username_id(self, instance):
         return instance.created_by.id
@@ -130,7 +141,6 @@ class PollSerializer(serializers.ModelSerializer):
         instance.choice_type = validated_data.get('choice_type', instance.choice_type)
         instance.save()
         poll_choices = validated_data.get('choices', None)
-        print(poll_choices)
         if poll_choices is not None:
             for choices in poll_choices:
                 try:
