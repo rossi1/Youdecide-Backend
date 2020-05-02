@@ -19,7 +19,8 @@ class FollowQuerySet(models.query.QuerySet):
                 {'id': follower.pk,
                  'follwer_id': follower.follower.id,
                  'follower_username': follower.follower.username,
-                 'follow_date': follower.date_follow
+                 'follow_date': follower.date_follow,
+                 'follower_image': follower.follower.profile.image.url
                 }
                 )
         return follow
@@ -33,8 +34,11 @@ class FollowQuerySet(models.query.QuerySet):
                 {'id': following.pk,
                  'following_id': following.following.id,
                  'following_username': following.following.username,
-                 'following_date': following.date_follow}
-                 )
+                 'following_date': following.date_follow,
+                 'following_image': following.following.profile.image.url
+                }
+                
+                )
         return follow
 
     def get_followers_list(self, user):
@@ -52,8 +56,8 @@ class Follow(models.Model):
     date_follow = models.DateTimeField(auto_now_add=True)
     objects = FollowQuerySet.as_manager()
 
-    class Meta:
-        unique_together = ("follower", "following")
+    #class Meta:
+    #    unique_together = ("follower", "following")
      
 
     def __str__(self):

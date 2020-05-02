@@ -3,7 +3,7 @@ from django.core import serializers
 from rest_framework import serializers
 from social.models import Follow
 
-from account.serializers import UserSerializer
+from account.serializers import UserSerializer, UserProfileSerializer
 
 from .models import BookMark, Likes, Profile
 
@@ -13,13 +13,13 @@ class SingleUserSerializer(serializers.ModelSerializer):
     """Serializer for User model having only the field required for all users"""
 
     follow_status = serializers.SerializerMethodField()
-    profile_data = UserSerializer(read_only=True)
+    profile =  UserProfileSerializer(read_only=True)
     
     class Meta:
         model = User
         # Note that id is non-updatable, therefore not required in the
         # read-only fields
-        fields = ('id', 'username', 'follow_status', 'profile_data')
+        fields = ('id','username', 'follow_status', 'profile')
 
     def get_follow_status(self, instance):
         follow_stat = {}

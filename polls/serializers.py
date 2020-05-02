@@ -95,15 +95,19 @@ class PollSerializer(serializers.ModelSerializer):
     
     choices = ChoiceSerializer(many=True, required=False)
     poller_username = serializers.SerializerMethodField()
+    poller_username_id = serializers.SerializerMethodField()
     slug_field = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Poll
-        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field', 'poller_username_id']
 
     def get_poller_username(self, instance):
         return instance.created_by.username
+
+    def get_poller_username_id(self, instance):
+        return instance.created_by.id
 
     def get_slug_field(self, instance):
         return instance.slug
@@ -111,13 +115,13 @@ class PollSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         choices = validated_data.pop('choices', None)
         poll = Poll.objects.create(**validated_data)
+       
 
         if choices is not None:
             for choice in choices:
                 Choice.objects.create(poll=poll, **choice)
             
-            return poll
-        
+            
         return poll
 
     def update(self, instance, validated_data):
@@ -126,16 +130,17 @@ class PollSerializer(serializers.ModelSerializer):
         instance.choice_type = validated_data.get('choice_type', instance.choice_type)
         instance.save()
         poll_choices = validated_data.get('choices', None)
+        print(poll_choices)
         if poll_choices is not None:
             for choices in poll_choices:
                 try:
                     choice = Choice.objects.get(poll=instance, id=choices.get('id'))
+                   
                     if choice.votes.count() > 0:
                         raise serializers.ValidationError('Poll ongoing unable to edit poll choice ')
                     choice.choice_text = choices.get('choice_text', choice.choice_text)
                     choice.choice_audio = choices.get('choice_audio', choice.choice_audio)
-                    choice.choice_video = choices.get('choice_videi', choice.choice_video)
-                    choice.save()
+                    choice.choice_video = choices.get('choice_video', choice.choice_video)
                 except Choice.DoesNotExist:
                     pass
 

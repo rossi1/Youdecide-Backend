@@ -15,22 +15,6 @@ class FollowUserAPIView(generics.CreateAPIView):
     serializer_class = FollowSerializer
     queryset = Follow
     
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        if serializer.validated_data['follower'] == serializer.validated_data['following']:
-            return Response({'status': 'failed', 'message': 'User cant follow itself'}, \
-                status=status.HTTP_400_BAD_REQUEST)
-        create = super().create(request, *args, **kwargs)
-        return create
-    
-
-    def perform_create(self, serializer):
-        try:
-            serializer.save()
-        except:
-            raise ValidationError('User already followed')
-            
 
 class ListFollowersAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)

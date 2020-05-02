@@ -86,4 +86,4 @@ class PollDocumentView(BaseDocumentViewSet):
        
     }
     # Specify default ordering
-    ordering = ('pub_date', )
+    ordering = ('-pub_date', )

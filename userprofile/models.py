@@ -67,7 +67,7 @@ class BookMark(models.Model):
     
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile_data")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     social_id = models.CharField(max_length=200, null=True)
     first_name = models.CharField(max_length=100, null=True)
     last_name = models.CharField(max_length=100, null=True)
