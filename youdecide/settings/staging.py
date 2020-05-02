@@ -14,7 +14,7 @@ DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql',
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'https://hvdwktj6pd:epx0rzhffo@jasmine-670477483.us-east-1.bonsaisearch.net:443'
+        'hosts': 'https://g47gae624z:t3oy2k6ze2@jasmine-116574974.us-east-1.bonsaisearch.net:443'
     },
 }
 

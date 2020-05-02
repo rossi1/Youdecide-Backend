@@ -91,6 +91,7 @@ class ChoiceDelete(generics.DestroyAPIView):
     permission_classes = (IsAuthenticated, IsOwner)
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
+    queryset = Choice
 
     def delete(self, request, *args, **kwargs):
         instance = self.object()
@@ -100,6 +101,7 @@ class ChoiceDelete(generics.DestroyAPIView):
 
 
 class ChoiceEdit(generics.UpdateAPIView):
+    queryset = Choice
     permission_classes = (IsAuthenticated, IsOwner)
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
