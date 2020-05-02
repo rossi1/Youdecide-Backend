@@ -58,7 +58,6 @@ class PollDocumentView(BaseDocumentViewSet):
     search_fields = (
         'question',
         'slug',
-        'pub_date',
     )
     # Define filter fields
     filter_fields = {
@@ -76,8 +75,6 @@ class PollDocumentView(BaseDocumentViewSet):
             ]},
         'question': 'question.raw',
         #'created_by': 'created_by.raw',
-        'pub_date': 'pub_date',
-        'expire_date': 'expire_date',
         'slug': 'slug.raw',
         
     }
@@ -86,7 +83,7 @@ class PollDocumentView(BaseDocumentViewSet):
         'id': 'id',
         'question': 'question.raw',
         #'created_by': 'created_by.raw',
-        'pub_date': 'pub_date',
+       
     }
     # Specify default ordering
-    ordering = ('id', 'pub_date', )
+    ordering = ('pub_date', )
