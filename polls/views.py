@@ -18,7 +18,7 @@ from anonymous_user.models import AnonymousVoter
 from .models import Poll, Choice, Vote
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 from .utils import filter_votes
-from .permissions import AnonymousUserPermission
+from .permissions import AnonymousUserPermission, IsPollChoiceOwner, IsPollOwner
 
 
 
@@ -44,13 +44,11 @@ class PollList(generics.ListAPIView):
 
 class PollDetail(generics.RetrieveUpdateAPIView):
     queryset = Poll.objects.all()
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = None
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
     
-    def retrieve(self, request, *arg, **kwargs):
-        return super().retrieve(request, *arg, **kwargs)
-
+    
     def update(self, request, *args, **kwargs):
        
         instance = self.get_object()
@@ -65,14 +63,22 @@ class PollDetail(generics.RetrieveUpdateAPIView):
             return Response({'message':'Poll ongoing unable to edit poll '}, status=status.HTTP_403_FORBIDDEN)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            self.permission_classes = (AllowAny,)
+
+        elif self.request.method == "PUT" or self.request.method == "PATCH":
+            self.permission_classes = (IsAuthenticated, IsPollOwner)
+
+        return super(PollDetail, self).get_permissions()
             
        
-
 class PollDelete(generics.DestroyAPIView):
     queryset = Poll
     serializer_class = PollSerializer
     lookup_url_kwarg = 'pk'
-    permission_classes = (IsAuthenticated, IsOwner)
+    permission_classes = (IsAuthenticated, IsPollOwner)
     
 
 class ChoiceList(generics.ListCreateAPIView):
@@ -88,29 +94,43 @@ class ChoiceList(generics.ListCreateAPIView):
 
         
 class ChoiceDelete(generics.DestroyAPIView):
-    permission_classes = (IsAuthenticated, IsOwner)
+    permission_classes = (IsAuthenticated, IsPollChoiceOwner)
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
     queryset = Choice
 
     def delete(self, request, *args, **kwargs):
-        instance = self.object()
-        if instance.votes().count() > 0:
+        instance = self.get_object()
+        if instance.votes.count() > 0:
             return Response({'message':'Poll ongoing unable to delete poll choice '}, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
+        
+    def get_object(self):
+        obj = generics.get_object_or_404(self.queryset, id=self.kwargs["pk"], poll_id=self.kwargs["poll_id"])
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class ChoiceEdit(generics.UpdateAPIView):
     queryset = Choice
-    permission_classes = (IsAuthenticated, IsOwner)
+    permission_classes = (IsAuthenticated, IsPollChoiceOwner)
     serializer_class = ChoiceSerializer
     lookup_url_kwarg = 'pk'
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+    
         if instance.votes.count() > 0:
             return Response({'message':'Poll ongoing unable to edit poll choice '}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
+
+    def get_object(self):
+
+        obj = generics.get_object_or_404(self.queryset, id=self.kwargs["pk"], poll_id=self.kwargs["poll_id"])
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class CreateVote(generics.CreateAPIView):

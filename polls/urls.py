@@ -15,7 +15,7 @@ urlpatterns = [
     path("polls/", PollList.as_view(), name="polls_list"),
     path("create-polls/", PollCreate.as_view(), name='poll_create'),
     path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail"),
-    path('choice/<int:pk>/', ChoiceDelete.as_view(), name='choice_delete'),
-    path('choice-edit/<int:pk>/', ChoiceEdit.as_view(), name='choice_edit')
+    path('choice/<int:pk>/<int:poll_id>/', ChoiceDelete.as_view(), name='choice_delete'),
+    path('choice-edit/<int:pk>/<int:poll_id>/', ChoiceEdit.as_view(), name='choice_edit')
     
 ]

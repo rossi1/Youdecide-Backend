@@ -27,3 +27,27 @@ class AnonymousUserPermission(BasePermission):
                 raise PermissionDenied('Double voting disallowed')
             return True
         return True
+
+
+class IsPollChoiceOwner(BasePermission):
+    """
+    Custom of class IsOwnerOrReadOnly(permissions.BasePermission)
+    That an APIexception is raised instead
+    We do not want a ReadOnly
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Instance is the user
+        return obj.poll.created_by.id == request.user.id
+
+
+class IsPollOwner(BasePermission):
+    """
+    Custom of class IsOwnerOrReadOnly(permissions.BasePermission)
+    That an APIexception is raised instead
+    We do not want a ReadOnly
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Instance is the user
+        return obj.created_by.id == request.user.id
