@@ -63,3 +63,5 @@ class Follow(models.Model):
     def __str__(self):
         return u'%s follows %s' % (self.follower, self.following)
 
+
+

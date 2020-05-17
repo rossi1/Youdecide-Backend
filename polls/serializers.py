@@ -25,8 +25,8 @@ class VoteSerializer(serializers.ModelSerializer):
         if self.context['request'].user.is_authenticated:
             if instance.created_by.id == self.context['request'].user:
                 raise serializers.ValidationError("User cant vote on its poll")
-        if instance.expire_date == timezone.now().date() or instance.expire_date >= timezone.now().date():
-            raise serializers.ValidationError("Poll Ended, Unable to vote")
+        if instance.expire_date == timezone.now().date() or instance.expire_date <= timezone.now().date():
+            raise serializers.ValidationError("Poll Ended, Unable to vote") 
         return instance
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -105,11 +105,12 @@ class PollSerializer(serializers.ModelSerializer):
     poller_username_id = serializers.SerializerMethodField()
     slug_field = serializers.SerializerMethodField()
     poll_has_expired = serializers.SerializerMethodField()
+    poller_image = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Poll
-        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field', 'poller_username_id', 'poll_has_expired']
+        fields = ['id', 'pub_date',  'question', 'choices', 'poller_username', 'choice_type', 'expire_date', 'slug_field', 'poller_username_id', 'poll_has_expired', 'poller_image']
 
     def get_poller_username(self, instance):
         return instance.created_by.username
@@ -119,6 +120,9 @@ class PollSerializer(serializers.ModelSerializer):
 
     def get_poller_username_id(self, instance):
         return instance.created_by.id
+
+    def get_poller_image(self, instance):
+        return instance.created_by.user.image
 
     def get_slug_field(self, instance):
         return instance.slug
@@ -131,8 +135,7 @@ class PollSerializer(serializers.ModelSerializer):
         if choices is not None:
             for choice in choices:
                 Choice.objects.create(poll=poll, **choice)
-            
-            
+
         return poll
 
     def update(self, instance, validated_data):
