@@ -122,7 +122,7 @@ class PollSerializer(serializers.ModelSerializer):
         return instance.created_by.id
 
     def get_poller_image(self, instance):
-        return instance.created_by.profile.image
+        return instance.created_by.profile.image.url
 
     def get_slug_field(self, instance):
         return instance.slug
