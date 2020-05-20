@@ -74,7 +74,7 @@ class Profile(models.Model):
     place_of_work = models.CharField(max_length=150, null=True, blank=True)
     position = models.CharField(max_length=100, null=True, blank=True)
     about = models.TextField(max_length=1200, null=True, blank=True)
-    image = CloudinaryField('images', default='avatar/customer.png')
+    image = CloudinaryField('images', null=True)
  
     def get_user(self):
         return User.objects.get(id=self.user_id)
