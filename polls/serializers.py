@@ -116,8 +116,7 @@ class PollSerializer(serializers.ModelSerializer):
         return instance.created_by.username
 
     def get_poll_has_expired(self, instance):
-        return instance.expire_date == timezone.now().date() or instance.expire_date >= timezone.now().date()
-
+        return instance.expire_date == timezone.now().date() or timezone.now().date() > instance.expire_date
     def get_poller_username_id(self, instance):
         return instance.created_by.id
 
