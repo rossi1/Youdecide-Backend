@@ -50,12 +50,15 @@ class SingleUserAPIDetailView(generics.RetrieveAPIView):
         user = self.get_object()
         serializer = SingleUserSerializer(user, context=self.get_serializer_context())
         poll = Poll.objects.filter(created_by=user).values('question', 'pub_date', 'pk')
+        bookmark = BookMark.objects.filter(created_by=user).values(question=F('poll__question'), 
+        pub_date=F('poll__pub_date'),  pk=F('poll__pk'))
         like = Likes.objects.filter(user=user).values('like_date', question=F('poll__question'), 
         pk=F('poll__pk'), pub_date=F('poll__pub_date'))
         user_info['user'] = serializer.data
         user_info['followers']= Follow.objects.get_followers(user) 
         user_info['followed'] = Follow.objects.get_followings(user)
         user_info['polls'] = poll
+        user_info['bookmarks'] = bookmark
         user_info['likes'] =like 
         return Response(user_info, status=status.HTTP_200_OK)
 
