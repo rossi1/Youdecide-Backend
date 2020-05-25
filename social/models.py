@@ -20,7 +20,7 @@ class FollowQuerySet(models.query.QuerySet):
                  'follwer_id': follower.follower.id,
                  'follower_username': follower.follower.username,
                  'follow_date': follower.date_follow,
-                 'follower_image': follower.follower.profile.image.url
+                 'follower_image': follower.follower.profile.image.url if follower.follower.profile.image.url is not None else None
                 }
                 )
         return follow
@@ -35,7 +35,7 @@ class FollowQuerySet(models.query.QuerySet):
                  'following_id': following.following.id,
                  'following_username': following.following.username,
                  'following_date': following.date_follow,
-                 'following_image': following.following.profile.image.url
+                 'following_image': following.following.profile.image.url if following.following.profile.image.url is not None else None
                 }
                 
                 )
