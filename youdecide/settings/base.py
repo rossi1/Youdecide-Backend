@@ -115,7 +115,7 @@ AUTHENTICATION_BACKENDS = (
     # 'django.contrib.auth.backends.ModelBackend', # for django 1.8.3
     'django.contrib.auth.backends.AllowAllUsersModelBackend', # for django 1.10 to test is_active user
     'account.customauthbackend.EmailOrUsernameModelBackend',
-    'account.customauthbackend.CaseInsensitiveModelBackend'
+    'account.customauthbackend.CaseInsensitiveModelBackend',
     # facebook auth backend
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
