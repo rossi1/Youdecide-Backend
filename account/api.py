@@ -148,6 +148,6 @@ def not_found_request(request, exception, *args, **kwargs):
     Generic 400 error handler.
     """
     data = {
-        'error': 'An error occured, please this endpoint does not exist'
+        'error': 'An error occured'
     }
     return Response(data, status=status.HTTP_404_NOT_FOUND)
