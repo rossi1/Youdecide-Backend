@@ -1,7 +1,7 @@
+from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 
-from django.contrib.auth.backends import ModelBackend
 
 class CaseInsensitiveModelBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
