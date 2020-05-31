@@ -14,7 +14,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'user_image')
+        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'user_image', 'image')
+        extra_kwargs = {'image': {'write_only': True},  'user_image': {'read_only': True}}
 
     def get_user_image(self, instance):
         try:
