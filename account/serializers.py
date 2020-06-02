@@ -9,21 +9,14 @@ from userprofile.models import Profile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user_image = serializers.SerializerMethodField()
     """UserProfile Serializer"""
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'user_image', 'image')
-        extra_kwargs = {'image': {'write_only': True},  'user_image': {'read_only': True}}
+        fields = ('first_name', 'last_name', 'place_of_work', 'position', 'about', 'image')
+        #extra_kwargs = {'image': {'write_only': True},  'user_image': {'read_only': True}}
 
-    def get_user_image(self, instance):
-        try:
-            return instance.image.url
-        except AttributeError:
-            return None
-
-
+    
 class UserSerializer(serializers.ModelSerializer):
     profile =  UserProfileSerializer(required=True)
 
